@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+		<link rel="stylesheet" href="./design/index.css">
+		<script type="module" src="./design/index.mjs"></script>
+		<title>Agenda</title>
+	</head>
+	<body>
+		<header>
+			<ul>
+				<li class="active" data-type="company">Company</li>
+				<li class="active" data-type="work">Work</li>
+				<li class="active" data-type="family">Family</li>
+				<li class="active" data-type="household">Household</li>
+				<li class="active" data-type="other">Other</li>
+			</ul>
+		</header>
+		<main>
+			<section id="agenda">
+				<aside>
+					<button data-action="toggle-important">Show Important</button>
+					<button data-action="create-task">Create Task</button>
+				</aside>
+			</section>
+			<section id="journal"></section>
+			<section id="editor">
+				<article>
+					<fieldset>
+						<div>
+							<label for="editor-title">Title</label>
+							<input id="editor-title" data-name="title" type="text" placeholder="Implement Awesomeness()">
+						</div>
+						<div>
+							<label for="editor-type">Type</label>
+							<select id="editor-type" data-name="type">
+								<option value="company">Company</option>
+								<option value="work">Work</option>
+								<option value="family">Family</option>
+								<option value="household">Household</option>
+								<option value="other">Other</option>
+							</select>
+						</div>
+						<div>
+							<label for="editor-project">Project</label>
+							<input id="editor-project" data-name="project" type="text" placeholder="life">
+						</div>
+						<div>
+							<label for="editor-description">Description</label>
+							<textarea id="editor-description" data-name="description" placeholder="A thorough description..."></textarea>
+						</div>
+					</fieldset>
+					<fieldset>
+						<div>
+							<label for="editor-complexity">Complexity</label>
+							<select id="editor-complexity" data-name="complexity">
+								<option value="1">&nbsp;1&nbsp;(very easy)</option>
+								<option value="2">&nbsp;2&nbsp;(easy)</option>
+								<option value="3">&nbsp;3&nbsp;(normal)</option>
+								<option value="5">&nbsp;5&nbsp;(hard)</option>
+								<option value="8">&nbsp;8&nbsp;(very hard)</option>
+								<option value="13">13&nbsp;(ultra hard)</option>
+								<option value="21">21&nbsp;(almost impossible)</option>
+							</select>
+						</div>
+						<div>
+							<label for="editor-estimation">Estimation</label>
+							<input id="editor-estimation" data-name="estimation" type="text" placeholder="01:00:00">
+						</div>
+						<div>
+							<label for="editor-deadline">Deadline?</label>
+							<input id="editor-deadline" data-name="deadline" type="text" placeholder="(leave empty or datetime string)">
+						</div>
+					</fieldset>
+					<fieldset>
+						<div>
+							<label for="editor-eternal">Eternal?</label>
+							<input id="editor-eternal" data-name="eternal" type="checkbox">
+						</div>
+						<div>
+							<label for="editor-repeat-monday">Repeat on Mondays?</label>
+							<input id="editor-repeat-monday" data-name="repeat" type="checkbox" value="Monday">
+						</div>
+						<div>
+							<label for="editor-repeat-tuesday">Repeat on Tuesdays?</label>
+							<input id="editor-repeat-tuesday" data-name="repeat" type="checkbox" value="Tuesday">
+						</div>
+						<div>
+							<label for="editor-repeat-wednesday">Repeat on Wednesdays?</label>
+							<input id="editor-repeat-wednesday" data-name="repeat" type="checkbox" value="Wednesday">
+						</div>
+						<div>
+							<label for="editor-repeat-thursday">Repeat on Thursdays?</label>
+							<input id="editor-repeat-thursday" data-name="repeat" type="checkbox" value="Thursday">
+						</div>
+						<div>
+							<label for="editor-repeat-friday">Repeat on Fridays?</label>
+							<input id="editor-repeat-friday" data-name="repeat" type="checkbox" value="Friday">
+						</div>
+						<div>
+							<label for="editor-repeat-saturday">Repeat on Saturdays?</label>
+							<input id="editor-repeat-saturday" data-name="repeat" type="checkbox" value="Saturday">
+						</div>
+						<div>
+							<label for="editor-repeat-sunday">Repeat on Sundays?</label>
+							<input id="editor-repeat-sunday" data-name="repeat" type="checkbox" value="Sunday">
+						</div>
+					</fieldset>
+					<footer>
+						<button data-action="cancel">Cancel</button>
+						<button data-action="save-close">Save and Close</button>
+						<button data-action="save-create">Save and Create</button>
+					</footer>
+				</article>
+				// Task Name
+				// Task Type (Work, Family, Company, Other)
+				// Task Project (Select Field with existing Projects or Text Field)
+				// Task Due Date (None or specific Datetime)
+				// Reoccuring Tasks (Varying or every Friday morning) - Varying means if task done, it asks for next due date
+				// Approximate Task Complexity
+				// Approximate Task Length
+				// External Dependency: Event, Appointment
+			</section>
+		</main>
+		<script type="module">
+
+			import { App } from "./source/App.mjs";
+
+			window.APP = new App({
+				types: [ 'company', 'work', 'family', 'household', 'other' ]
+			});
+
+		</script>
+	</body>
+</html>

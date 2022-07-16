@@ -1,0 +1,167 @@
+
+main em {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 4px;
+	color: #ffffff;
+	background: #404552;
+	font-weight: normal;
+	font-style: normal;
+	font-family: 'monospace';
+	border-radius: 4px;
+}
+
+h3 {
+	display: block;
+	text-align: center;
+}
+
+fieldset {
+	display: block;
+	width: 480px;
+	margin: 0px auto;
+	padding: 16px;
+	border: 1px solid #333643;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+fieldset div {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+}
+
+fieldset p {
+	display: block;
+	margin: 16px 0px;
+	padding: 0px;
+	text-align: center;
+}
+
+fieldset p:last-child {
+	margin-bottom: 0px;
+}
+
+fieldset + fieldset {
+	margin-top: 32px;
+}
+
+fieldset legend {
+	margin: 0px;
+	padding: 0px 4px;
+	font-weight: bold;
+	font-size: 20px;
+	text-align: center;
+	background: #383c4a;
+	border: 1px solid #333643;
+	border-radius: 4px;
+}
+
+fieldset span.tooltip {
+	position: absolute;
+	width: 480px;
+	height: 2em;
+	top: calc(-2em - 24px);
+	right: auto;
+	bottom: auto;
+	left: calc(-480px/2 + 128px/2);
+	margin: 0px;
+	padding: 4px;
+	color: #ffffff;
+	line-height: 16px;
+	vertical-align: middle;
+	background: #383c4a;
+	transition: 250ms all ease-out;
+	border: 2px solid #20222a;
+	border-radius: 4px;
+	visibility: hidden;
+	opacity: 0;
+}
+
+fieldset span.tooltip:hover {
+	visibility: hidden;
+	opacity: 0;
+}
+
+
+fieldset input[type="file"] {
+	display: none;
+}
+
+
+
+fieldset button,
+footer button,
+aside button {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 8px;
+	width: auto;
+	height: 24px;
+	line-height: 24px;
+	color: #a8b2bf;
+	background: #414857;
+	border: 1px solid #2a2f39;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	cursor: default;
+}
+
+fieldset button:focus,
+fieldset button:hover,
+footer button:focus,
+footer button:hover,
+aside button:focus,
+aside button:hover {
+	color: #acb6c3;
+	background: #4f5665;
+	border-color: #393e4a;
+	transition: 250ms all ease-out;
+	cursor: pointer;
+}
+
+footer button:first-of-type,
+aside button:first-of-type {
+	color: #a8b2bf;
+	background: #414857;
+	border-color: #2a2f39;
+	transition: 250ms all ease-out;
+}
+
+footer button:first-of-type:focus,
+footer button:first-of-type:hover,
+aside button:first-of-type:focus,
+aside button:first-of-type:hover {
+	color: #ffffff;
+	background: #4f5665;
+	border-color: #393e4a;
+	transition: 250ms all ease-out;
+	cursor: pointer;
+}
+
+footer button:last-of-type,
+aside button:last-of-type {
+	color: #bafcff;
+	background: #5294e2;
+	border-color: #2b2e39;
+	transition: 250ms all ease-out;
+}
+
+footer button:last-of-type:focus,
+footer button:last-of-type:hover,
+aside button:last-of-type:focus,
+aside button:last-of-type:hover {
+	color: #ffffff;
+	background: #60a2f0;
+	border-color: #2b2e39;
+	transition: 250ms all ease-out;
+}
+
+footer button:last-of-type,
+aside button:last-of-type {
+	position: relative;
+	right: 0px;
+}
+
