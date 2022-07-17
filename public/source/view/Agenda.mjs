@@ -102,8 +102,7 @@ const render = function(task, active) {
 const Agenda = function(app, element) {
 
 	this.app     = app;
-	this.element = element;
-	this.aside   = element.querySelector('aside');
+	this.element = element.querySelector('section');
 
 };
 
@@ -170,10 +169,10 @@ Agenda.prototype = {
 
 			if (rendered.length > 0) {
 				rendered.forEach((article) => {
-					this.element.insertBefore(article, this.aside);
+					this.element.appendChild(article);
 				});
 			} else {
-				this.element.insertBefore(renderEmpty(), this.aside);
+				this.element.appendChild(renderEmpty());
 			}
 
 		}

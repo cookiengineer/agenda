@@ -34,7 +34,7 @@ fieldset div {
 
 fieldset p {
 	display: block;
-	margin: 16px 0px;
+	margin: 0px 16px;
 	padding: 0px;
 	text-align: center;
 }
@@ -58,35 +58,191 @@ fieldset legend {
 	border-radius: 4px;
 }
 
-fieldset span.tooltip {
-	position: absolute;
-	width: 480px;
-	height: 2em;
-	top: calc(-2em - 24px);
-	right: auto;
-	bottom: auto;
-	left: calc(-480px/2 + 128px/2);
+fieldset label[for] {
+	display: inline-block;
+	width: auto;
+	height: 32px;
+	line-height: 30px;
 	margin: 0px;
-	padding: 4px;
-	color: #ffffff;
-	line-height: 16px;
+	padding: 0px;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-weight: normal;
+	text-align: left;
+	text-overflow: ellipsis;
+	user-select: none;
 	vertical-align: middle;
-	background: #383c4a;
-	transition: 250ms all ease-out;
-	border: 2px solid #20222a;
+	white-space: nowrap;
+	border: 1px solid transparent;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+fieldset input[type="checkbox"] {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	line-height: 30px;
+	margin: 0px;
+	padding: 0px 8px;
+	color: #ffffff;
+	background: #404552;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	vertical-align: top;
+	border: 1px solid #262a33;
 	border-radius: 4px;
-	visibility: hidden;
-	opacity: 0;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	appearance: none;
+	-webkit-appearance: none;
+	outline: none;
+	cursor: pointer;
 }
 
-fieldset span.tooltip:hover {
-	visibility: hidden;
-	opacity: 0;
+fieldset input[type="checkbox"]:checked {
+	color: #ffffff;
+	background: #60a2f0;
 }
 
+fieldset input[type="checkbox"]:checked:before {
+	display: block;
+	content: 'X';
+	font-family: 'vera-mono';
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 32px;
+	text-align: center;
+	vertical-align: middle;
+}
 
-fieldset input[type="file"] {
-	display: none;
+fieldset input[type="date"],
+fieldset input[type="time"] {
+	display: inline-block;
+	width: auto;
+	height: 32px;
+	line-height: 30px;
+	margin: 0px;
+	padding: 0px 8px;
+	color: #ffffff;
+	background: #404552;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	border: 1px solid #262a33;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	appearance: none;
+	-webkit-appearance: none;
+	outline: none;
+	cursor: text;
+}
+
+fieldset input[type="date"]:focus,
+fieldset input[type="date"]:hover,
+fieldset input[type="time"]:focus,
+fieldset input[type="time"]:hover {
+	border-color: #5294e2;
+	transition: 250ms all ease-out;
+}
+
+fieldset input[type="text"] {
+	display: inline-block;
+	width: auto;
+	height: 32px;
+	line-height: 30px;
+	margin: 0px;
+	padding: 0px 8px;
+	color: #ffffff;
+	background: #404552;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	border: 1px solid #262a33;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	outline: none;
+	cursor: text;
+}
+
+fieldset input[type="text"]:focus,
+fieldset input[type="text"]:hover {
+	border-color: #5294e2;
+	transition: 250ms all ease-out;
+}
+
+fieldset select {
+	display: inline-block;
+	width: auto;
+	height: 32px;
+	line-height: 30px;
+	margin: 0px;
+	padding: 0px 8px;
+	color: #ffffff;
+	background: #404552;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	border: 1px solid #262a33;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	appearance: none;
+	-webkit-appearance: none;
+	outline: none;
+	cursor: pointer;
+}
+
+fieldset select:focus,
+fieldset select:hover {
+	border-color: #5294e2;
+	transition: 250ms all ease-out;
+}
+
+fieldset select option {
+	margin: 0px;
+	padding: 0px;
+	font-family: 'vera-mono';
+}
+
+fieldset select option:focus,
+fieldset select option:hover {
+	color: #ffffff;
+	background-color: #5294e2;
+}
+
+fieldset textarea {
+	display: inline-block;
+	width: auto;
+	height: 128px;
+	line-height: 32px;
+	margin: 0px;
+	padding: 0px 8px;
+	color: #ffffff;
+	background: #404552;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	border: 1px solid #262a33;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	outline: none;
+	cursor: text;
+}
+
+fieldset textarea:focus,
+fieldset textarea:hover {
+	border-color: #5294e2;
+	transition: 250ms all ease-out;
 }
 
 
@@ -95,18 +251,23 @@ fieldset button,
 footer button,
 aside button {
 	display: inline-block;
+	width: auto;
+	height: 32px;
+	line-height: 30px;
 	margin: 0px;
 	padding: 0px 8px;
-	width: auto;
-	height: 24px;
-	line-height: 24px;
 	color: #a8b2bf;
 	background: #414857;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
 	border: 1px solid #2a2f39;
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
 	cursor: default;
+	outline: none;
 }
 
 fieldset button:focus,

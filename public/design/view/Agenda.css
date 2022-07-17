@@ -1,0 +1,116 @@
+
+main > section#agenda > header ul {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	-webkit-app-region: no-drag;
+}
+
+main > section#agenda > header ul li {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 8px;
+	height: 32px;
+	line-height: 30px;
+	color: #a8b2bf;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	background: #414857;
+	border-top: 1px solid #2b2e39;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid #2b2e39;
+	border-left: 1px solid transparent;
+	border-radius: 0px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	cursor: pointer;
+}
+
+main > section#agenda > header ul li:hover {
+	color: #acb6c3;
+	background: #4f5665;
+	border-color: #393e4a;
+}
+
+main > section#agenda > header ul li:first-of-type {
+	border-top: 1px solid #2b2e39;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid #2b2e39;
+	border-left: 1px solid #2b2e39;
+	border-radius: 4px 0px 0px 4px;
+}
+
+main > section#agenda > header ul li:last-of-type {
+	border-top: 1px solid #2b2e39;
+	border-right: 1px solid #2b2e39;
+	border-bottom: 1px solid #2b2e39;
+	border-left: 1px solid transparent;
+	border-radius: 0px 4px 4px 0px;
+}
+
+main > section#agenda > header ul li.active {
+	color: #ffffff;
+	background: #5294e2;
+	border-color: #2f343f;
+}
+
+main > section#agenda > header ul li[data-type="company"].active   { background-color: #e2a052; }
+main > section#agenda > header ul li[data-type="work"].active      { background-color: #5294e2; }
+main > section#agenda > header ul li[data-type="family"].active    { background-color: #e252dc; }
+main > section#agenda > header ul li[data-type="household"].active { background-color: #52e258; }
+main > section#agenda > header ul li[data-type="other"].active     { background-color: #262a33; }
+
+
+
+main > section#agenda article h3 span[data-complexity] {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	font-size: 16px;
+	text-align: center;
+	vertical-align: top;
+	border: 0px solid transparent;
+	border-radius: 32px;
+	background: #2f343f;
+	box-sizing: border-box;
+}
+
+main > section#agenda article[data-type="company"]   h3 span[data-complexity] { color: #ffffff; background-color: #e2a052; }
+main > section#agenda article[data-type="work"]      h3 span[data-complexity] { color: #ffffff; background-color: #5294e2; }
+main > section#agenda article[data-type="family"]    h3 span[data-complexity] { color: #ffffff; background-color: #e252dc; }
+main > section#agenda article[data-type="household"] h3 span[data-complexity] { color: #ffffff; background-color: #52e258; }
+main > section#agenda article[data-type="other"]     h3 span[data-complexity] { color: #ffffff; background-color: #262a33; }
+
+main > section#agenda article div:nth-of-type(1),
+main > section#agenda article div:nth-of-type(2) {
+	display: block;
+	margin: 0px 0px 8px 0px;
+	padding: 0px;
+	text-align: right;
+}
+
+main > section#agenda article div:nth-of-type(1) b {
+	display: inline-block;
+	width: calc(100% - 170px);
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-weight: bold;
+	text-align: left;
+}
+
+main > section#agenda article div:nth-of-type(1) span,
+main > section#agenda article div:nth-of-type(2) span {
+	font-family: 'vera-mono';
+	font-size: 16px;
+}
+
+main > section#agenda article div:last-of-type {
+	display: block;
+	margin: 16px 0px;
+	padding: 0px;
+	text-align: left;
+}
+

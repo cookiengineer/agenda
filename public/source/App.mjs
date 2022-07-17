@@ -72,6 +72,8 @@ App.prototype = {
 			let element = this.elements[name] || null;
 			let view    = this.views[name]    || null;
 
+			console.log(view, element);
+
 			if (element !== null && view !== null) {
 
 				if (view !== this.view) {

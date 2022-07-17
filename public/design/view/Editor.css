@@ -1,0 +1,78 @@
+
+main section#editor article fieldset {
+	display: block;
+	width: 100%;
+	height: auto;
+	border: 0px solid transparent;
+}
+
+main section#editor article fieldset div {
+	display: block;
+	margin: 0px 0px 8px 0px;
+	padding: 0px;
+}
+
+main section#editor article fieldset div:last-of-type {
+	margin: 0px 0px 0px 0px;
+}
+
+main section#editor article fieldset div label[for] {
+	width: 128px;
+	vertical-align: top;
+}
+
+main section#editor article fieldset div input + label[for] {
+	width: auto;
+}
+
+main section#editor article fieldset div label[for] + input[type="text"],
+main section#editor article fieldset div label[for] + select,
+main section#editor article fieldset div label[for] + textarea {
+	width: calc(100% - 128px - 16px);
+	vertical-align: top;
+}
+
+main section#editor ul#editor-deadline,
+main section#editor ul#editor-repeat {
+	display: inline-block;
+	width: calc(100% - 128px - 16px);
+	height: auto;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	vertical-align: top;
+}
+
+main section#editor ul#editor-deadline > li,
+main section#editor ul#editor-repeat > li {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+}
+
+main section#editor ul#editor-repeat > li > label {
+	width: auto;
+}
+
+
+
+@media screen and (max-width: 640px) {
+
+	main section#editor input#editor-eternal + label {
+		display: none;
+	}
+
+	main section#editor ul#editor-deadline > li,
+	main section#editor ul#editor-repeat > li {
+		display: block;
+		margin: 0px 0px 8px 0px;
+		padding: 0px;
+	}
+
+	main section#editor ul#editor-deadline > li:last-of-type,
+	main section#editor ul#editor-repeat > li:last-of-type {
+		margin-bottom: 0px;
+	}
+
+}
+

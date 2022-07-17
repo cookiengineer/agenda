@@ -1,91 +1,9 @@
 
-header {
-	display: block;
-	position: fixed;
-	width: auto;
-	height: 42px;
-	margin: 0px;
-	padding: 0px;
-	top: 0px;
-	right: 0px;
-	bottom: auto;
-	left: 0px;
-	line-height: 42px;
-	text-align: center;
-	vertical-align: middle;
-	background: #2f343f;
-	border: 0px solid transparent;
-	border-bottom: 2px solid #262a33;
-	border-radius: 0px;
-	-webkit-user-select: none;
-	-webkit-app-region: drag;
-}
-
-header ul {
-	display: inline-block;
-	margin: 0px;
-	padding: 0px;
-	list-style: none;
-	-webkit-app-region: no-drag;
-}
-
-header ul > li {
-	display: inline-block;
-	margin: 0px;
-	padding: 0px 8px;
-	height: 24px;
-	line-height: 24px;
-	color: #a8b2bf;
-	font-family: 'cantarell';
-	font-size: 16px;
-	font-style: normal;
-	font-weight: normal;
-	background: #414857;
-	border-top: 1px solid #2b2e39;
-	border-right: 1px solid transparent;
-	border-bottom: 1px solid #2b2e39;
-	border-left: 1px solid transparent;
-	border-radius: 0px;
-	cursor: default;
-}
-
-header ul > li:hover {
-	color: #acb6c3;
-	background: #4f5665;
-	border-color: #393e4a;
-	cursor: default;
-}
-
-header ul > li:first-of-type {
-	border-top: 1px solid #2b2e39;
-	border-right: 1px solid transparent;
-	border-bottom: 1px solid #2b2e39;
-	border-left: 1px solid #2b2e39;
-	border-radius: 4px 0px 0px 4px;
-}
-
-header ul > li:last-of-type {
-	border-top: 1px solid #2b2e39;
-	border-right: 1px solid #2b2e39;
-	border-bottom: 1px solid #2b2e39;
-	border-left: 1px solid transparent;
-	border-radius: 0px 4px 4px 0px;
-}
-
-header ul > li.active {
-	color: #ffffff;
-	background: #5294e2;
-	border-color: #2f343f;
-	cursor: default;
-}
-
-
-
 main {
 	position: fixed;
 	width: auto;
 	height: auto;
-	top: 44px;
+	top: 0px;
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
@@ -102,7 +20,8 @@ main {
 	-webkit-app-region: no-drag;
 }
 
-main section {
+main > section {
+	display: block;
 	position: absolute;
 	top: 0px;
 	right: 0px;
@@ -112,26 +31,61 @@ main section {
 	transition: 250ms all ease-out;
 }
 
-main section.active {
+main > section.active {
 	transform: translate(0%, 0%);
 	transition: 250ms all ease-out;
 }
 
-main section.inactive {
+main > section.inactive {
 	transform: translate(-100%, 0%);
 	transition: 250ms all ease-out;
 }
 
-main section article {
+main > section > header {
 	display: block;
-	width: 640px;
-	margin: 16px auto;
+	position: fixed;
+	width: auto;
+	height: auto;
+	margin: 0px;
 	padding: 8px;
-	border: 2px solid #262a33;
-	border-left: 16px solid #262a33;
+	top: 0px;
+	right: 0px;
+	bottom: auto;
+	left: 0px;
+	text-align: center;
+	vertical-align: middle;
+	background: #2f343f;
+	border: 0px solid transparent;
+	border-bottom: 2px solid #262a33;
+	border-radius: 0px;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
 }
 
-main section article h3 {
+main > section > section {
+	position: absolute;
+	top: 50px;
+	right: 0px;
+	bottom: 50px;
+	left: 0px;
+	overflow: hidden auto;
+}
+
+main > section article {
+	display: block;
+	width: 704px;
+	margin: 32px auto;
+	padding: 8px;
+	border-top: 2px solid #262a33;
+	border-right: 16px solid #262a33;
+	border-bottom: 2px solid #262a33;
+	border-left: 16px solid #262a33;
+	box-sizing: border-box;
+	transition: border-color 250ms ease-out;
+}
+
+main > section article h3 {
 	display: block;
 	margin: 0px 0px 8px 0px;
 	padding: 0px;
@@ -144,75 +98,20 @@ main section article h3 {
 	overflow: hidden;
 }
 
-main section article h3 > span[data-complexity] {
-	display: inline-block;
-	width: 32px;
-	height: 32px;
-	font-size: 16px;
-	text-align: center;
-	vertical-align: top;
-	border: 0px solid transparent;
-	border-radius: 32px;
-	background: #2f343f;
-	box-sizing: border-box;
-}
-
-main section article div:nth-of-type(1),
-main section article div:nth-of-type(2) {
-	display: block;
-	margin: 0px 0px 8px 0px;
-	padding: 0px;
-	text-align: right;
-}
-
-main section article div:nth-of-type(1) b {
-	display: inline-block;
-	width: calc(100% - 170px);
-	font-family: 'cantarell';
-	font-size: 16px;
-	font-weight: bold;
-	text-align: left;
-}
-
-main section article div:nth-of-type(1) span,
-main section article div:nth-of-type(2) span {
-	font-family: 'vera-mono';
-	font-size: 16px;
-}
-
-main section article div:last-of-type {
-	display: block;
-	margin: 16px 0px;
-	padding: 0px;
-	text-align: left;
-}
-
-main section article footer {
+main > section article footer {
 	display: block;
 	text-align: right;
 }
 
-header ul > li[data-type="company"].active   { background-color: #5294e2; }
-header ul > li[data-type="work"].active      { background-color: #5294e2; }
-header ul > li[data-type="family"].active    { background-color: #e252dc; }
-header ul > li[data-type="household"].active { background-color: #e2a052; }
-header ul > li[data-type="other"].active     { background-color: #52e258; }
-
-main section article[data-type="company"]   { border-color: #5294e2; }
-main section article[data-type="work"]      { border-color: #5294e2; }
-main section article[data-type="family"]    { border-color: #e252dc; }
-main section article[data-type="household"] { border-color: #e2a052; }
-main section article[data-type="other"]     { border-color: #52e258; }
-
-main section article[data-type="company"] span[data-complexity]   { color: #ffffff; background-color: #5294e2; }
-main section article[data-type="work"] span[data-complexity]      { color: #ffffff; background-color: #5294e2; }
-main section article[data-type="family"] span[data-complexity]    { color: #ffffff; background-color: #e252dc; }
-main section article[data-type="household"] span[data-complexity] { color: #ffffff; background-color: #e2a052; }
-main section article[data-type="other"] span[data-complexity]     { color: #ffffff; background-color: #52e258; }
+main > section article[data-type="company"]   { border-color: #e2a052; }
+main > section article[data-type="work"]      { border-color: #5294e2; }
+main > section article[data-type="family"]    { border-color: #e252dc; }
+main > section article[data-type="household"] { border-color: #52e258; }
+main > section article[data-type="other"]     { border-color: #262a33; }
 
 
 
-aside {
+main > section > footer {
 	display: block;
 	position: fixed;
 	width: auto;
@@ -224,26 +123,26 @@ aside {
 	bottom: 0px;
 	left: 0px;
 	text-align: center;
+	vertical-align: middle;
 	background: #2f343f;
 	border: 0px solid transparent;
 	border-top: 2px solid #262a33;
+	border-radius: 0px;
+	user-select: none;
+	-webkit-user-select: none;
 }
 
-aside button {
+main > section > footer button {
 	display: inline-block;
-	width: 128px;
+	width: auto;
 	margin: 0px 8px 0px 8px;
 }
 
-aside button:last-of-type {
-	margin-bottom: 0px;
-}
 
 
+@media screen and (max-width: 704px) {
 
-@media screen and (max-width: 640px) {
-
-	main section article {
+	main > section article {
 		width: auto;
 	}
 
