@@ -72,19 +72,19 @@ App.prototype = {
 			let element = this.elements[name] || null;
 			let view    = this.views[name]    || null;
 
-			console.log(view, element);
-
 			if (element !== null && view !== null) {
 
 				if (view !== this.view) {
 
-					Object.values(this.elements).forEach((element) => {
+					if (this.view !== null) {
 
-						if (element !== null) {
-							element.className = '';
+						let old_name    = Object.keys(this.views)[Object.values(this.views).indexOf(this.view)];
+						let old_element = this.elements[old_name] || null;
+						if (old_element !== null) {
+							old_element.className = 'inactive';
 						}
 
-					});
+					}
 
 					element.className = 'active';
 

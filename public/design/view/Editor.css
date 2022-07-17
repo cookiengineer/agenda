@@ -54,6 +54,21 @@ main section#editor ul#editor-repeat > li > label {
 	width: auto;
 }
 
+main section#editor footer {
+	display: flex;
+	justify-content: flex-start;
+	flex-direction: row;
+}
+
+main section#editor footer button {
+	display: flex;
+}
+
+main section#editor footer button:nth-of-type(2) {
+	margin-left: auto;
+	margin-right: 16px;
+}
+
 
 
 @media screen and (max-width: 640px) {

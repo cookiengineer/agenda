@@ -114,3 +114,38 @@ main > section#agenda article div:last-of-type {
 	text-align: left;
 }
 
+main > section#agenda article footer {
+	display: block;
+	overflow: hidden;
+	height: 0px;
+	opacity: 0;
+	transition: all 250ms ease-out;
+}
+
+main > section#agenda article[data-focus] footer {
+	height: 32px;
+	opacity: 1;
+	transition: all 250ms ease-out;
+}
+
+main > section#agenda article footer {
+	display: flex;
+	justify-content: space-between;
+}
+
+
+
+main > section#agenda > footer input[type="text"] {
+	width: 256px;
+}
+
+
+
+@media screen and (max-width: 720px) {
+
+	main > section#agenda > footer input[type="text"] {
+		display: none;
+	}
+
+}
+

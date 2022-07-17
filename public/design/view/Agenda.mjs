@@ -27,6 +27,38 @@ const cleanify = (element) => {
 
 };
 
+const toArticle = (target) => {
+
+	let found   = null;
+	let current = target;
+
+	while (current.tagName !== 'BODY') {
+
+		if (current.tagName === 'ARTICLE') {
+
+			found = current;
+			break;
+
+		} else {
+
+			current = current.parentNode;
+
+		}
+
+	}
+
+	if (found !== null) {
+
+		if (found.getAttribute('data-focus') === null) {
+			return found;
+		}
+
+	}
+
+	return null;
+
+};
+
 
 
 export const initialize = () => {
@@ -75,6 +107,38 @@ export const initialize = () => {
 			});
 
 		}
+
+	}
+
+	let section = document.querySelector('section#agenda > section');
+	if (section !== null) {
+
+
+		section.addEventListener('click', (event) => {
+
+			let article = toArticle(event.target);
+			if (article !== null) {
+
+				let articles = Array.from(section.querySelectorAll('article'));
+				if (articles.length > 0) {
+
+					articles.forEach((other) => {
+
+						if (other === article) {
+							other.setAttribute('data-focus', 'whatever');
+						} else {
+							other.removeAttribute('data-focus');
+						}
+
+					});
+
+				}
+
+			}
+
+			console.log(event);
+
+		});
 
 	}
 

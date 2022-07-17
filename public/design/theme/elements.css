@@ -150,6 +150,7 @@ fieldset input[type="time"]:hover {
 	transition: 250ms all ease-out;
 }
 
+footer input[type="text"],
 fieldset input[type="text"] {
 	display: inline-block;
 	width: auto;
@@ -171,6 +172,8 @@ fieldset input[type="text"] {
 	cursor: text;
 }
 
+footer input[type="text"]:focus,
+footer input[type="text"]:hover,
 fieldset input[type="text"]:focus,
 fieldset input[type="text"]:hover {
 	border-color: #5294e2;

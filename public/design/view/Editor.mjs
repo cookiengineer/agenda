@@ -18,7 +18,7 @@ const onresize = () => {
 	}
 
 	let width = window.innerWidth;
-	if (width > 640) {
+	if (width > 720) {
 
 		if (mode !== 'desktop') {
 
@@ -43,7 +43,7 @@ const onresize = () => {
 
 		}
 
-	} else if (width < 640) {
+	} else if (width < 720) {
 
 		if (mode !== 'mobile') {
 

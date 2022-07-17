@@ -78,10 +78,11 @@ const render = function(task, active) {
 		html.push('</div>');
 
 		html.push('<footer>');
+		html.push('<button data-action="edit">Edit</button>');
 		if (active === true) {
-			html.push('<button data-action="stop">Stop working on this</button>');
+			html.push('<button data-action="stop" title="Stop working on this Task!">Stop</button>');
 		} else {
-			html.push('<button data-action="start">Start to work on this</button>');
+			html.push('<button data-action="start" title="Start to work on this Task!">Start</button>');
 		}
 		html.push('</footer>');
 
