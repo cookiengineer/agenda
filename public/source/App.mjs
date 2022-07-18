@@ -1,6 +1,6 @@
 
 import { Client  } from './Client.mjs';
-import { isTask  } from './data/Task.mjs';
+import { IsTask  } from './data/Task.mjs';
 import { Agenda  } from './view/Agenda.mjs';
 import { Editor  } from './view/Editor.mjs';
 // import { Journal } from './view/Journal.mjs';
@@ -37,14 +37,8 @@ const App = function(selector) {
 	};
 
 
-	this.client.read((tasks) => {
-
-		console.log(this);
-
-		this.tasks = tasks.filter((task) => isTask(task));
-		this.show('agenda');
-
-	});
+	this.update();
+	this.show('agenda');
 
 };
 
@@ -64,7 +58,7 @@ App.prototype = {
 	show: function(name, task) {
 
 		name = typeof name === 'string' ? name : null;
-		task = isTask(task)             ? task : null;
+		task = IsTask(task)             ? task : null;
 
 
 		if (name !== null) {
@@ -107,6 +101,27 @@ App.prototype = {
 
 
 		return false;
+
+	},
+
+	start: function(task) {
+
+		// TODO: Start Interval / duration update for task
+		// TODO: Integrate Interval with rendering in DOM
+
+	},
+
+	stop: function(task) {
+
+		// TODO: Stop Interval / duration update for task
+
+	},
+
+	update: function() {
+
+		this.client.update((tasks) => {
+			this.tasks = tasks.filter((task) => IsTask(task));
+		});
 
 	}
 

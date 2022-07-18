@@ -30,15 +30,17 @@
 			<section id="journal"></section>
 			<section id="editor">
 				<header>
-					<b>Create new Task</b>
+					<b>Create Task</b>
 				</header>
 				<section>
 					<article data-type="other">
+
+						<!-- Hidden Fields -->
+						<input id="editor-id" data-name="id" type="hidden" value="0">
+						<input id="editor-duration" data-name="duration" type="hidden" value="00:00:00">
+						<!-- /Hidden Fields -->
+
 						<fieldset>
-							<div>
-								<label for="editor-title">Title</label>
-								<input id="editor-title" data-name="title" type="text" placeholder="Implement Awesomeness()">
-							</div>
 							<div>
 								<label for="editor-type">Type</label>
 								<select id="editor-type" data-name="type">
@@ -52,6 +54,10 @@
 							<div>
 								<label for="editor-project">Project</label>
 								<input id="editor-project" data-name="project" type="text" placeholder="life">
+							</div>
+							<div>
+								<label for="editor-title">Title</label>
+								<input id="editor-title" data-name="title" type="text" placeholder="Implement Awesomeness()">
 							</div>
 							<div>
 								<label for="editor-description">Description</label>
@@ -72,15 +78,15 @@
 								</select>
 							</div>
 							<div>
-								<label for="editor-estimation">Estimation</label>
-								<input id="editor-estimation" data-name="estimation" type="text" placeholder="01:00:00">
-							</div>
-							<div>
 								<label for="editor-deadline">Deadline?</label>
 								<ul id="editor-deadline">
 									<li><input id="editor-deadline-date" data-name="deadline-date" type="date"></li>
 									<li><input id="editor-deadline-time" data-name="deadline-time" type="time"></li>
 								</ul>
+							</div>
+							<div>
+								<label for="editor-estimation">Estimation</label>
+								<input id="editor-estimation" data-name="estimation" type="text" placeholder="01:00:00">
 							</div>
 						</fieldset>
 						<fieldset>
@@ -126,9 +132,9 @@
 					</article>
 				</section>
 				<footer>
-					<button data-action="cancel" title="Back to Agenda">Cancel</button>
-					<button data-action="save" title="Save and Back to Agenda">Save</button>
-					<button data-action="save-create" title="Save and Create another Task">Save and Next</button>
+					<button data-action="cancel" title="Back to Agenda View">Cancel</button>
+					<button data-action="save" title="Save and Back to Agenda View">Save</button>
+					<button data-action="save-create" title="Save and Create another Task">Save and Create</button>
 				</footer>
 			</section>
 		</main>

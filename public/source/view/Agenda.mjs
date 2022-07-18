@@ -1,5 +1,5 @@
 
-import { isTask   } from '../../source/data/Task.mjs';
+import { IsTask   } from '../../source/data/Task.mjs';
 import { DATETIME } from '../../source/parser/DATETIME.mjs';
 
 const isArray  = (obj) => Object.prototype.toString.call(obj) === '[object Array]';
@@ -28,7 +28,7 @@ const renderEmpty = function() {
 
 const render = function(task, active) {
 
-	if (isTask(task) === true) {
+	if (IsTask(task) === true) {
 
 		let element = document.createElement('article');
 		let html    = [];
@@ -47,6 +47,7 @@ const render = function(task, active) {
 		html.push(' / ');
 		html.push('<span data-estimation="' + task.estimation + '">' + task.estimation + '</span>');
 		if (isArray(task.repeat) === true && task.repeat.length > 0) {
+			html.push('<br>');
 			html.push('<span data-repeat="' + task.repeat.join(',') + '">(every ' + task.repeat.join(', ') + ')</span>');
 		}
 		html.push('</div>');
@@ -112,13 +113,14 @@ Agenda.prototype = {
 
 	render: function(task) {
 
-		task = isTask(task) ? task : null;
+		task = IsTask(task) ? task : null;
 
 
-		console.log('RENDER');
+		if (task !== null) {
 
+			// Do Nothing
 
-		if (task === null) {
+		} else {
 
 			let rendered = [];
 

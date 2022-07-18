@@ -113,21 +113,27 @@ const isRepeat = function(repeat) {
 
 };
 
-export const isTask = function(task) {
+
+
+export const IsTask = function(task) {
 
 	if (
 		isObject(task) === true
-		&& isString(task.id) === true
-		&& isString(task.title) === true
-		&& isString(task.description) === true
+		&& isNumber(task.id) === true
 		&& isString(task.type) === true && TYPES.includes(task.type) === true
 		&& isString(task.project) === true
+		&& isString(task.title) === true
+		&& isString(task.description) === true
+
+		&& isComplexity(task.complexity) === true
 		&& (isDatetime(task.deadline) === true || task.deadline === null)
+		&& isTime(task.estimation) === true
+
 		&& isBoolean(task.eternal) === true
 		&& isRepeat(task.repeat) === true
-		&& isComplexity(task.complexity) === true
+
 		&& isTime(task.duration) === true
-		&& isTime(task.estimation) === true
+		&& isBoolean(task.is_completed) === true
 	) {
 		return true;
 	}
@@ -136,20 +142,27 @@ export const isTask = function(task) {
 
 };
 
-export const toTask = function(id) {
+export const NewTask = function(id) {
+
+	id = isNumber(id) ? id : 0;
+
 
 	return {
-		id:          id,
-		title:       null,
-		description: '',
-		type:        'other',
-		project:     'life',
-		deadline:    null,
-		eternal:     false,
-		repeat:      [],
-		complexity:  COMPLEXITY[0],
-		duration:    '00:00:00',
-		estimation:  '01:00:00'
+		id:           id,
+		type:         'other',
+		project:      'life',
+		title:        null,
+		description:  '',
+
+		complexity:   COMPLEXITY[0],
+		deadline:     null,
+		estimation:   '01:00:00',
+
+		eternal:      false,
+		repeat:       [],
+
+		duration:     '00:00:00',
+		is_completed: false
 	};
 
 };
