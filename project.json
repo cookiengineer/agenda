@@ -1,0 +1,17 @@
+{
+	"name": "agenda",
+	"description": "Offline-ready Task Management App",
+	"author": {
+		"name": "Cookie Engineer",
+		"email": "sayno@spam.to"
+	},
+	"version": "0.1.0",
+	"binaryname": "agenda",
+	"frontend": {
+		"dir":     "public",
+		"bridge":  "bridge",
+		"install": "true",
+		"build":   "true",
+		"serve":   "true"
+	}
+}
