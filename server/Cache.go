@@ -1,7 +1,6 @@
 
-package cache;
+package server;
 
-import "agenda/data";
 import "encoding/json";
 import "io/ioutil";
 import "os";
@@ -10,7 +9,7 @@ import "strings";
 
 
 
-func toFilename (task data.Task) string {
+func toFilename (task Task) string {
 
 	var project string = strings.ToLower(task.Project);
 	var number  string = strconv.Itoa(task.ID);
@@ -39,7 +38,7 @@ func toFilename (task data.Task) string {
 
 type Cache struct {
 	Folder string;
-	Tasks  []data.Task;
+	Tasks  []Task;
 };
 
 
@@ -59,9 +58,9 @@ func NewCache () Cache {
 
 }
 
-func (cache *Cache) ReadTask (filename string) data.Task {
+func (cache *Cache) ReadTask (filename string) Task {
 
-	var task data.Task;
+	var task Task;
 
 	buffer, err1 := ioutil.ReadFile(cache.Folder + "/" + filename);
 
@@ -79,7 +78,7 @@ func (cache *Cache) ReadTask (filename string) data.Task {
 
 }
 
-func (cache *Cache) WriteTask (task data.Task) bool {
+func (cache *Cache) WriteTask (task Task) bool {
 
 	if task.Project != "" && task.ID != 0 {
 
@@ -114,13 +113,13 @@ func (cache *Cache) Update() {
 
 	if err == nil {
 
-		var tasks []data.Task;
+		var tasks []Task;
 
 		for _, file := range files {
 
 			if strings.HasSuffix(file.Name(), ".json") {
 
-				var task data.Task = cache.ReadTask(file.Name());
+				var task Task = cache.ReadTask(file.Name());
 
 				if task.ID != 0 {
 					tasks = append(tasks, task);
@@ -136,7 +135,7 @@ func (cache *Cache) Update() {
 
 }
 
-func (cache *Cache) Create (task data.Task) bool {
+func (cache *Cache) Create (task Task) bool {
 
 	if task.ID == 0 {
 
@@ -171,7 +170,7 @@ func (cache *Cache) Create (task data.Task) bool {
 
 }
 
-func (cache *Cache) Modify (task data.Task) bool {
+func (cache *Cache) Modify (task Task) bool {
 
 	if task.ID != 0 && task.ID < 999999 {
 

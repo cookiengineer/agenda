@@ -1,14 +1,12 @@
 
-package api;
+package server;
 
-import "agenda/cache";
-import "agenda/data";
 import "encoding/json";
 import "net/http";
 
 
 
-var CACHE cache.Cache = cache.NewCache();
+var CACHE Cache = NewCache();
 
 
 func GetTasks (response http.ResponseWriter, request *http.Request) {
@@ -57,7 +55,7 @@ func CreateTask (response http.ResponseWriter, request *http.Request) {
 
 	if request.Method == http.MethodPost {
 
-		task, err1 := data.NewTask(request.Body);
+		task, err1 := NewTask(request.Body);
 
 		if err1 == nil {
 
@@ -113,7 +111,7 @@ func ModifyTask (response http.ResponseWriter, request *http.Request) {
 
 	if request.Method == http.MethodPost {
 
-		task, err1 := data.NewTask(request.Body);
+		task, err1 := NewTask(request.Body);
 
 		if err1 == nil {
 

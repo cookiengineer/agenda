@@ -1,5 +1,5 @@
 
-package data;
+package server;
 
 import "encoding/json";
 import "io";

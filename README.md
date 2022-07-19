@@ -21,8 +21,6 @@ This tool aims to solve this, in a very opinionated manner.
 ## Quickstart
 
 ```bash
-cd ./server/source;
-
 # Run Web Server and Backend API
 go run agenda.go;
 
