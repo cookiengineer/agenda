@@ -2,6 +2,15 @@
 # Construction Sites
 
 
+# Calendar View
+
+- [ ] Calendar View should reflect the time schedule, with enable/disable buttons on the side for each project and/or category
+
+# Scrumboard View
+
+- [ ] Scrumboard View should reflect all issues per project, so that the tasks that should be done on the specific day are viewed in the To Do row.
+
+
 # Agenda View
 
 - [ ] Search field in the footer should implement a fuzzy search for `project`, `title`, `description`, `deadline`, and `repeat[]`.

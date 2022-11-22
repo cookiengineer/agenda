@@ -130,7 +130,10 @@ const renderHeader = function(title) {
 
 	title = isString(title) ? title : 'Create Task';
 
-	this.header.innerHTML = '<b>' + title + '</b>';
+	let headline = this.header.querySelector('b');
+	if (headline !== null) {
+		headline.innerHTML = title;
+	}
 
 };
 

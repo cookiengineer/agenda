@@ -251,6 +251,7 @@ fieldset textarea:hover {
 
 
 fieldset button,
+header button,
 footer button,
 aside button {
 	display: inline-block;
@@ -275,6 +276,8 @@ aside button {
 
 fieldset button:focus,
 fieldset button:hover,
+header button:focus,
+header button:hover,
 footer button:focus,
 footer button:hover,
 aside button:focus,
@@ -286,6 +289,7 @@ aside button:hover {
 	cursor: pointer;
 }
 
+header button:first-of-type,
 footer button:first-of-type,
 aside button:first-of-type {
 	color: #a8b2bf;
@@ -294,6 +298,8 @@ aside button:first-of-type {
 	transition: 250ms all ease-out;
 }
 
+header button:first-of-type:focus,
+header button:first-of-type:hover,
 footer button:first-of-type:focus,
 footer button:first-of-type:hover,
 aside button:first-of-type:focus,

@@ -1,8 +1,9 @@
 
-import { Client  } from './Client.mjs';
-import { IsTask  } from './data/Task.mjs';
-import { Agenda  } from './view/Agenda.mjs';
-import { Editor  } from './view/Editor.mjs';
+import { Client   } from './Client.mjs';
+import { IsTask   } from './data/Task.mjs';
+import { Agenda   } from './view/Agenda.mjs';
+import { Calendar } from './view/Calendar.mjs';
+import { Editor   } from './view/Editor.mjs';
 // import { Journal } from './view/Journal.mjs';
 
 const isObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]';
@@ -15,8 +16,9 @@ const App = function(selector) {
 
 
 	this.selector = Object.assign({
-		project: null,
-		types:   [ 'company', 'work', 'family', 'household', 'other' ]
+		datetime: null,
+		project:  null,
+		types:    [ 'company', 'work', 'family', 'household', 'other' ]
 	}, selector);
 
 
@@ -24,15 +26,17 @@ const App = function(selector) {
 
 	this.active   = null;
 	this.elements = {
-		'agenda':  document.querySelector('section#agenda'),
-		'editor':  document.querySelector('section#editor'),
-		'journal': document.querySelector('section#journal')
+		'agenda':    document.querySelector('section#agenda'),
+		'calendar':  document.querySelector('section#calendar'),
+		'editor':    document.querySelector('section#editor'),
+		'journal':   document.querySelector('section#journal')
 	};
 	this.tasks = [];
 	this.view  = null;
 	this.views = {
-		'agenda':  new Agenda(this,  this.elements['agenda']),
-		'editor':  new Editor(this,  this.elements['editor']),
+		'agenda':   new Agenda(this, this.elements['agenda']),
+		'calendar': new Calendar(this, this.elements['calendar']),
+		'editor':   new Editor(this, this.elements['editor']),
 		// 'journal': new Journal(this, this.elements['journal'])
 	};
 
@@ -49,7 +53,11 @@ App.prototype = {
 
 		// XXX: Selector has changed
 
-		if (this.view === this.views['agenda']) {
+		if (
+			this.view === this.views['agenda']
+			|| this.view === this.views['calendar']
+			|| this.view === this.views['journal']
+		) {
 			this.view.render();
 		}
 

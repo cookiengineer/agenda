@@ -126,8 +126,58 @@ Agenda.prototype = {
 
 			this.app.tasks.filter((task) => {
 
-				let matches_type    = false;
-				let matches_project = false;
+				let matches_datetime = false;
+				let matches_type     = false;
+				let matches_project  = false;
+
+				let datetime = this.app.selector.datetime;
+				if (datetime !== null) {
+
+					if (isString(task.deadline) === true) {
+
+						let deadline = DATETIME.parse(task.deadline);
+
+						let matches_year  = false;
+						let matches_month = false;
+						let matches_day   = false;
+
+						if (datetime.year !== null) {
+
+							if (datetime.year === deadline.year) {
+								matches_year = true;
+							}
+
+						} else {
+							matches_year = true;
+						}
+
+						if (datetime.month !== null) {
+
+							if (datetime.month === deadline.month) {
+								matches_month = true;
+							}
+
+						} else {
+							matches_month = true;
+						}
+
+						if (datetime.day !== null) {
+
+							if (datetime.day === deadline.day) {
+								matches_day = true;
+							}
+
+						} else {
+							matches_day = true;
+						}
+
+						matches_datetime = matches_year && matches_month && matches_day;
+
+					} else {
+						matches_datetime = true;
+					}
+
+				}
 
 				let types = this.app.selector.types;
 				if (types.length > 0) {
@@ -155,7 +205,7 @@ Agenda.prototype = {
 					matches_project = true;
 				}
 
-				return (matches_type && matches_project);
+				return (matches_datetime && matches_type && matches_project);
 
 			}).forEach((task) => {
 

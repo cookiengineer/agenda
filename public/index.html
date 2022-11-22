@@ -2,16 +2,24 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+
 		<link rel="stylesheet" href="./design/index.css">
 		<script type="module" src="./design/index.mjs"></script>
-		<title>Agenda</title>
+
+		<link rel="apple-touch-icon" sizes="180x180" href="./design/asset/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="./design/asset/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="./design/asset/favicon-16x16.png">
+		<link rel="manifest" href="./index.webmanifest">
+
+		<title>Agenda Taskplanner</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
 		<main>
 			<section id="agenda">
 				<header>
+					<button data-view="calendar">Calendar</button>
 					<ul>
 						<li class="active" data-type="company">Company</li>
 						<li class="active" data-type="work">Work</li>
@@ -19,6 +27,7 @@
 						<li class="active" data-type="household">Household</li>
 						<li class="active" data-type="other">Other</li>
 					</ul>
+					<span></span>
 				</header>
 				<section></section>
 				<footer>
@@ -27,10 +36,52 @@
 					<button data-action="create">Create Task</button>
 				</footer>
 			</section>
-			<section id="journal"></section>
+			<section id="calendar">
+				<header>
+					<button data-view="agenda">Agenda</button>
+					<ul>
+						<li class="active" data-type="company">Company</li>
+						<li class="active" data-type="work">Work</li>
+						<li class="active" data-type="family">Family</li>
+						<li class="active" data-type="household">Household</li>
+						<li class="active" data-type="other">Other</li>
+					</ul>
+					<span></span>
+				</header>
+				<section>
+					<table>
+						<thead>
+							<tr>
+								<th>Monday</th>
+								<th>Tuesday</th>
+								<th>Wednesday</th>
+								<th>Thursday</th>
+								<th>Friday</th>
+								<th>Saturday</th>
+								<th>Sunday</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</section>
+				<footer>
+					<button data-action="prev-month">Prev Month</button>
+					<button data-action="next-month">Next Month</button>
+				</footer>
+			</section>
+			<section id="journal">
+				// TODO: Journal is timeline per-datetime (specified year and month and day)
+				<header>
+				</header>
+				<section></section>
+				<footer>
+				</footer>
+			</section>
 			<section id="editor">
 				<header>
+					<button data-view="agenda">Agenda</button>
 					<b>Create Task</b>
+					<span></span>
 				</header>
 				<section>
 					<article data-type="other">
@@ -145,6 +196,10 @@
 			window.APP = new App({
 				types: [ 'company', 'work', 'family', 'household', 'other' ]
 			});
+
+			// setTimeout(() => {
+			// 	window.APP.show('calendar');
+			// }, 1000);
 
 		</script>
 	</body>

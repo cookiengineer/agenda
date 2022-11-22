@@ -1,32 +1,4 @@
 
-const cleanify = (element) => {
-
-	if (element.childNodes.length > 0) {
-
-		for (let c = 0, cl = element.childNodes.length; c < cl; c++) {
-
-			let node = element.childNodes[c];
-			if (
-				node.nodeName === '#text'
-				&& node.textContent.trim() === ''
-			) {
-
-				element.removeChild(node);
-				cl--;
-				c--;
-
-			} else {
-
-				cleanify(node);
-
-			}
-
-		}
-
-	}
-
-};
-
 const toArticle = (target) => {
 
 	let found   = null;
@@ -71,53 +43,6 @@ const toTask = function(identifier) {
 
 
 export const initialize = () => {
-
-	let header = document.querySelector('section#agenda > header');
-	if (header !== null) {
-
-		cleanify(header);
-
-
-		let selectors = Array.from(header.querySelectorAll('li'));
-		if (selectors.length > 0) {
-			selectors.forEach((element) => {
-
-				element.addEventListener('click', () => {
-
-					if (element.className === 'active') {
-						element.className = '';
-					} else {
-						element.className = 'active';
-					}
-
-
-					setTimeout(() => {
-
-						let types = [];
-
-						selectors.forEach((other) => {
-
-							if (other.className === 'active') {
-								types.push(other.getAttribute('data-type'));
-							}
-
-						});
-
-						let APP = window.APP || null;
-						if (APP !== null) {
-							APP.selector.types = types;
-							APP.refresh();
-						}
-
-					}, 0);
-
-				});
-
-			});
-
-		}
-
-	}
 
 	let section = document.querySelector('section#agenda > section');
 	if (section !== null) {

@@ -78,8 +78,9 @@ main > section.inactive > footer {
 
 
 main > section > header {
-	display: block;
+	display: flex;
 	position: fixed;
+	justify-content: space-between;
 	width: auto;
 	height: auto;
 	margin: 0px;
@@ -98,6 +99,72 @@ main > section > header {
 	-webkit-user-select: none;
 	-webkit-app-region: drag;
 }
+
+main > section > header ul {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	-webkit-app-region: no-drag;
+}
+
+main > section > header ul li {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 8px;
+	height: 32px;
+	line-height: 30px;
+	color: #a8b2bf;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	background: #414857;
+	border-top: 1px solid #2b2e39;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid #2b2e39;
+	border-left: 1px solid transparent;
+	border-radius: 0px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	cursor: pointer;
+}
+
+main > section > header ul li:hover {
+	color: #acb6c3;
+	background: #4f5665;
+	border-color: #393e4a;
+}
+
+main > section > header ul li:first-of-type {
+	border-top: 1px solid #2b2e39;
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid #2b2e39;
+	border-left: 1px solid #2b2e39;
+	border-radius: 4px 0px 0px 4px;
+}
+
+main > section > header ul li:last-of-type {
+	border-top: 1px solid #2b2e39;
+	border-right: 1px solid #2b2e39;
+	border-bottom: 1px solid #2b2e39;
+	border-left: 1px solid transparent;
+	border-radius: 0px 4px 4px 0px;
+}
+
+main > section > header ul li.active {
+	color: #ffffff;
+	background: #5294e2;
+	border-color: #2f343f;
+}
+
+main > section > header ul li[data-type="company"].active   { background-color: #e2a052; }
+main > section > header ul li[data-type="work"].active      { background-color: #5294e2; }
+main > section > header ul li[data-type="family"].active    { background-color: #e252dc; }
+main > section > header ul li[data-type="household"].active { background-color: #52e258; }
+main > section > header ul li[data-type="other"].active     { background-color: #262a33; }
+
+
 
 main > section > section {
 	position: absolute;
