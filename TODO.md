@@ -10,6 +10,10 @@
 
 - [ ] Scrumboard View should reflect all issues per project, so that the tasks that should be done on the specific day are viewed in the To Do row.
 
+# Gantt View
+
+- [ ] Show Tasks in a specific order, and milestones/deadlines according to whether or not they are blocking.
+
 
 # Agenda View
 
