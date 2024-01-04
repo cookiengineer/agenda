@@ -1,0 +1,79 @@
+
+main > section#agenda article h3 span[data-complexity] {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	font-size: 16px;
+	text-align: center;
+	vertical-align: top;
+	border: 0px solid transparent;
+	border-radius: 32px;
+	background: #2f343f;
+	box-sizing: border-box;
+}
+
+main > section#agenda article div:nth-of-type(1),
+main > section#agenda article div:nth-of-type(2) {
+	display: block;
+	margin: 0px 0px 8px 0px;
+	padding: 0px;
+	text-align: right;
+}
+
+main > section#agenda article div:nth-of-type(1) b {
+	display: inline-block;
+	width: calc(100% - 170px);
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-weight: bold;
+	text-align: left;
+}
+
+main > section#agenda article div:nth-of-type(1) span,
+main > section#agenda article div:nth-of-type(2) span {
+	font-family: 'vera-mono';
+	font-size: 16px;
+}
+
+main > section#agenda article div:last-of-type {
+	display: block;
+	margin: 16px 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+main > section#agenda article footer {
+	display: block;
+	overflow: hidden;
+	height: 0px;
+	opacity: 0;
+	transition: all 250ms ease-out;
+}
+
+main > section#agenda article[data-focus] footer {
+	height: 32px;
+	opacity: 1;
+	transition: all 250ms ease-out;
+}
+
+main > section#agenda article footer {
+	display: flex;
+	justify-content: space-between;
+}
+
+
+
+main > section#agenda > footer input[type="text"] {
+	width: 256px;
+}
+
+
+
+@media screen and (max-width: 720px) {
+
+	main > section#agenda > footer input[type="text"] {
+		display: none;
+	}
+
+}
+

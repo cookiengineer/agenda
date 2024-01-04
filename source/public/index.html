@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
+
+		<link rel="stylesheet" href="./design/index.css">
+		<script type="module" src="./design/index.mjs"></script>
+
+		<link rel="apple-touch-icon" sizes="180x180" href="./design/asset/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="./design/asset/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="./design/asset/favicon-16x16.png">
+		<link rel="manifest" href="./index.webmanifest">
+
+		<title>Agenda Taskplanner</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<main>
+			<section id="agenda">
+				<header>
+					<button data-view="calendar">Calendar</button>
+					<ul></ul>
+					<span></span>
+				</header>
+				<section></section>
+				<footer>
+					<button data-action="show-deadlines">Show Deadlines</button>
+					<input data-action="search-agenda" type="text" placeholder="Search for title, project or description">
+					<button data-action="create">Create Task</button>
+				</footer>
+			</section>
+			<section id="calendar">
+				<header>
+					<button data-view="agenda">Agenda</button>
+					<ul></ul>
+					<span></span>
+				</header>
+				<section>
+					<table>
+						<thead>
+							<tr>
+								<th>Monday</th>
+								<th>Tuesday</th>
+								<th>Wednesday</th>
+								<th>Thursday</th>
+								<th>Friday</th>
+								<th>Saturday</th>
+								<th>Sunday</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</section>
+				<footer>
+					<button data-action="prev-month">Prev Month</button>
+					<button data-action="next-month">Next Month</button>
+				</footer>
+			</section>
+			<section id="journal">
+				// TODO: Journal is timeline per-datetime (specified year and month and day)
+				<header>
+				</header>
+				<section></section>
+				<footer>
+				</footer>
+			</section>
+			<section id="editor">
+				<header>
+					<button data-view="agenda">Agenda</button>
+					<b>Create Task</b>
+					<span></span>
+				</header>
+				<section>
+					<article data-project="other">
+
+						<!-- Hidden Fields -->
+						<input id="editor-id" data-name="id" type="hidden" value="0">
+						<input id="editor-duration" data-name="duration" type="hidden" value="00:00:00">
+						<!-- /Hidden Fields -->
+
+						<fieldset>
+							<div>
+								<label for="editor-project">Project</label>
+								<input id="editor-project" data-name="project" type="text" placeholder="life" pattern="^[a-z0-9_\-]{3,}$" required>
+							</div>
+							<div>
+								<label for="editor-title">Title</label>
+								<input id="editor-title" data-name="title" type="text" placeholder="Implement Awesomeness()" pattern="^[A-Za-z0-9\(\):._\-+ ]{5,}$" required>
+							</div>
+							<div>
+								<label for="editor-description">Description</label>
+								<textarea id="editor-description" data-name="description" placeholder="A thorough description..." pattern="^(.*)+$" required></textarea>
+							</div>
+						</fieldset>
+						<fieldset>
+							<div>
+								<label for="editor-complexity">Complexity</label>
+								<select id="editor-complexity" data-name="complexity">
+									<option value="1">&nbsp;1&nbsp;(very easy)</option>
+									<option value="2">&nbsp;2&nbsp;(easy)</option>
+									<option value="3">&nbsp;3&nbsp;(normal)</option>
+									<option value="5">&nbsp;5&nbsp;(hard)</option>
+									<option value="8">&nbsp;8&nbsp;(very hard)</option>
+									<option value="13">13&nbsp;(ultra hard)</option>
+									<option value="21">21&nbsp;(almost impossible)</option>
+								</select>
+							</div>
+							<div>
+								<label for="editor-deadline">Deadline?</label>
+								<ul id="editor-deadline">
+									<li><input id="editor-deadline-date" data-name="deadline-date" type="date"></li>
+									<li><input id="editor-deadline-time" data-name="deadline-time" type="time"></li>
+								</ul>
+							</div>
+							<div>
+								<label for="editor-estimation">Estimation</label>
+								<input id="editor-estimation" data-name="estimation" type="text" placeholder="01:00:00" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}" required>
+							</div>
+						</fieldset>
+						<fieldset>
+							<div>
+								<label for="editor-eternal">Eternal?</label>
+								<input id="editor-eternal" data-name="eternal" type="checkbox">
+								<label for="editor-eternal">After completing this task, I'll have to do it again.</label>
+							</div>
+							<div>
+								<label for="editor-repeat">Repeat?</label>
+								<ul id="editor-repeat">
+									<li>
+										<input id="editor-repeat-monday" data-name="repeat" type="checkbox" value="Monday">
+										<label for="editor-repeat-monday" title="Monday">Mon</label>
+									</li>
+									<li>
+										<input id="editor-repeat-tuesday" data-name="repeat" type="checkbox" value="Tuesday">
+										<label for="editor-repeat-tuesday" title="Tuesday">Tue</label>
+									</li>
+									<li>
+										<input id="editor-repeat-wednesday" data-name="repeat" type="checkbox" value="Wednesday">
+										<label for="editor-repeat-wednesday" title="Wednesday">Wed</label>
+									</li>
+									<li>
+										<input id="editor-repeat-thursday" data-name="repeat" type="checkbox" value="Thursday">
+										<label for="editor-repeat-thursday" title="Thursday">Thu</label>
+									</li>
+									<li>
+										<input id="editor-repeat-friday" data-name="repeat" type="checkbox" value="Friday">
+										<label for="editor-repeat-friday" title="Friday">Fri</label>
+									</li>
+									<li>
+										<input id="editor-repeat-saturday" data-name="repeat" type="checkbox" value="Saturday">
+										<label for="editor-repeat-saturday" title="Saturday">Sat</label>
+									</li>
+									<li>
+										<input id="editor-repeat-sunday" data-name="repeat" type="checkbox" value="Sunday">
+										<label for="editor-repeat-sunday" title="Sunday">Sun</label>
+									</li>
+								</ul>
+							</div>
+						</fieldset>
+					</article>
+				</section>
+				<footer>
+					<button data-action="cancel" title="Back to Agenda View">Cancel</button>
+					<button data-action="save" title="Save and Back to Agenda View">Save</button>
+					<button data-action="save-create" title="Save and Create another Task">Save and Create</button>
+				</footer>
+			</section>
+		</main>
+		<script type="module">
+			import { App } from "./source/App.mjs";
+
+			window.APP = new App({});
+		</script>
+	</body>
+</html>

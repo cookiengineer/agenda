@@ -3,8 +3,6 @@
 GO="$(which go)";
 ROOT="$(pwd)";
 
-
-
 build() {
 
 	local os="$1";
@@ -19,12 +17,12 @@ build() {
 
 	mkdir -p "$folder";
 
-	cd "${ROOT}";
+	cd "${ROOT}/source";
 
 	if [[ "$ext" != "" ]]; then
-		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}.${ext}" "${ROOT}/agenda.go";
+		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}.${ext}" "${ROOT}/source/cmds/agenda/main.go";
 	else
-		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}" "${ROOT}/agenda.go";
+		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}" "${ROOT}/source/cmds/agenda/main.go";
 	fi;
 
 	if [[ "$?" == "0" ]]; then
@@ -36,24 +34,9 @@ build() {
 }
 
 
-
 if [[ "$GO" != "" ]]; then
 
-	# build "android" "arm";
-	build "android" "arm64";
-
-	build "darwin" "amd64";
-	build "darwin" "arm64";
-
-	# build "linux" "386";
 	build "linux" "amd64";
-	build "linux" "arm";
-	build "linux" "arm64";
-
-	# build "windows" "386";
-	build "windows" "amd64";
-	# build "windows" "arm";
-	# build "windows" "arm64";
 
 else
 	echo "Please install go(lang) compiler.";

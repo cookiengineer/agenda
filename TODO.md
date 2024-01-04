@@ -1,6 +1,10 @@
 
 # Construction Sites
 
+# Editor View
+
+- [ ] A `Delete` button needs to be implemented.
+- [ ] API needs a `RemoveTask` method that is called from frontend.
 
 # Calendar View
 
@@ -31,16 +35,6 @@
       backend API via the `Client.modify(task)` method.
 
 - [ ] `APP.stop(task)` should stop the timer and interval for for the given task.
-
-
-# Editor View
-
-- [ ] A `Delete` button needs to be implemented.
-
-
-# Backend API
-
-- [ ] A `DeleteTask` API needs to be implemented.
 
 
 # Journal View
