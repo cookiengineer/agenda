@@ -57,7 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 						let view = button.getAttribute('data-view');
 						if (view !== null && view !== '') {
-							APP.show(view);
+
+							let APP = window.APP || null;
+							if (APP !== null) {
+								APP.selector.datetime = null;
+								APP.show(view);
+							}
 						}
 
 					});

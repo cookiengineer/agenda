@@ -17,7 +17,7 @@ const Client = function(app, api) {
 
 Client.prototype = {
 
-	update: function(callback) {
+	Update: function(callback) {
 
 		callback = isFunction(callback) ? callback : null;
 
@@ -62,6 +62,10 @@ Client.prototype = {
 
 					};
 
+					xhr2.onerror = () => {
+						callback([], {});
+					};
+
 					xhr2.send();
 
 				} else {
@@ -70,13 +74,17 @@ Client.prototype = {
 
 			};
 
+			xhr1.onerror = () => {
+				callback([], {});
+			};
+
 			xhr1.send();
 
 		}
 
 	},
 
-	create: function(task, callback) {
+	Create: function(task, callback) {
 
 		task     = IsTask(task)         ? task     : null;
 		callback = isFunction(callback) ? callback : null;
@@ -117,6 +125,10 @@ Client.prototype = {
 
 				};
 
+				xhr.onerror = () => {
+					callback(null);
+				};
+
 				xhr.send(payload);
 
 			} else {
@@ -129,7 +141,7 @@ Client.prototype = {
 
 	},
 
-	modify: function(task, callback) {
+	Modify: function(task, callback) {
 
 		task     = IsTask(task)         ? task     : null;
 		callback = isFunction(callback) ? callback : null;
@@ -168,6 +180,53 @@ Client.prototype = {
 						callback(null);
 					}
 
+				};
+
+				xhr.onerror = () => {
+					callback(null);
+				};
+
+				xhr.send(payload);
+
+			} else {
+
+				callback(null);
+
+			}
+
+		}
+
+	},
+
+	Remove: function(task, callback) {
+
+		task     = IsTask(task)         ? task     : null;
+		callback = isFunction(callback) ? callback : null;
+
+
+		if (task !== null && callback !== null) {
+
+			let payload = null;
+
+			try {
+				payload = JSON.stringify(task);
+			} catch (err) {
+				payload = null;
+			}
+
+			if (payload !== null) {
+
+				let xhr = new XMLHttpRequest();
+
+				xhr.open('DELETE', this.api + '/tasks/remove');
+				xhr.setRequestHeader('Content-Type', 'application/json');
+
+				xhr.onload = () => {
+					callback(true);
+				};
+
+				xhr.onerror = () => {
+					callback(false);
 				};
 
 				xhr.send(payload);

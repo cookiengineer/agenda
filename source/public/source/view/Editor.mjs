@@ -134,6 +134,28 @@ const renderHeader = function(title) {
 
 };
 
+const renderFooter = function(task) {
+
+	if (IsTask(task) === true) {
+
+		this.actions['remove'].removeAttribute('disabled');
+
+		if (this.actions['save-create'].parentNode !== null) {
+			this.actions['save-create'].parentNode.removeChild(this.actions['save-create']);
+		}
+
+	} else {
+
+		this.actions['remove'].setAttribute('disabled', true);
+
+		if (this.actions['save-create'].parentNode === null) {
+			this.footer.appendChild(this.actions['save-create']);
+		}
+
+	}
+
+};
+
 const reset = function() {
 
 	let elements = {
@@ -156,6 +178,13 @@ const Editor = function(app, element) {
 	this.app     = app;
 	this.header  = element.querySelector('header');
 	this.element = element.querySelector('section');
+	this.footer  = element.querySelector('footer');
+
+	this.actions = {
+		'remove':      this.footer.querySelector('button[data-action="remove"]'),
+		'save':        this.footer.querySelector('button[data-action="save"]'),
+		'save-create': this.footer.querySelector('button[data-action="save-create"]')
+	};
 
 };
 
@@ -171,11 +200,13 @@ Editor.prototype = {
 
 			render.call(this, task);
 			renderHeader.call(this, 'Edit Task #' + task.id);
+			renderFooter.call(this, task);
 
 		} else if (task === null) {
 
 			render.call(this, null);
 			renderHeader.call(this, 'Create Task');
+			renderFooter.call(this, null);
 
 		}
 

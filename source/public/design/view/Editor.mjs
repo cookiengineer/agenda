@@ -240,14 +240,35 @@ export const initialize = () => {
 
 	if (section !== null && footer !== null) {
 
-		let cancel = footer.querySelector('button[data-action="cancel"]');
-		if (cancel !== null) {
+		let remove = footer.querySelector('button[data-action="remove"]');
+		if (remove !== null) {
 
-			cancel.addEventListener('click', () => {
+			remove.addEventListener('click', () => {
 
-				let APP = window.APP || null;
-				if (APP !== null) {
-					APP.show('agenda', null);
+				let task = toTask(section);
+
+				if (IsTask(task) === true) {
+
+					if (task.id !== 0) {
+
+						let APP = window.APP || null;
+						if (APP !== null) {
+
+							APP.client.Remove(task, (result) => {
+
+								if (result === true) {
+
+									APP.update();
+									APP.show('agenda');
+
+								}
+
+							});
+
+						}
+
+					}
+
 				}
 
 			});
@@ -261,14 +282,14 @@ export const initialize = () => {
 
 				let task = toTask(section);
 
-				if (IsTask(task) == true) {
+				if (IsTask(task) === true) {
 
 					if (task.id !== 0) {
 
 						let APP = window.APP || null;
 						if (APP !== null) {
 
-							APP.client.modify(task, (response) => {
+							APP.client.Modify(task, (response) => {
 
 								if (response !== null) {
 
@@ -288,7 +309,7 @@ export const initialize = () => {
 						let APP = window.APP || null;
 						if (APP !== null) {
 
-							APP.client.create(task, (response) => {
+							APP.client.Create(task, (response) => {
 
 								if (response !== null) {
 
@@ -322,7 +343,7 @@ export const initialize = () => {
 					let APP = window.APP || null;
 					if (APP !== null) {
 
-						APP.client.create(task, (response) => {
+						APP.client.Create(task, (response) => {
 
 							if (response !== null) {
 

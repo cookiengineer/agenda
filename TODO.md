@@ -1,18 +1,9 @@
 
 # Construction Sites
 
-# Editor View
-
-- [ ] A `Delete` button needs to be implemented.
-- [ ] API needs a `RemoveTask` method that is called from frontend.
-
 # Calendar View
 
 - [ ] Calendar View should reflect the time schedule, with enable/disable buttons on the side for each project and/or category
-
-# Scrumboard View
-
-- [ ] Scrumboard View should reflect all issues per project, so that the tasks that should be done on the specific day are viewed in the To Do row.
 
 # Gantt View
 
@@ -42,15 +33,4 @@
 The Journal View renders all completed tasks. It should implement a Histogram of Task
 Duration/Estimation efficiencies, as well as an overlay for Task Complexity. It should
 also feature a Search Field to be able to search for already completed tasks.
-
-
-# App Distribution
-
-The backend has been written in golang, and in a manner that it's at least theoretically
-possible to create/modify/query all tasks without having to do a network request.
-
-This has to be integrated into the [Client](./public/source/Client.mjs) as well, so that
-there might be a check similar to `if (typeof window.runtime === '...')` beforehand to
-catch all network requests, and to be able to override the networked APIs in that case
-with the locally called ones in the Wails runtime.
 

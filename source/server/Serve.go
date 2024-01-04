@@ -30,6 +30,10 @@ func Serve(filesystem fs.FS, port int) bool {
 		ModifyTask(&database, response, request)
 	})
 
+	http.HandleFunc("/api/tasks/remove", func(response http.ResponseWriter, request *http.Request) {
+		RemoveTask(&database, response, request)
+	})
+
 	err1 := http.ListenAndServe(":"+strconv.Itoa(port), nil)
 
 	if err1 == nil {

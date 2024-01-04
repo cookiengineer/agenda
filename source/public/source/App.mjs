@@ -1,6 +1,7 @@
 
 import { update as update_theme } from '../design/theme/index.mjs';
 import { Client                 } from './Client.mjs';
+import { DATETIME               } from './parsers/DATETIME.mjs';
 import { IsTask                 } from './structs/Task.mjs';
 import { Agenda                 } from './view/Agenda.mjs';
 import { Calendar               } from './view/Calendar.mjs';
@@ -132,7 +133,7 @@ App.prototype = {
 
 		callback = isFunction(callback) ? callback : null;
 
-		this.client.update((tasks, projects) => {
+		this.client.Update((tasks, projects) => {
 
 			this.tasks = tasks.filter((task) => IsTask(task));
 			this.projects = projects;
@@ -150,7 +151,6 @@ App.prototype = {
 	isVisible: function(task) {
 
 		let matches_datetime = false;
-		let matches_type     = false;
 		let matches_project  = false;
 
 		let datetime = this.selector.datetime;

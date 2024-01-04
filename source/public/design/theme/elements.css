@@ -347,3 +347,28 @@ aside button:last-of-type {
 	right: 0px;
 }
 
+header button[disabled],
+footer button[disabled],
+aside button[disabled],
+header button[disabled]:focus,
+footer button[disabled]:focus,
+aside button[disabled]:focus,
+header button[disabled]:hover
+footer button[disabled]:hover
+aside button[disabled]:hover,
+header button[disabled]:first-of-type,
+footer button[disabled]:first-of-type,
+aside button[disabled]:first-of-type,
+header button[disabled]:first-of-type:focus,
+footer button[disabled]:first-of-type:focus,
+aside button[disabled]:first-of-type:focus,
+header button[disabled]:first-of-type:hover
+footer button[disabled]:first-of-type:hover
+aside button[disabled]:first-of-type:hover {
+	color: #a8b2bf;
+	background: #2a2f39;
+	border-color: #2a2f39;
+	transition: 250ms all ease-out;
+	cursor: not-allowed;
+}
+
