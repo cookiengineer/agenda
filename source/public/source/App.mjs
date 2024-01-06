@@ -20,8 +20,9 @@ const App = function(selector) {
 
 
 	this.selector = Object.assign({
-		datetime: null,
-		project:  null
+		completed: false, // true || false || null
+		datetime:  null,  // "2023-01" || "2023-01-02" || null
+		project:   null   // "<project>" || null
 	}, selector);
 
 	this.client = new Client(this);
@@ -54,13 +55,8 @@ App.prototype = {
 
 	Refresh: function() {
 
-		// XXX: Selector has changed
-
-		if (
-			this.view === this.views['agenda']
-			|| this.view === this.views['calendar']
-			|| this.view === this.views['journal']
-		) {
+		// this.selector has changed
+		if (this.view !== this.views['editor']) {
 			this.view.render();
 		}
 
@@ -149,8 +145,26 @@ App.prototype = {
 
 	IsVisible: function(task) {
 
+		let matches_completed = false;
 		let matches_datetime = false;
 		let matches_project  = false;
+
+		let completed = this.selector.completed;
+		if (completed === true) {
+
+			if (task.is_completed === true) {
+				matches_completed = true;
+			}
+
+		} else if (completed === false) {
+
+			if (task.is_completed === false) {
+				matches_completed = true;
+			}
+
+		} else {
+			matches_completed = true;
+		}
 
 		let datetime = this.selector.datetime;
 		if (datetime !== null) {
@@ -216,7 +230,7 @@ App.prototype = {
 			matches_project = true;
 		}
 
-		return (matches_datetime && matches_project);
+		return (matches_completed && matches_datetime && matches_project);
 
 	}
 

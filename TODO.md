@@ -1,34 +1,35 @@
 
 # Construction Sites
 
+# Agenda View
+
+- [ ] Implement a `Show Suggested` button which toggles to `Show All`. This button should
+      show all immediate tasks which are scheduled for the next upcoming days (until the end
+      of the week), and if there are none, recommend the next unscheduled task with the lowest
+      complexity.
+- [ ] Implement a `Search` that fuzzy searches `project`, `title`, `description`, and `repeat[]`
+      of the displayed set of tasks. Implement this as an `APP.selector` so that it automatically
+      integrates with the other views.
+- [ ] Implement a `Start` button that starts a given task and sets the `APP.active` task to
+      the selected one. There can be only one active task, and it should be stickied to the top
+      and animated while the time duration counter increases. Save the active task to the Profile
+      so that the Agenda App can be closed and re-opened later.
+- [ ] Implement a `Stop` button that stops a given task and sets the `APP.active` task to `null`,
+      while storing the measured `time duration` on the stopped task. After the Stop button is
+      clicked, there should be a displayed dialog that asks whether or not the task is completed.
+
 # Calendar View
 
-- [ ] Implement Drag and Drop support for the `<article>` elements in the `<aside>` sidepanel.
-      Dropping onto a `table td` cell leads to `task.deadline` being set to that cell's `date`.
-      The `time` should be the (following) `nexttask.deadline - nexttask.estimation`.
+- [ ] Implement a Drag and Drop feature that drags `<article>` elements from the `<aside>`
+      to the table's `<td>` cells. This leads to the `task.deadline` property being set to
+      that cell's `data-date` property. The `time` property should be `23:59:59` by default.
 
 # Gantt View
 
-- [ ] Show Tasks in a specific order, and milestones/deadlines according to whether or not they are blocking.
-
-
-# Agenda View
-
-- [ ] Search field in the footer should implement a fuzzy search for `project`, `title`, `description`, `deadline`, and `repeat[]`.
-- [ ] `Show Deadlines` button should only show important upcoming tasks.
-- [ ] The `Start` button should start a render-interval that updates the `duration` property in the DOM, so that the seconds are counted live.
-- [ ] The `Stop` button should stop the render-interval and ask whether the Task has been completed or not.
-- [ ] The `Yes` button (in response to completion question) should set the `is_completed` property to true and call `Client.modify(task)` afterwards.
-
-
-# App
-
-- [ ] `APP.start(task)` should start a timer for the given task, and run an interval that
-      modifies/updates the task's `duration` property and sends the updated time to the
-      backend API via the `Client.modify(task)` method.
-
-- [ ] `APP.stop(task)` should stop the timer and interval for for the given task.
-
+- [ ] Show Tasks in a specific order of completion, and deadlines according to whether or not
+      they are blocking or were overdue.
+- [ ] Implement a `Show All` and `Show Completed` button which toggles tasks by the
+      `APP.selector.completed` selector.
 
 # Journal View
 

@@ -121,6 +121,7 @@ export const IsTask = function(task) {
 		&& isRepeat(task.repeat) === true
 		&& isTime(task.duration) === true
 		&& isBoolean(task.is_completed) === true
+		&& isArray(task.activities) === true
 	) {
 		return true;
 	}
@@ -145,6 +146,7 @@ export const NewTask = function(id) {
 		repeat:       [],
 		duration:     '00:00:00',
 		is_completed: false
+		activities:   []
 	};
 
 };

@@ -15,6 +15,7 @@ type Task struct {
 	Repeat      []string `json:"repeat"`
 	Duration    string   `json:"duration"`
 	IsCompleted bool     `json:"is_completed"`
+	Activities  []string `json:"activities"`
 }
 
 func NewTask(requestbody io.ReadCloser) (Task, error) {
@@ -32,10 +33,3 @@ func NewTask(requestbody io.ReadCloser) (Task, error) {
 
 }
 
-func (task *Task) SetDuration(duration string) {
-	task.Duration = duration
-}
-
-func (task *Task) SetCompleted(completed bool) {
-	task.IsCompleted = completed
-}
