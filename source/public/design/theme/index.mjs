@@ -44,7 +44,8 @@ export const update = () => {
 				stylesheet.push('main > section > header ul li[data-project="' + project + '"].active { background-color: ' + color + '; }');
 				stylesheet.push('main > section article[data-project="' + project + '"] { border-color: ' + color + '; }');
 				stylesheet.push('main > section#agenda article[data-project="' + project + '"] h3 span[data-complexity] { color: #ffffff; background-color: ' + color + '; }');
-				stylesheet.push('main > section#calendar table tr td > ul li button[data-project="' + project + '"]   { color: #ffffff; background-color: ' + color + '; }');
+				stylesheet.push('main > section#calendar article[data-project="' + project + '"] { border-color: ' + color + '; }');
+				stylesheet.push('main > section#calendar article[data-project="' + project + '"] h3 span[data-complexity] { color: #ffffff; background-color: ' + color + '; }');
 				stylesheet.push('');
 
 			});

@@ -38,7 +38,7 @@ const render = function(task, active) {
 
 		html.push('<h3>');
 		html.push('<span data-complexity="' + task.complexity + '">' + task.complexity + '</span>');
-		html.push(' - ' + task.title);
+		html.push(task.title);
 		html.push('</h3>');
 
 		html.push('<div>');
@@ -125,7 +125,7 @@ Agenda.prototype = {
 			let rendered = [];
 
 			this.app.tasks.filter((task) => {
-				return this.app.isVisible(task);
+				return this.app.IsVisible(task);
 			}).forEach((task) => {
 
 				let element = render.call(this, task, this.app.active === task);

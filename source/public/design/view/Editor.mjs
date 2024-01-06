@@ -104,8 +104,6 @@ const toDATETIME = (date_element, time_element) => {
 		time_str = (time_element.value).trim();
 	}
 
-	// TODO: If time string is after now's time, then use date of tomorrow
-
 	if (date_str === '' && time_str.includes(':') === true) {
 
 		let now_str = DATETIME.render(DATETIME.parse(new Date()));
@@ -119,6 +117,24 @@ const toDATETIME = (date_element, time_element) => {
 
 		let date = DATETIME.parse(date_str);
 		let time = DATETIME.parse(time_str);
+
+		if (DATETIME.isDate(date) === true && DATETIME.isTime(time) === true) {
+
+			return DATETIME.render({
+				year:   date.year,
+				month:  date.month,
+				day:    date.day,
+				hour:   time.hour,
+				minute: time.minute,
+				second: time.second
+			});
+
+		}
+
+	} else if (date_str !== '') {
+
+		let date = DATETIME.parse(date_str);
+		let time = DATETIME.parse('23:59:59');
 
 		if (DATETIME.isDate(date) === true && DATETIME.isTime(time) === true) {
 
@@ -258,8 +274,9 @@ export const initialize = () => {
 
 								if (result === true) {
 
-									APP.update();
-									APP.show('agenda');
+									APP.Update(() => {
+										APP.Show('agenda');
+									});
 
 								}
 
@@ -289,16 +306,13 @@ export const initialize = () => {
 						let APP = window.APP || null;
 						if (APP !== null) {
 
-							APP.client.Modify(task, (response) => {
+							APP.client.Modify(task, () => {
 
-								if (response !== null) {
+								APP.views['editor'].render(null);
 
-									APP.views['editor'].render(null);
-
-									APP.update();
-									APP.show('agenda');
-
-								}
+								APP.Update(() => {
+									APP.Show('agenda');
+								});
 
 							});
 
@@ -315,8 +329,9 @@ export const initialize = () => {
 
 									APP.views['editor'].render(null);
 
-									APP.update();
-									APP.show('agenda');
+									APP.Update(() => {
+										APP.Show('agenda');
+									});
 
 								}
 
@@ -350,7 +365,7 @@ export const initialize = () => {
 								APP.views['editor'].render(response);
 								APP.views['editor'].reset();
 
-								APP.update();
+								APP.Update();
 
 							}
 

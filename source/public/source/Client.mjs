@@ -118,15 +118,15 @@ Client.prototype = {
 					}
 
 					if (IsTask(data) === true) {
-						callback(data);
+						callback(true, data);
 					} else {
-						callback(null);
+						callback(false, null);
 					}
 
 				};
 
 				xhr.onerror = () => {
-					callback(null);
+					callback(false, null);
 				};
 
 				xhr.send(payload);
@@ -165,32 +165,18 @@ Client.prototype = {
 				xhr.setRequestHeader('Content-Type', 'application/json');
 
 				xhr.onload = () => {
-
-					let data = null;
-
-					try {
-						data = JSON.parse(xhr.response);
-					} catch (err) {
-						data = null;
-					}
-
-					if (IsTask(data) === true) {
-						callback(data);
-					} else {
-						callback(null);
-					}
-
+					callback(true);
 				};
 
 				xhr.onerror = () => {
-					callback(null);
+					callback(false);
 				};
 
 				xhr.send(payload);
 
 			} else {
 
-				callback(null);
+				callback(false);
 
 			}
 

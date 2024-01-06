@@ -3,6 +3,8 @@ main > section#agenda article h3 span[data-complexity] {
 	display: inline-block;
 	width: 32px;
 	height: 32px;
+	margin: 0px 8px 0px 0px;
+	padding: 0px;
 	font-size: 16px;
 	text-align: center;
 	vertical-align: top;

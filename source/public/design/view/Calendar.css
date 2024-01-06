@@ -56,55 +56,126 @@ main > section#calendar table tr td:last-of-type {
 	border-right: 0px solid transparent;
 }
 
-main > section#calendar table tr td.empty {
+main > section#calendar table tr td.today {
+	background: rgba(255,255,255,0.1);
+	border-color: #d3dae3;
+}
+
+main > section#calendar table tr td:empty {
 	line-height: 100%;
 	text-align: center;
 	vertical-align: middle;
 }
 
-main > section#calendar table tr td > button {
-	display: block;
-	width: 100%;
-	margin: 0px;
-	padding: 0px;
-	color: #ffffff;
-	background: transparent;
-	border: 1px solid transparent;
-	appearance: none;
-	cursor: pointer;
-}
-
-main > section#calendar table tr td > button:only-child {
-	height: 100%;
-	vertical-align: middle;
-}
-
-main > section#calendar table tr td > ul {
-	display: block;
-	margin: 0px;
-	padding: 0px;
-	list-style: none;
-}
-
-main > section#calendar table tr td > ul li button {
-	display: block;
-	width: 100%;
-	margin: 0px;
-	padding: 0px 4px;
-	text-align: left;
-	background: transparent;
-	border: 1px solid transparent;
-	appearance: none;
-	color: #ffffff;
-}
-
-main > section#calendar table tr td > ul li button span {
+main > section#calendar table tr td:empty:before {
 	display: inline-block;
-	margin: 0px 4px 0px 0px;
+	content: attr(data-date);
+	text-align: center;
+}
+
+
+main > section#calendar article h3 span[data-complexity] {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	margin: 0px 8px 0px 0px;
 	padding: 0px;
-	font-family: 'vera-mono';
-	font-size: 12px;
+	font-size: 16px;
+	text-align: center;
+	vertical-align: top;
+	border: 0px solid transparent;
+	border-radius: 32px;
+	background: #2f343f;
+	box-sizing: border-box;
+}
+
+main > section#calendar article div:nth-of-type(1) {
+	display: block;
+	margin: 0px 0px 8px 0px;
+	padding: 0px;
+	text-align: right;
+}
+
+main > section#calendar article div:nth-of-type(2) {
+	display: block;
+	margin: 16px 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+main > section#calendar article div:nth-of-type(1) b {
+	display: inline-block;
+	width: calc(100% - 70px);
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-weight: bold;
+	text-align: left;
+}
+
+
+main > section#calendar aside article {
+	display: block;
+	position: relative;
+	width: auto;
+	border-top: 2px solid #262a33;
+	border-right: 16px solid #262a33;
+	border-bottom: 2px solid #262a33;
+	border-left: 16px solid #262a33;
+}
+
+main > section#calendar article div:nth-of-type(2) {
+	max-height: 22px;
+	overflow: hidden;
+	overflow-wrap: break-word;
+	text-wrap: nowrap;
+	text-overflow: ellipsis;
+}
+
+main > section#calendar table tr td article {
+	display: block;
+	position: relative;
+	width: auto;
+	margin: 0px;
+	padding: 4px 4px 4px 4px;
+	border-top: 2px solid #262a33;
+	border-right: 2px solid #262a33;
+	border-bottom: 2px solid #262a33;
+	border-left: 2px solid #262a33;
+}
+
+main > section#calendar table tr td article:after {
+	display: inline-block;
+	content: attr(data-time);
+	position: absolute;
+	margin: 0px;
+	padding: 4px 4px 4px 4px;
+	top: 0px;
+	right: 0px;
+	bottom: auto;
+	left: auto;
+	color: #ffffff;
+	background: inherit;
+}
+
+main > section#calendar table tr td article h3 {
+	margin: 0px;
+	padding: 0px;
+	font-size: 16px;
 	line-height: 16px;
-	vertical-align: middle;
+}
+
+main > section#calendar table tr td article h3 span[data-complexity] {
+	width: 16px;
+	height: 16px;
+	margin: 0px 8px 0px 0px;
+	padding: 0px;
+	font-size: 12px;
+	border-radius: 16px;
+}
+
+main > section#calendar table tr td article div:nth-of-type(1),
+main > section#calendar table tr td article div:nth-of-type(2),
+main > section#calendar table tr td article div:nth-of-type(3) {
+	display: none;
 }
 

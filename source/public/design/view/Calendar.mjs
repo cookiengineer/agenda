@@ -61,14 +61,14 @@ export const initialize = () => {
 
 	// 					let APP = window.APP || null;
 	// 					if (APP !== null) {
-	// 						APP.show('editor', task);
+	// 						APP.Show('editor', task);
 	// 					}
 
 	// 				} else if (action === 'start' && task !== null) {
 
 	// 					let APP = window.APP || null;
 	// 					if (APP !== null) {
-	// 						APP.start(task);
+	// 						APP.Start(task);
 	// 					}
 
 	// 					event.target.setAttribute('data-action', 'stop');
@@ -78,7 +78,7 @@ export const initialize = () => {
 
 	// 					let APP = window.APP || null;
 	// 					if (APP !== null) {
-	// 						APP.stop(task);
+	// 						APP.Stop(task);
 	// 					}
 
 	// 					event.target.setAttribute('data-action', 'start');
@@ -121,7 +121,7 @@ export const initialize = () => {
 
 	// 			let APP = window.APP || null;
 	// 			if (APP !== null) {
-	// 				APP.show('editor', null);
+	// 				APP.Show('editor', null);
 	// 			}
 
 	// 		});

@@ -3,7 +3,9 @@
 
 # Calendar View
 
-- [ ] Calendar View should reflect the time schedule, with enable/disable buttons on the side for each project and/or category
+- [ ] Implement Drag and Drop support for the `<article>` elements in the `<aside>` sidepanel.
+      Dropping onto a `table td` cell leads to `task.deadline` being set to that cell's `date`.
+      The `time` should be the (following) `nexttask.deadline - nexttask.estimation`.
 
 # Gantt View
 

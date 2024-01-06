@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 							let APP = window.APP || null;
 							if (APP !== null) {
 								APP.selector.datetime = null;
-								APP.show(view);
+								APP.Show(view);
 							}
 						}
 
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 							if (APP !== null) {
 								APP.selector.project = project;
-								APP.refresh();
+								APP.Refresh();
 							}
 
 						}, 0);

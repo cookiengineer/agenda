@@ -166,6 +166,7 @@ main > section > header ul li.active {
 
 main > section > section {
 	position: absolute;
+	box-sizing: border-box;
 	top: 50px;
 	right: 0px;
 	bottom: 50px;
@@ -173,7 +174,35 @@ main > section > section {
 	overflow: hidden auto;
 }
 
-main > section article {
+main > section > aside {
+	position: absolute;
+	box-sizing: border-box;
+	width: 20vw;
+	height: auto;
+	margin: 0px;
+	padding: 8px;
+	top: 50px;
+	right: auto;
+	bottom: 50px;
+	left: 0px;
+	text-align: center;
+	vertical-align: top;
+	background: #2f343f;
+	border: 0px solid transparent;
+	border-right: 2px solid #262a33;
+	border-radius: 0px;
+	user-select: none;
+	overflow: hidden auto;
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+}
+
+main > section > aside + section {
+	left: 20vw;
+}
+
+main > section article,
+main > aside article {
 	display: block;
 	width: 720px;
 	margin: 32px auto;
@@ -182,11 +211,13 @@ main > section article {
 	border-right: 16px solid #262a33;
 	border-bottom: 2px solid #262a33;
 	border-left: 16px solid #262a33;
+	background: #383c4a;
 	box-sizing: border-box;
 	transition: border-color 250ms ease-out;
 }
 
-main > section article h3 {
+main > section article h3,
+main > aside article h3 {
 	display: block;
 	margin: 0px 0px 8px 0px;
 	padding: 0px;

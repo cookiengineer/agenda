@@ -36,6 +36,11 @@
 					<ul></ul>
 					<span></span>
 				</header>
+				<aside>
+					<h3>Unsheduled Tasks</h3>
+					<p>(Drag and Drop to schedule)</p>
+					<div></div>
+				</aside>
 				<section>
 					<table>
 						<thead>
@@ -107,7 +112,7 @@
 								</select>
 							</div>
 							<div>
-								<label>Deadline?</label>
+								<label for="editor-deadline-date">Deadline?</label>
 								<ul id="editor-deadline">
 									<li><input id="editor-deadline-date" data-name="deadline-date" type="date"></li>
 									<li><input id="editor-deadline-time" data-name="deadline-time" type="time"></li>
@@ -125,7 +130,7 @@
 								<label for="editor-eternal">After completing this task, I'll have to do it again.</label>
 							</div>
 							<div>
-								<label>Repeat?</label>
+								<label for="editor-repeat-monday">Repeat?</label>
 								<ul id="editor-repeat">
 									<li>
 										<input id="editor-repeat-monday" data-name="repeat" type="checkbox" value="Monday">
@@ -171,6 +176,10 @@
 			import { App } from "./source/App.mjs";
 
 			window.APP = new App({});
+
+			setTimeout(() => {
+				window.APP.Show('calendar');
+			}, 3000);
 		</script>
 	</body>
 </html>

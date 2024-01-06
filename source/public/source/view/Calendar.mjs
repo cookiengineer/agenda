@@ -5,8 +5,6 @@ import { DATETIME } from '../parsers/DATETIME.mjs';
 const isArray  = (obj) => Object.prototype.toString.call(obj) === '[object Array]';
 const isString = (obj) => Object.prototype.toString.call(obj) === '[object String]';
 
-
-
 const MONTH_DAYS = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 const WEEK_DAYS  = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
 
@@ -98,12 +96,9 @@ const renderCalendar = function(year, month) {
 
 	for (let d = 0; d < first_day; d++) {
 
-		calendar[0].push({
-			datetime: DATETIME.render(Object.assign({}, prev_datetime, {
-				day: prev_days - first_day + d + 1
-			})),
-			tasks: []
-		});
+		calendar[0].push(DATETIME.render(Object.assign({}, prev_datetime, {
+			day: prev_days - first_day + d + 1
+		})));
 
 	}
 
@@ -114,12 +109,9 @@ const renderCalendar = function(year, month) {
 
 		let weekday = toWeekDay(curr_datetime.year, curr_datetime.month, day);
 
-		week.push({
-			datetime: DATETIME.render(Object.assign({}, curr_datetime, {
-				day: day
-			})),
-			tasks: []
-		});
+		week.push(DATETIME.render(Object.assign({}, curr_datetime, {
+			day: day
+		})));
 
 		if (week.length >= 7) {
 			calendar.push([]);
@@ -133,59 +125,37 @@ const renderCalendar = function(year, month) {
 
 		for (let d = 0; d < remaining; d++) {
 
-			week.push({
-				datetime: DATETIME.render(Object.assign({}, next_datetime, {
-					day: d + 1
-				})),
-				tasks: []
-			});
+			week.push(DATETIME.render(Object.assign({}, next_datetime, {
+				day: d + 1
+			})));
 
 		}
 
 	}
 
 
-
 	let elements = [];
+
+	let today = Object.assign(DATETIME.parse(new Date()), {
+		hour: null,
+		minute: null,
+		second: null
+	});
 
 	calendar.forEach((week) => {
 
 		let row = document.createElement('tr');
 
-		week.forEach((day) => {
+		week.forEach((date) => {
 
-			let cell    = document.createElement('td');
-			let content = [];
+			let cell = document.createElement('td');
 
-			if (day.tasks.length > 0) {
+			cell.setAttribute('data-date', date);
+			cell.setAttribute('title', date);
 
-				content.push('<ul>');
-
-				day.tasks.forEach((task) => {
-
-					// TODO: Time should be from - to instead of deadline
-					let deadline = task.deadline.split(' ').pop();
-
-					content.push('<li>');
-					content.push('<button data-view="editor" data-id="' + task.id + '" data-project="' + task.project + '">');
-					content.push('<span>' + deadline + '</span>');
-					content.push('<b>' + task.title + '</b>');
-					content.push('<button>');
-					content.push('</li>');
-
-				});
-
-				content.push('</ul>');
-
-			} else {
-
-				content.push('<button data-datetime="' + day.datetime + '">' + day.datetime + '</button>');
-				cell.setAttribute('class', 'empty');
-
+			if (DATETIME.render(today) === date) {
+				cell.setAttribute('class', 'today');
 			}
-
-			cell.setAttribute('data-datetime', day.datetime);
-			cell.innerHTML = content.join('');
 
 			row.appendChild(cell);
 
@@ -210,92 +180,65 @@ const renderCalendar = function(year, month) {
 
 };
 
-const renderEmpty = function() {
-
-	let element = document.createElement('article');
-	let html    = [];
-
-	html.push('<h3>');
-	html.push('Nothing to do. Great job!');
-	html.push('</h3>');
-
-	html.push('<div>');
-	html.push('If you want to create a Task, use the "Create Task" button in the bottom left corner.');
-	html.push('</div>');
-
-	element.innerHTML = html.join('');
-
-	return element;
-
-};
-
 const render = function(task, active) {
 
-	// if (IsTask(task) === true) {
+	if (IsTask(task) === true) {
 
-	// 	let element = document.createElement('article');
-	// 	let html    = [];
+		let date = DATETIME.render(Object.assign(DATETIME.parse(task.deadline), {
+			hour: null,
+			minute: null,
+			second: null
+		}))
 
-	// 	element.setAttribute('data-id',   task.id);
+		let time = DATETIME.render(Object.assign(DATETIME.parse(task.deadline), {
+			year: null,
+			month: null,
+			day: null
+		}));
 
-	// 	html.push('<h3>');
-	// 	html.push('<span data-complexity="' + task.complexity + '">' + task.complexity + '</span>');
-	// 	html.push(' - ' + task.title);
-	// 	html.push('</h3>');
+		let element = document.createElement('article');
+		let html    = [];
 
-	// 	html.push('<div>');
-	// 	html.push('<b>' + task.project + '</b>');
-	// 	html.push('<span data-duration="' + task.duration + '">' + task.duration + '</span>');
-	// 	html.push(' / ');
-	// 	html.push('<span data-estimation="' + task.estimation + '">' + task.estimation + '</span>');
-	// 	if (isArray(task.repeat) === true && task.repeat.length > 0) {
-	// 		html.push('<br>');
-	// 		html.push('<span data-repeat="' + task.repeat.join(',') + '">(every ' + task.repeat.join(', ') + ')</span>');
-	// 	}
-	// 	html.push('</div>');
+		element.setAttribute('data-id',      task.id);
+		element.setAttribute('data-project', task.project);
+		element.setAttribute('data-view',    'editor');
+		element.setAttribute('data-date',    date);
+		element.setAttribute('data-time',    time);
 
-	// 	if (isString(task.deadline) === true) {
+		if (task.deadline !== null) {
+			element.setAttribute('title', task.deadline);
+		}
 
-	// 		html.push('<div>');
+		html.push('<h3>');
+		html.push('<span data-complexity="' + task.complexity + '">' + task.complexity + '</span>');
+		html.push(task.title);
+		html.push('</h3>');
 
-	// 		let deadline = DATETIME.parse(task.deadline);
-	// 		let today    = DATETIME.parse(new Date());
+		html.push('<div>');
+		html.push('<b>' + task.project + '</b>');
+		html.push('<span data-estimation="' + task.estimation + '">' + task.estimation + '</span>');
+		html.push('</div>');
 
-	// 		if (
-	// 			deadline.year === today.year
-	// 			&& deadline.month === today.month
-	// 			&& deadline.day === today.day
-	// 		) {
-	// 			html.push('<span title="Must be done today!">!</span> <span data-deadline="' + task.deadline + '">' + task.deadline + '</span>');
-	// 		} else {
-	// 			html.push('<span data-deadline="' + task.deadline + '">' + task.deadline + '</span>');
-	// 		}
-	// 		html.push('</div>');
+		if (isString(task.deadline) === true) {
 
-	// 	}
+			html.push('<div>');
+			html.push('<span data-deadline="' + task.deadline + '">' + task.deadline + '</span>');
+			html.push('</div>');
 
-	// 	html.push('<div>');
-	// 	if (isString(task.description) === true) {
-	// 		html.push(task.description.split('\n').join('<br>\n'));
-	// 	}
-	// 	html.push('</div>');
+		}
 
-	// 	html.push('<footer>');
-	// 	html.push('<button data-action="edit">Edit</button>');
-	// 	if (active === true) {
-	// 		html.push('<button data-action="stop" title="Stop working on this Task!">Stop</button>');
-	// 	} else {
-	// 		html.push('<button data-action="start" title="Start to work on this Task!">Start</button>');
-	// 	}
-	// 	html.push('</footer>');
+		html.push('<div>');
+		if (isString(task.description) === true) {
+			html.push(task.description.split('\n').join('<br>\n'));
+		}
+		html.push('</div>');
 
-	// 	element.className = active === true ? 'active' : '';
-	// 	element.innerHTML = html.join('');
+		element.className = active === true ? 'active' : '';
+		element.innerHTML = html.join('');
 
-	// 	return element;
+		return element;
 
-	// }
-
+	}
 
 	return null;
 
@@ -307,6 +250,7 @@ const Calendar = function(app, element) {
 
 	this.app     = app;
 	this.element = element.querySelector('section');
+	this.sidebar = element.querySelector('aside div');
 
 };
 
@@ -347,32 +291,86 @@ Calendar.prototype = {
 
 		} else {
 
-			let rendered = [];
+			let calendar = [];
+			let sidebar = [];
 
 			this.app.tasks.filter((task) => {
-				return this.app.isVisible(task);
+				return this.app.IsVisible(task);
+			}).sort((a, b) => {
+
+				if (a.deadline !== null && b.deadline !== null) {
+
+					if (a.deadline < b.deadline) return -1;
+					if (b.deadline < a.deadline) return 1;
+
+					return 0;
+
+				} else if (a.deadline !== null && b.deadline === null) {
+
+					return 1;
+
+				} else if (b.deadline !== null && a.deadline === null) {
+
+					return -1;
+
+				} else if (a.deadline === null && b.deadline === null) {
+
+					if (a.id < b.id) return -1;
+					if (b.id < a.id) return 1;
+
+					return 0;
+
+				}
+
 			}).forEach((task) => {
 
-				let element = render.call(this, task, this.app.active === task);
-				if (element !== null) {
-					rendered.push(element);
+				if (IsTask(task) === true) {
+
+					if (isString(task.deadline) === true) {
+
+						let element = render.call(this, task, this.app.active === task);
+						if (element !== null) {
+							calendar.push(element);
+						}
+
+					} else {
+
+						let element = render.call(this, task, this.app.active === task);
+						if (element !== null) {
+							sidebar.push(element);
+						}
+
+					}
+
 				}
 
 			});
 
-			// Array.from(this.element.querySelectorAll('table button')).forEach((button) => {
-			// 	article.parentNode.removeChild(button);
-			// });
+			Array.from(this.element.querySelectorAll('article')).forEach((article) => {
+				article.parentNode.removeChild(article);
+			});
 
-			// TODO: This is wrong, buttons need to be placed differently
-			// if (rendered.length > 0) {
-			// 	rendered.forEach((button) => {
-			// 		this.element.appendChild(button);
-			// 	});
-			// } else {
-			// 	this.element.appendChild(renderEmpty());
-			// }
+			if (calendar.length > 0) {
+				calendar.forEach((article) => {
 
+					let date = article.getAttribute('data-date');
+					let cell = this.element.querySelector('table tbody td[data-date="' + date + '"]');
+					if (cell !== null) {
+						cell.appendChild(article);
+					}
+
+				});
+			}
+
+			Array.from(this.sidebar.querySelectorAll('article')).forEach((article) => {
+				article.parentNode.removeChild(article);
+			});
+
+			if (sidebar.length > 0) {
+				sidebar.forEach((article) => {
+					this.sidebar.appendChild(article);
+				});
+			}
 
 		}
 

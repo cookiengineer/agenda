@@ -24,7 +24,6 @@ const App = function(selector) {
 		project:  null
 	}, selector);
 
-
 	this.client = new Client(this);
 
 	this.active   = null;
@@ -44,8 +43,8 @@ const App = function(selector) {
 	};
 
 
-	this.update(() => {
-		this.show('agenda');
+	this.Update(() => {
+		this.Show('agenda');
 	});
 
 };
@@ -53,7 +52,7 @@ const App = function(selector) {
 
 App.prototype = {
 
-	refresh: function() {
+	Refresh: function() {
 
 		// XXX: Selector has changed
 
@@ -67,7 +66,7 @@ App.prototype = {
 
 	},
 
-	show: function(name, task) {
+	Show: function(name, task) {
 
 		name = typeof name === 'string' ? name : null;
 		task = IsTask(task)             ? task : null;
@@ -116,20 +115,20 @@ App.prototype = {
 
 	},
 
-	start: function(task) {
+	Start: function(task) {
 
 		// TODO: Start Interval / duration update for task
 		// TODO: Integrate Interval with rendering in DOM
 
 	},
 
-	stop: function(task) {
+	Stop: function(task) {
 
 		// TODO: Stop Interval / duration update for task
 
 	},
 
-	update: function(callback) {
+	Update: function(callback) {
 
 		callback = isFunction(callback) ? callback : null;
 
@@ -148,7 +147,7 @@ App.prototype = {
 
 	},
 
-	isVisible: function(task) {
+	IsVisible: function(task) {
 
 		let matches_datetime = false;
 		let matches_project  = false;
