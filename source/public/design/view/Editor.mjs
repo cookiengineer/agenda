@@ -1,31 +1,31 @@
 
-import { DATETIME        } from '../../source/parsers/DATETIME.mjs';
-import { IsTask, NewTask } from '../../source/structs/Task.mjs';
+import { Datetime     } from "/source/structs/Datetime.mjs";
+import { Task, IsTask } from "/source/structs/Task.mjs";
 
 const DAYS = {
-	'Mon': 'Monday',
-	'Tue': 'Tuesday',
-	'Wed': 'Wednesday',
-	'Thu': 'Thursday',
-	'Fri': 'Friday',
-	'Sat': 'Saturday',
-	'Sun': 'Sunday'
+	"Mon": "Monday",
+	"Tue": "Tuesday",
+	"Wed": "Wednesday",
+	"Thu": "Thursday",
+	"Fri": "Friday",
+	"Sat": "Saturday",
+	"Sun": "Sunday"
 };
 
 const onresize = () => {
 
-	let mode = 'desktop';
-	let body = document.querySelector('body');
+	let mode = "desktop";
+	let body = document.querySelector("body");
 	if (body !== null) {
-		mode = body.getAttribute('data-mode');
+		mode = body.getAttribute("data-mode");
 	}
 
 	let width = window.innerWidth;
 	if (width > 720) {
 
-		if (mode !== 'desktop') {
+		if (mode !== "desktop") {
 
-			let repeat = Array.from(document.querySelectorAll('section#editor > section fieldset ul#editor-repeat li label'));
+			let repeat = Array.from(document.querySelectorAll("section#editor > section fieldset ul#editor-repeat li label"));
 			if (repeat.length > 0) {
 
 				repeat.forEach((element) => {
@@ -42,15 +42,15 @@ const onresize = () => {
 
 			}
 
-			body.setAttribute('data-mode', 'desktop');
+			body.setAttribute("data-mode", "desktop");
 
 		}
 
 	} else if (width < 720) {
 
-		if (mode !== 'mobile') {
+		if (mode !== "mobile") {
 
-			let repeat = Array.from(document.querySelectorAll('section#editor > section fieldset ul#editor-repeat li label'));
+			let repeat = Array.from(document.querySelectorAll("section#editor > section fieldset ul#editor-repeat li label"));
 			if (repeat.length > 0) {
 
 				repeat.forEach((element) => {
@@ -67,7 +67,7 @@ const onresize = () => {
 
 			}
 
-			body.setAttribute('data-mode', 'mobile');
+			body.setAttribute("data-mode", "mobile");
 
 		}
 
@@ -89,10 +89,10 @@ const toBoolean = (element) => {
 
 };
 
-const toDATETIME = (date_element, time_element) => {
+const toDatetimeString = (date_element, time_element) => {
 
-	let date_str = '';
-	let time_str = '';
+	let date_str = "";
+	let time_str = "";
 
 	if (date_element !== null) {
 		date_str = (date_element.value).trim();
@@ -102,49 +102,27 @@ const toDATETIME = (date_element, time_element) => {
 		time_str = (time_element.value).trim();
 	}
 
-	if (date_str === '' && time_str.includes(':') === true) {
+	if (date_str === "" && time_str.includes(":") === true) {
 
-		let now_str = DATETIME.render(DATETIME.parse(new Date()));
-		if (now_str !== null) {
-			date_str = now_str.split(' ').shift();
+		let now = Datetime.from(new Date()).toString();
+		if (now.includes(" ")) {
+			date_str = now.split(" ").shift();
 		}
 
 	}
 
-	if (date_str !== '' && time_str !== '') {
+	if (date_str !== "" && time_str !== "") {
 
-		let date = DATETIME.parse(date_str);
-		let time = DATETIME.parse(time_str);
-
-		if (DATETIME.isDate(date) === true && DATETIME.isTime(time) === true) {
-
-			return DATETIME.render({
-				year:   date.year,
-				month:  date.month,
-				day:    date.day,
-				hour:   time.hour,
-				minute: time.minute,
-				second: time.second
-			});
-
+		let datetime = Datetime.from(date_str + " " + time_str);
+		if (datetime.IsValid()) {
+			return datetime.toString();
 		}
 
-	} else if (date_str !== '') {
+	} else if (date_str !== "") {
 
-		let date = DATETIME.parse(date_str);
-		let time = DATETIME.parse('23:59:59');
-
-		if (DATETIME.isDate(date) === true && DATETIME.isTime(time) === true) {
-
-			return DATETIME.render({
-				year:   date.year,
-				month:  date.month,
-				day:    date.day,
-				hour:   time.hour,
-				minute: time.minute,
-				second: time.second
-			});
-
+		let datetime = Datetime.from(date_str + " 23:59:59");
+		if (datetime.IsValid()) {
+			return datetime.toString();
 		}
 
 	}
@@ -175,12 +153,11 @@ const toString = (element) => {
 	if (element !== null) {
 
 		let str = element.value.trim();
-		if (str !== '') {
+		if (str !== "") {
 			return str;
 		}
 
 	}
-
 
 	return null;
 
@@ -197,9 +174,9 @@ const toStrings = (elements) => {
 			if (element !== null) {
 
 				let str = element.value.trim();
-				if (str !== '') {
+				if (str !== "") {
 
-					if (element.type === 'checkbox') {
+					if (element.type === "checkbox") {
 
 						if (element.checked === true) {
 							filtered.push(str);
@@ -225,18 +202,18 @@ const toStrings = (elements) => {
 
 const toTask = (section) => {
 
-	let task = NewTask();
+	let task = new Task();
 
-	task.id          = toNumber(section.querySelector('input[data-name="id"]'));
-	task.project     = toString(section.querySelector('input[data-name="project"]'));
-	task.title       = toString(section.querySelector('input[data-name="title"]'));
-	task.description = toString(section.querySelector('textarea[data-name="description"]'));
-	task.complexity  = toNumber(section.querySelector('select[data-name="complexity"]')) || 1;
-	task.duration    = toString(section.querySelector('input[data-name="duration"]'));
-	task.estimation  = toString(section.querySelector('input[data-name="estimation"]'));
-	task.deadline    = toDATETIME(section.querySelector('input[data-name="deadline-date"]'), section.querySelector('input[data-name="deadline-time"]'));
-	task.eternal     = toBoolean(section.querySelector('input[data-name="eternal"]'));
-	task.repeat      = toStrings(Array.from(section.querySelectorAll('input[data-name="repeat"]')));
+	task.ID          = toNumber(section.querySelector("input[data-name=\"id\"]"));
+	task.Project     = toString(section.querySelector("input[data-name=\"project\"]"));
+	task.Title       = toString(section.querySelector("input[data-name=\"title\"]"));
+	task.Description = toString(section.querySelector("textarea[data-name=\"description\"]"));
+	task.Complexity  = toNumber(section.querySelector("select[data-name=\"complexity\"]")) || 1;
+	task.Duration    = toString(section.querySelector("input[data-name=\"duration\"]"));
+	task.Estimation  = toString(section.querySelector("input[data-name=\"estimation\"]"));
+	task.Deadline    = toDatetimeString(section.querySelector("input[data-name=\"deadline-date\"]"), section.querySelector("input[data-name=\"deadline-time\"]"));
+	task.Eternal     = toBoolean(section.querySelector("input[data-name=\"eternal\"]"));
+	task.Repeat      = toStrings(Array.from(section.querySelectorAll("input[data-name=\"repeat\"]")));
 
 	return task;
 
@@ -244,126 +221,35 @@ const toTask = (section) => {
 
 export const initialize = () => {
 
-	let header = document.querySelector('section#editor > header');
+	let header = document.querySelector("section#editor > header");
 	if (header !== null) {
 		// Do Nothing
 	}
 
-	let section = document.querySelector('section#editor > section');
-	let footer = document.querySelector('section#editor > footer');
+	let section = document.querySelector("section#editor > section");
+	let footer = document.querySelector("section#editor > footer");
 
 	if (section !== null && footer !== null) {
 
-		let remove = footer.querySelector('button[data-action="remove"]');
+		let remove = footer.querySelector("button[data-action=\"remove\"]");
 		if (remove !== null) {
 
-			remove.addEventListener('click', () => {
+			remove.addEventListener("click", () => {
 
+				let APP  = window.APP || null;
 				let task = toTask(section);
 
-				if (IsTask(task) === true) {
+				if (APP !== null && IsTask(task)) {
 
-					if (task.id !== 0) {
+					if (task.ID !== 0) {
 
-						let APP = window.APP || null;
-						if (APP !== null) {
+						APP.Client.Remove(task, (result) => {
 
-							APP.client.Remove(task, (result) => {
-
-								if (result === true) {
-
-									APP.Update(() => {
-										APP.Show('agenda');
-									});
-
-								}
-
-							});
-
-						}
-
-					}
-
-				}
-
-			});
-
-		}
-
-		let save = footer.querySelector('button[data-action="save"]');
-		if (save !== null) {
-
-			save.addEventListener('click', () => {
-
-				let task = toTask(section);
-
-				if (IsTask(task) === true) {
-
-					if (task.id !== 0) {
-
-						let APP = window.APP || null;
-						if (APP !== null) {
-
-							APP.client.Modify(task, () => {
-
-								APP.views['editor'].render(null);
+							if (result === true) {
 
 								APP.Update(() => {
-									APP.Show('agenda');
+									APP.Show("agenda");
 								});
-
-							});
-
-						}
-
-					} else {
-
-						let APP = window.APP || null;
-						if (APP !== null) {
-
-							APP.client.Create(task, (response) => {
-
-								if (response !== null) {
-
-									APP.views['editor'].render(null);
-
-									APP.Update(() => {
-										APP.Show('agenda');
-									});
-
-								}
-
-							});
-
-						}
-
-					}
-
-				}
-
-			});
-
-		}
-
-		let save_create = footer.querySelector('button[data-action="save-create"]');
-		if (save_create !== null) {
-
-			save_create.addEventListener('click', () => {
-
-				let task = toTask(section);
-				if (task !== null) {
-
-					let APP = window.APP || null;
-					if (APP !== null) {
-
-						APP.client.Create(task, (response) => {
-
-							if (response !== null) {
-
-								APP.views['editor'].render(response);
-								APP.views['editor'].reset();
-
-								APP.Update();
 
 							}
 
@@ -377,9 +263,80 @@ export const initialize = () => {
 
 		}
 
+		let save = footer.querySelector("button[data-action=\"save\"]");
+		if (save !== null) {
+
+			save.addEventListener("click", () => {
+
+				let APP  = window.APP || null;
+				let task = toTask(section);
+
+				if (APP !== null && IsTask(task)) {
+
+					if (task.ID !== 0) {
+
+						APP.Client.Modify(task, () => {
+
+							APP.Render(null);
+							APP.Update(() => {
+								APP.Show("agenda");
+							});
+
+						});
+
+					} else {
+
+						APP.Client.Create(task, (result) => {
+
+							if (result === true) {
+
+								APP.Render(null);
+								APP.Update(() => {
+									APP.Show("agenda");
+								});
+
+							}
+
+						});
+
+					}
+
+				}
+
+			});
+
+		}
+
+		let save_create = footer.querySelector("button[data-action=\"save-create\"]");
+		if (save_create !== null) {
+
+			save_create.addEventListener("click", () => {
+
+				let APP  = window.APP || null;
+				let task = toTask(section);
+
+				if (APP !== null && IsTask(task)) {
+
+					APP.Client.Create(task, (result, response) => {
+
+						if (result === true) {
+
+							APP.Render(response);
+							APP.Reset();
+
+						}
+
+					});
+
+				}
+
+			});
+
+		}
+
 	}
 
-	window.addEventListener('resize', onresize);
+	window.addEventListener("resize", onresize);
 
 	setTimeout(() => {
 		onresize();

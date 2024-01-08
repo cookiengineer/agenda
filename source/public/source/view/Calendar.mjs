@@ -1,30 +1,15 @@
 
-import { IsTask   } from '../structs/Task.mjs';
-import { DATETIME } from '../parsers/DATETIME.mjs';
+import { IsString           } from "/stdlib.mjs";
+import { Datetime           } from "/source/structs/Datetime.mjs";
+import { IsTask             } from "/source/structs/Task.mjs";
+import { FormatInt          } from "/source/utils/FormatInt.mjs";
+import { ToDateString       } from "/source/utils/ToDateString.mjs";
+import { ToTimeString       } from "/source/utils/ToTimeString.mjs";
+import { SortTaskByDeadline } from "/source/utils/SortTaskByDeadline.mjs";
 
-const isArray  = (obj) => Object.prototype.toString.call(obj) === '[object Array]';
-const isString = (obj) => Object.prototype.toString.call(obj) === '[object String]';
+const toFirstWeekday = (datetime) => {
 
-const MONTH_DAYS = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
-const WEEK_DAYS  = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
-
-const isLeapYear = function(value) {
-
-	if (value % 4 !== 0) {
-		return false;
-	} else if (value % 100 !== 0) {
-		return true;
-	} else if (value % 400 !== 0) {
-		return false;
-	} else {
-		return true;
-	}
-
-};
-
-const toWeekDay = function(year, month, day) {
-
-	let index = new Date(Date.UTC(year, month - 1, day)).getDay();
+	let index = new Date(Date.UTC(datetime.Year, datetime.Month - 1, 1)).getDay();
 
 	// Sunday to Saturday, stoopid Americans
 	if (index === 0) {
@@ -35,99 +20,51 @@ const toWeekDay = function(year, month, day) {
 
 };
 
-const renderMonth = function(year, month) {
+const renderCalendar = function(selector) {
 
-	if (month < 10) {
-		return year + '-0' + month;
-	} else {
-		return year + '-' + month;
-	}
+	let prev_month = Datetime.from(ToDateString(selector)).PrevMonth();
+	let curr_month = Datetime.from(ToDateString(selector));
+	let next_month = Datetime.from(ToDateString(selector)).NextMonth();
 
-};
-
-const renderCalendar = function(year, month) {
-
-	let curr_datetime = {
-		year:   year,
-		month:  month,
-		day:    null,
-		hour:   null,
-		minute: null,
-		second: null
-	};
-
-	let prev_datetime = {
-		year:   month === 1 ? year - 1 : year,
-		month:  month === 1 ? 12       : month - 1,
-		day:    null,
-		hour:   null,
-		minute: null,
-		second: null
-	};
-
-	let next_datetime = {
-		year:   month === 12 ? year + 1 : year,
-		month:  month === 12 ? 1        : month + 1,
-		day:    null,
-		hour:   null,
-		minute: null,
-		second: null
-	};
-
-	let curr_days = 0;
-
-	if (isLeapYear(curr_datetime.year) && curr_datetime.month === 2) {
-		curr_days = MONTH_DAYS[curr_datetime.month - 1] + 1;
-	} else {
-		curr_days = MONTH_DAYS[curr_datetime.month - 1];
-	}
-
-	let prev_days = 0;
-
-	if (isLeapYear(prev_datetime.year) && prev_datetime.month === 2) {
-		prev_days = MONTH_DAYS[prev_datetime.month - 1] + 1;
-	} else {
-		prev_days = MONTH_DAYS[prev_datetime.month - 1];
-	}
-
-
-	let calendar   = [[]];
-	let first_day  = toWeekDay(curr_datetime.year, curr_datetime.month, 1);
+	let calendar  = [[]];
+	let first_day = toFirstWeekday(curr_month);
 
 	for (let d = 0; d < first_day; d++) {
 
-		calendar[0].push(DATETIME.render(Object.assign({}, prev_datetime, {
-			day: prev_days - first_day + d + 1
-		})));
+		let day      = prev_month.ToDays() - first_day + d + 1;
+		let datetime = Datetime.from(FormatInt(prev_month.Year, 4) + "-" + FormatInt(prev_month.Month, 2) + "-" + FormatInt(day, 2));
+
+		calendar[0].push(datetime);
 
 	}
 
-
 	let week = calendar[0];
 
-	for (let day = 1; day <= curr_days; day++) {
+	for (let day = 1; day <= curr_month.ToDays(); day++) {
 
-		let weekday = toWeekDay(curr_datetime.year, curr_datetime.month, day);
+		let datetime = Datetime.from(FormatInt(curr_month.Year, 4) + "-" + FormatInt(curr_month.Month, 2) + "-" + FormatInt(day, 2));
 
-		week.push(DATETIME.render(Object.assign({}, curr_datetime, {
-			day: day
-		})));
+		week.push(datetime);
 
-		if (week.length >= 7) {
+		if (week.length === 7) {
 			calendar.push([]);
 			week = calendar[calendar.length - 1];
 		}
 
 	}
 
-	let remaining = 7 - week.length;
-	if (remaining > 0) {
+	if (week.length > 0 && week.length < 7) {
 
-		for (let d = 0; d < remaining; d++) {
+		let remaining = 7 - week.length;
+		if (remaining > 0) {
 
-			week.push(DATETIME.render(Object.assign({}, next_datetime, {
-				day: d + 1
-			})));
+			for (let day = 1; day <= remaining; day++) {
+
+				let datetime = Datetime.from(FormatInt(next_month.Year, 4) + "-" + FormatInt(next_month.Month, 2) + "-" + FormatInt(day, 2));
+
+				week.push(datetime);
+
+			}
 
 		}
 
@@ -135,26 +72,22 @@ const renderCalendar = function(year, month) {
 
 
 	let elements = [];
-
-	let today = Object.assign(DATETIME.parse(new Date()), {
-		hour: null,
-		minute: null,
-		second: null
-	});
+	let today    = ToDateString(Datetime.from(new Date()));
 
 	calendar.forEach((week) => {
 
-		let row = document.createElement('tr');
+		let row = document.createElement("tr");
 
-		week.forEach((date) => {
+		week.forEach((datetime) => {
 
-			let cell = document.createElement('td');
+			let cell = document.createElement("td");
+			let date = ToDateString(datetime);
 
-			cell.setAttribute('data-date', date);
-			cell.setAttribute('title', date);
+			cell.setAttribute("data-date", date);
+			cell.setAttribute("title", date);
 
-			if (DATETIME.render(today) === date) {
-				cell.setAttribute('class', 'today');
+			if (today === date) {
+				cell.setAttribute("class", "today");
 			}
 
 			row.appendChild(cell);
@@ -165,10 +98,10 @@ const renderCalendar = function(year, month) {
 
 	});
 
-	let table = this.element.querySelector('table tbody');
+	let table = this.element.querySelector("table tbody");
 	if (table !== null) {
 
-		Array.from(table.querySelectorAll('tr')).forEach((row) => {
+		Array.from(table.querySelectorAll("tr")).forEach((row) => {
 			row.parentNode.removeChild(row);
 		});
 
@@ -184,57 +117,45 @@ const render = function(task, active) {
 
 	if (IsTask(task) === true) {
 
-		let date = DATETIME.render(Object.assign(DATETIME.parse(task.deadline), {
-			hour: null,
-			minute: null,
-			second: null
-		}))
-
-		let time = DATETIME.render(Object.assign(DATETIME.parse(task.deadline), {
-			year: null,
-			month: null,
-			day: null
-		}));
-
-		let element = document.createElement('article');
+		let element = document.createElement("article");
 		let html    = [];
 
-		element.setAttribute('data-id',      task.id);
-		element.setAttribute('data-project', task.project);
-		element.setAttribute('data-view',    'editor');
-		element.setAttribute('data-date',    date);
-		element.setAttribute('data-time',    time);
+		element.setAttribute("data-id",      task.ID);
+		element.setAttribute("data-project", task.Project);
+		element.setAttribute("data-view",    "editor");
 
-		if (task.deadline !== null) {
-			element.setAttribute('title', task.deadline);
+		if (task.Deadline !== null) {
+			element.setAttribute("data-date", ToDateString(Datetime.from(task.Deadline)));
+			element.setAttribute("data-time", ToTimeString(Datetime.from(task.Deadline)));
+			element.setAttribute("title",     task.Deadline);
 		}
 
-		html.push('<h3>');
-		html.push('<span data-complexity="' + task.complexity + '">' + task.complexity + '</span>');
-		html.push(task.title);
-		html.push('</h3>');
+		html.push("<h3>");
+		html.push("<span data-complexity=\"" + task.Complexity + "\">" + task.Complexity + "</span>");
+		html.push(task.Title);
+		html.push("</h3>");
 
-		html.push('<div>');
-		html.push('<b>' + task.project + '</b>');
-		html.push('<span data-estimation="' + task.estimation + '">' + task.estimation + '</span>');
-		html.push('</div>');
+		html.push("<div>");
+		html.push("<b>" + task.Project + "</b>");
+		html.push("<span data-estimation=\"" + task.Estimation + "\">" + task.Estimation + "</span>");
+		html.push("</div>");
 
-		if (isString(task.deadline) === true) {
+		if (IsString(task.Deadline) === true) {
 
-			html.push('<div>');
-			html.push('<span data-deadline="' + task.deadline + '">' + task.deadline + '</span>');
-			html.push('</div>');
+			html.push("<div>");
+			html.push("<span data-deadline=\"" + task.Deadline + "\">" + task.Deadline + "</span>");
+			html.push("</div>");
 
 		}
 
-		html.push('<div>');
-		if (isString(task.description) === true) {
-			html.push(task.description.split('\n').join('<br>\n'));
+		html.push("<div>");
+		if (IsString(task.Description) === true) {
+			html.push(task.Description.split("\n").join("<br>\n"));
 		}
-		html.push('</div>');
+		html.push("</div>");
 
-		element.className = active === true ? 'active' : '';
-		element.innerHTML = html.join('');
+		element.className = active === true ? "active" : "";
+		element.innerHTML = html.join("");
 
 		return element;
 
@@ -249,40 +170,31 @@ const render = function(task, active) {
 const Calendar = function(app, element) {
 
 	this.app     = app;
-	this.element = element.querySelector('section');
-	this.sidebar = element.querySelector('aside div');
+	this.element = element.querySelector("section");
+	this.sidebar = element.querySelector("aside div");
 
 };
 
 
 Calendar.prototype = {
 
-	render: function(task) {
+	Render: function(task) {
 
 		task = IsTask(task) ? task : null;
 
 
-		let datetime = this.app.selector.datetime;
+		let datetime = this.app.Selector.datetime;
 		if (datetime === null) {
 
-			let now = DATETIME.parse(new Date());
+			let now = Datetime.from(new Date());
 			if (now !== null) {
-
-				this.app.selector.datetime = {
-					year:   now.year,
-					month:  now.month,
-					day:    null,
-					hour:   null,
-					minute: null,
-					second: null
-				};
-
+				this.app.Selector.datetime = Datetime.from(ToDateString(now));
 			}
 
 		}
 
-		if (this.app.selector.datetime !== null) {
-			renderCalendar.call(this, this.app.selector.datetime.year, this.app.selector.datetime.month);
+		if (this.app.Selector.datetime !== null) {
+			renderCalendar.call(this, this.app.Selector.datetime);
 		}
 
 		if (task !== null) {
@@ -294,39 +206,15 @@ Calendar.prototype = {
 			let calendar = [];
 			let sidebar = [];
 
-			this.app.tasks.filter((task) => {
+			this.app.Tasks.filter((task) => {
 				return this.app.IsVisible(task);
 			}).sort((a, b) => {
-
-				if (a.deadline !== null && b.deadline !== null) {
-
-					if (a.deadline < b.deadline) return -1;
-					if (b.deadline < a.deadline) return 1;
-
-					return 0;
-
-				} else if (a.deadline !== null && b.deadline === null) {
-
-					return 1;
-
-				} else if (b.deadline !== null && a.deadline === null) {
-
-					return -1;
-
-				} else if (a.deadline === null && b.deadline === null) {
-
-					if (a.id < b.id) return -1;
-					if (b.id < a.id) return 1;
-
-					return 0;
-
-				}
-
+				return SortTaskByDeadline(a, b);
 			}).forEach((task) => {
 
 				if (IsTask(task) === true) {
 
-					if (isString(task.deadline) === true) {
+					if (IsString(task.Deadline) === true) {
 
 						let element = render.call(this, task, this.app.active === task);
 						if (element !== null) {
@@ -346,15 +234,15 @@ Calendar.prototype = {
 
 			});
 
-			Array.from(this.element.querySelectorAll('article')).forEach((article) => {
+			Array.from(this.element.querySelectorAll("article")).forEach((article) => {
 				article.parentNode.removeChild(article);
 			});
 
 			if (calendar.length > 0) {
 				calendar.forEach((article) => {
 
-					let date = article.getAttribute('data-date');
-					let cell = this.element.querySelector('table tbody td[data-date="' + date + '"]');
+					let date = article.getAttribute("data-date");
+					let cell = this.element.querySelector("table tbody td[data-date=\"" + date + "\"]");
 					if (cell !== null) {
 						cell.appendChild(article);
 					}
@@ -362,7 +250,7 @@ Calendar.prototype = {
 				});
 			}
 
-			Array.from(this.sidebar.querySelectorAll('article')).forEach((article) => {
+			Array.from(this.sidebar.querySelectorAll("article")).forEach((article) => {
 				article.parentNode.removeChild(article);
 			});
 

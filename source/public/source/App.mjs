@@ -1,31 +1,31 @@
 
-import { update as update_theme } from '../design/theme/index.mjs';
-import { FormatInt              } from './utils/FormatInt.mjs';
-import { Client                 } from './Client.mjs';
-import { DATETIME               } from './parsers/DATETIME.mjs';
-import { IsTask                 } from './structs/Task.mjs';
-import { Agenda                 } from './view/Agenda.mjs';
-import { Calendar               } from './view/Calendar.mjs';
-import { Editor                 } from './view/Editor.mjs';
-// import { Journal } from './view/Journal.mjs';
+import { IsFunction, IsObject, IsString } from "/stdlib.mjs";
+import { update as update_theme         } from "/design/theme/index.mjs";
+import { FormatInt                      } from "/source/utils/FormatInt.mjs";
+import { Client                         } from "/source/Client.mjs";
+import { Datetime                       } from "/source/structs/Datetime.mjs";
+import { Task, IsTask                   } from "/source/structs/Task.mjs";
+import { Agenda                         } from "/source/view/Agenda.mjs";
+import { Calendar                       } from "/source/view/Calendar.mjs";
+import { Editor                         } from "/source/view/Editor.mjs";
+// import { Journal } from "/source/view/Journal.mjs";
 
-const isFunction = (obj) => Object.prototype.toString.call(obj) === '[object Function]';
-const isObject   = (obj) => Object.prototype.toString.call(obj) === '[object Object]';
-const isString   = (obj) => Object.prototype.toString.call(obj) === '[object String]';
+export const IsApp = (obj) => Object.prototype.toString.call(obj) === "[object App]";
 
-const App = function(selector) {
+export const App = function(selector) {
 
-	selector = isObject(selector) ? selector : {};
+	selector = IsObject(selector) ? selector : {};
 
-
-	this.selector = Object.assign({
+	this.Client   = new Client(this);
+	this.Projects = {};
+	this.Selector = Object.assign({
 		completed: false, // true || false || null
 		datetime:  null,  // "2023-01" || "2023-01-02" || null
 		keywords:  [],    // [ "keyword", "additional-keyword" ] || []
 		project:   null   // "<project>" || null
 	}, selector);
+	this.Tasks    = [];
 
-	this.client = new Client(this);
 
 	this.active   = null;
 	this.activity = {
@@ -36,23 +36,23 @@ const App = function(selector) {
 		stop:      null
 	};
 	this.elements = {
-		'agenda':    document.querySelector('section#agenda'),
-		'calendar':  document.querySelector('section#calendar'),
-		'editor':    document.querySelector('section#editor'),
-		'journal':   document.querySelector('section#journal')
+		"agenda":    document.querySelector("section#agenda"),
+		"calendar":  document.querySelector("section#calendar"),
+		"editor":    document.querySelector("section#editor"),
+		"journal":   document.querySelector("section#journal")
 	};
-	this.tasks = [];
+
 	this.view  = null;
 	this.views = {
-		'agenda':   new Agenda(this, this.elements['agenda']),
-		'calendar': new Calendar(this, this.elements['calendar']),
-		'editor':   new Editor(this, this.elements['editor']),
-		// 'journal': new Journal(this, this.elements['journal'])
+		"agenda":   new Agenda(this, this.elements["agenda"]),
+		"calendar": new Calendar(this, this.elements["calendar"]),
+		"editor":   new Editor(this, this.elements["editor"]),
+		// "journal": new Journal(this, this.elements["journal"])
 	};
 
 
 	this.Update(() => {
-		this.Show('agenda');
+		this.Show("agenda");
 	});
 
 };
@@ -60,18 +60,46 @@ const App = function(selector) {
 
 App.prototype = {
 
-	Refresh: function() {
+	[Symbol.toStringTag]: "App",
 
-		// this.selector has changed
-		if (this.view !== this.views['editor']) {
-			this.view.render();
+	Render: function(task, callback) {
+
+		task     = IsTask(task)         ? task     : null;
+		callback = IsFunction(callback) ? callback : null;
+
+		if (this.view === this.views["editor"]) {
+
+			this.view.Render(task);
+
+			if (task !== null) {
+				this.view.Reset();
+			}
+
+			if (callback !== null) {
+				callback(true);
+			}
+
+		} else if (this.view !== null) {
+
+			this.view.Render();
+
+			if (callback !== null) {
+				callback(true);
+			}
+
+		} else {
+
+			if (callback !== null) {
+				callback(false);
+			}
+
 		}
 
 	},
 
 	Show: function(name, task) {
 
-		name = typeof name === 'string' ? name : null;
+		name = typeof name === "string" ? name : null;
 		task = IsTask(task)             ? task : null;
 
 
@@ -89,21 +117,21 @@ App.prototype = {
 						let old_name    = Object.keys(this.views)[Object.values(this.views).indexOf(this.view)];
 						let old_element = this.elements[old_name] || null;
 						if (old_element !== null) {
-							old_element.className = 'inactive';
+							old_element.className = "inactive";
 						}
 
 					}
 
-					element.className = 'active';
+					element.className = "active";
 
 					setTimeout(() => {
-						view.render(task);
+						view.Render(task);
 						this.view = view;
 					}, 500);
 
 				} else if (view === this.view && task !== null) {
 
-					view.render(task);
+					view.Render(task);
 
 				}
 
@@ -120,71 +148,69 @@ App.prototype = {
 
 	Start: function(task) {
 
-		this.active = task;
-		this.activity.start = DATETIME.parse(new Date());
+		if (IsTask(task)) {
 
-		let offset = DATETIME.parse(this.active.duration);
-		if (offset.hour > 0) {
-			// TODO: Offset via DATETIME?
-		}
+			this.active = task;
+			this.activity.start = Datetime.from(new Date());
 
-		if (offset.minute > 0) {
-			// TODO
-		}
+			if (this.active.duration !== "00:00:00") {
 
-		if (offset.second > 0) {
-			// TODO
-		}
-
-		if (this.active.activities.length > 0) {
-			this.activity.index = this.active.activities.length;
-		} else {
-			this.activity.index = 0;
-		}
-
-		this.activity.interval1 = setInterval(() => {
-
-			let now = DATETIME.parse(new Date());
-
-			if (this.active !== null) {
-
-				let delta_hour   = now.hour   - this.activity.start.hour;
-				let delta_minute = now.minute - this.activity.start.minute;
-				let delta_second = now.second - this.activity.start.second;
-
-				this.active.activities[this.activity.index] = DATETIME.render(this.activity.start) + ' - ' + DATETIME.render(now);
-				this.active.duration = FormatInt(delta_hour, 2) + ':' + FormatInt(delta_minute, 2) + ':' + FormatInt(delta_second, 2);
+				let offset = Datetime.from(this.active.duration);
+				this.activity.start.Offset(offset);
 
 			}
 
-		}, 1000);
-
-		this.activity.interval2 = setInterval(() => {
-
-			if (this.active !== null) {
-				this.client.Modify(this.active);
+			if (this.active.activities.length > 0) {
+				this.activity.index = this.active.activities.length;
+			} else {
+				this.activity.index = 0;
 			}
 
-		}, 60 * 1000);
+			this.activity.interval1 = setInterval(() => {
+
+				let now = Datetime.from(new Date());
+
+				if (this.active !== null) {
+
+					let delta_hour   = now.hour   - this.activity.start.hour;
+					let delta_minute = now.minute - this.activity.start.minute;
+					let delta_second = now.second - this.activity.start.second;
+
+					this.active.activities[this.activity.index] = this.activity.start.toString() + " - " + now.toString();
+					this.active.duration = FormatInt(delta_hour, 2) + ":" + FormatInt(delta_minute, 2) + ":" + FormatInt(delta_second, 2);
+
+				}
+
+			}, 1000);
+
+			this.activity.interval2 = setInterval(() => {
+
+				if (this.active !== null) {
+					this.Client.Modify(this.active);
+				}
+
+			}, 60 * 1000);
+
+		}
 
 	},
 
 	Stop: function(task) {
 
-		if (this.active !== null) {
+		if (IsTask(this.active)) {
 
 			if (this.active === task) {
 
-				let now = DATETIME.parse(new Date());
+				let now = Datetime.from(new Date());
 
 				let delta_hour   = now.hour   - this.activity.start.hour;
 				let delta_minute = now.minute - this.activity.start.minute;
 				let delta_second = now.second - this.activity.start.second;
 
-				this.active.activities[this.activity.index] = DATETIME.render(this.activity.start) + ' - ' + DATETIME.render(now);
-				this.active.duration = FormatInt(delta_hour, 2) + ':' + FormatInt(delta_minute, 2) + ':' + FormatInt(delta_second, 2);
+				this.active.activities[this.activity.index] = this.activity.start.toString() + " - " + now.toString();
+				this.active.duration = FormatInt(delta_hour, 2) + ":" + FormatInt(delta_minute, 2) + ":" + FormatInt(delta_second, 2);
 
-				this.client.Modify(this.active, () => {
+				this.Client.Modify(this.active, () => {
 					this.active = null;
 				});
 
@@ -212,12 +238,21 @@ App.prototype = {
 
 	Update: function(callback) {
 
-		callback = isFunction(callback) ? callback : null;
+		callback = IsFunction(callback) ? callback : null;
 
-		this.client.Update((tasks, projects) => {
+		this.Client.Update((tasks, projects) => {
 
-			this.tasks = tasks.filter((task) => IsTask(task));
-			this.projects = projects;
+			this.Tasks = [];
+			this.Projects = projects;
+
+			tasks.forEach((data) => {
+
+				let task = Task.from(data);
+				if (task.IsValid()) {
+					this.Tasks.push(task);
+				}
+
+			});
 
 			update_theme();
 
@@ -236,16 +271,16 @@ App.prototype = {
 		let matches_keywords = false;
 		let matches_project  = false;
 
-		let completed = this.selector.completed;
+		let completed = this.Selector.completed;
 		if (completed === true) {
 
-			if (task.is_completed === true) {
+			if (task.IsCompleted === true) {
 				matches_completed = true;
 			}
 
 		} else if (completed === false) {
 
-			if (task.is_completed === false) {
+			if (task.IsCompleted === false) {
 				matches_completed = true;
 			}
 
@@ -253,20 +288,20 @@ App.prototype = {
 			matches_completed = true;
 		}
 
-		let datetime = this.selector.datetime;
+		let datetime = this.Selector.datetime;
 		if (datetime !== null) {
 
-			if (isString(task.deadline) === true) {
+			if (IsString(task.Deadline)) {
 
-				let deadline = DATETIME.parse(task.deadline);
+				let deadline = Datetime.from(task.Deadline);
 
 				let matches_year  = false;
 				let matches_month = false;
 				let matches_day   = false;
 
-				if (datetime.year !== null) {
+				if (datetime.Year !== null) {
 
-					if (datetime.year === deadline.year) {
+					if (datetime.Year === deadline.Year) {
 						matches_year = true;
 					}
 
@@ -274,9 +309,9 @@ App.prototype = {
 					matches_year = true;
 				}
 
-				if (datetime.month !== null) {
+				if (datetime.Month !== null) {
 
-					if (datetime.month === deadline.month) {
+					if (datetime.Month === deadline.Month) {
 						matches_month = true;
 					}
 
@@ -284,9 +319,9 @@ App.prototype = {
 					matches_month = true;
 				}
 
-				if (datetime.day !== null) {
+				if (datetime.Day !== null) {
 
-					if (datetime.day === deadline.day) {
+					if (datetime.Day === deadline.Day) {
 						matches_day = true;
 					}
 
@@ -304,19 +339,19 @@ App.prototype = {
 			matches_datetime = true;
 		}
 
-		let keywords = this.selector.keywords;
+		let keywords = this.Selector.keywords;
 		if (keywords.length > 0) {
 
 			let matches = new Array(keywords.length);
 
 			for (let k = 0; k < keywords.length; k++) {
 
-				let keyword = keywords[k].toLowerCase();
-				let task_project     = task.project.toLowerCase();
-				let task_title       = task.title.toLowerCase();
-				let task_description = task.description.toLowerCase();
-				let task_deadline    = task.deadline !== null ? task.deadline : '';
-				let task_repeat      = task.repeat.map((v) => v.toLowerCase());
+				let keyword          = keywords[k].toLowerCase();
+				let task_project     = task.Project.toLowerCase();
+				let task_title       = task.Title.toLowerCase();
+				let task_description = task.Description.toLowerCase();
+				let task_deadline    = task.Deadline !== null ? task.Deadline : "";
+				let task_repeat      = task.Repeat.map((v) => v.toLowerCase());
 
 				if (
 					task_project.includes(keyword)
@@ -338,10 +373,10 @@ App.prototype = {
 			matches_keywords = true;
 		}
 
-		let project = this.selector.project;
+		let project = this.Selector.project;
 		if (project !== null) {
 
-			if (task.project === project) {
+			if (task.Project === project) {
 				matches_project = true;
 			} else {
 				matches_project = false;
@@ -360,7 +395,4 @@ App.prototype = {
 	}
 
 };
-
-
-export { App };
 

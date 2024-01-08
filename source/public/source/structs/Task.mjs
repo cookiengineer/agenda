@@ -1,15 +1,10 @@
 
-import { DATETIME } from '../parsers/DATETIME.mjs';
+import { IsArray, IsBoolean, IsNumber, IsString } from "/stdlib.mjs";
+import { Datetime                               } from "./Datetime.mjs";
 
-const isArray   = (obj) => Object.prototype.toString.call(obj) === '[object Array]';
-const isBoolean = (obj) => Object.prototype.toString.call(obj) === '[object Boolean]';
-const isNumber  = (obj) => Object.prototype.toString.call(obj) === '[object Number]';
-const isObject  = (obj) => Object.prototype.toString.call(obj) === '[object Object]';
-const isString  = (obj) => Object.prototype.toString.call(obj) === '[object String]';
+export const IsTask = (obj) => Object.prototype.toString.call(obj) === "[object Task]";
 
-
-
-const COMPLEXITY = [
+const COMPLEXITIES = [
 	1,
 	2,
 	3,
@@ -20,22 +15,20 @@ const COMPLEXITY = [
 ];
 
 const DAYS = [
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-	'Sunday'
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday",
+	"Sunday"
 ];
-
-
 
 const isComplexity = function(complexity) {
 
 	if (
-		isNumber(complexity) === true
-		&& COMPLEXITY.includes(complexity) === true
+		IsNumber(complexity)
+		&& COMPLEXITIES.includes(complexity)
 	) {
 		return true;
 	}
@@ -44,34 +37,37 @@ const isComplexity = function(complexity) {
 
 };
 
-const isTime = function(duration) {
+const isTime = (value) => {
 
-	if (
-		isString(duration) === true
-		&& duration.includes(':') === true
-	) {
+	let result = false;
 
-		let check = DATETIME.parse(duration);
-		if (DATETIME.isTime(check) === true) {
-			return true;
+	if (value.includes(":")) {
+
+		let chunks = value.split(":");
+
+		if (chunks.length === 3) {
+			result = true;
+		} else if (chunks.length === 2) {
+			result = true;
 		}
 
 	}
 
-	return false;
+	return result;
 
 };
 
 const isDatetime = function(datetime) {
 
 	if (
-		isString(datetime) === true
-		&& datetime.includes('-') === true
-		&& datetime.includes(':') === true
+		IsString(datetime)
+		&& datetime.includes("-")
+		&& datetime.includes(":")
 	) {
 
-		let check = DATETIME.parse(datetime);
-		if (DATETIME.isDATETIME(check) === true) {
+		let check = Datetime.from(datetime);
+
+		if (check.IsValid()) {
 			return true;
 		}
 
@@ -83,14 +79,14 @@ const isDatetime = function(datetime) {
 
 const isRepeat = function(repeat) {
 
-	if (isArray(repeat) === true) {
+	if (IsArray(repeat)) {
 
 		let days  = repeat.map((v) => v.trim());
 		let valid = true;
 
 		days.forEach((day) => {
 
-			if (DAYS.includes(day) === false) {
+			if (DAYS.includes(day)) {
 				valid = false;
 			}
 
@@ -104,50 +100,171 @@ const isRepeat = function(repeat) {
 
 };
 
+export const NewTask = function(id) {
 
+	let task = new Task();
 
-export const IsTask = function(task) {
-
-	if (
-		isObject(task) === true
-		&& isNumber(task.id) === true
-		&& isString(task.project) === true
-		&& isString(task.title) === true
-		&& isString(task.description) === true
-		&& isComplexity(task.complexity) === true
-		&& (isDatetime(task.deadline) === true || task.deadline === null)
-		&& isTime(task.estimation) === true
-		&& isBoolean(task.eternal) === true
-		&& isRepeat(task.repeat) === true
-		&& isTime(task.duration) === true
-		&& isBoolean(task.is_completed) === true
-		&& isArray(task.activities) === true
-	) {
-		return true;
+	if (IsNumber(id)) {
+		task.ID = id;
 	}
 
-	return false;
+	return task;
 
 };
 
-export const NewTask = function(id) {
+export const Task = function() {
 
-	id = isNumber(id) ? id : 0;
+	this.ID          = 0;
+	this.Project     = "life";
+	this.Title       = null;
+	this.Description = "";
+	this.Complexity  = COMPLEXITIES[0];
+	this.Deadline    = null;
+	this.Estimation  = "01:00:00";
+	this.Eternal     = false;
+	this.Repeat      = [];
+	this.Duration    = "00:00:00";
+	this.IsCompleted = false;
+	this.Activities  = [];
 
-	return {
-		id:           id,
-		project:      'life',
-		title:        null,
-		description:  '',
-		complexity:   COMPLEXITY[0],
-		deadline:     null,
-		estimation:   '01:00:00',
-		eternal:      false,
-		repeat:       [],
-		duration:     '00:00:00',
-		is_completed: false,
-		activities:   []
-	};
+};
+
+Task.from = function(value) {
+
+	if (value === null || value === undefined) {
+
+		// Do Nothing
+
+	} else if (Object.prototype.toString.call(value) === "[object Object]") {
+
+		let task = new Task();
+
+		if (IsNumber(value["id"])) {
+			task.ID = value["id"];
+		}
+
+		if (IsString(value["project"])) {
+			task.Project = value["project"];
+		}
+
+		if (IsString(value["title"])) {
+			task.Title = value["title"];
+		}
+
+		if (IsString(value["description"])) {
+			task.Description = value["description"];
+		}
+
+		if (isComplexity(value["complexity"])) {
+			task.Complexity = value["complexity"];
+		}
+
+		if (isDatetime(value["deadline"])) {
+			task.Deadline = value["deadline"];
+		}
+
+		if (isTime(value["estimation"])) {
+			task.Estimation = value["estimation"];
+		}
+
+		if (IsBoolean(value["eternal"])) {
+			task.Eternal = value["eternal"];
+		}
+
+		if (isRepeat(value["repeat"])) {
+			task.Repeat = value["repeat"];
+		}
+
+		if (isTime(value["duration"])) {
+			task.Duration = value["duration"];
+		}
+
+		if (IsBoolean(value["is_completed"])) {
+			task.IsCompleted = value["is_completed"];
+		}
+
+		if (IsArray(value["activities"])) {
+			task.Activities = value["activities"];
+		}
+
+		return task;
+
+	} else if (Object.prototype.toString.call(value) === "[object String]") {
+
+		let object = null;
+
+		try {
+			object = JSON.parse(value);
+		} catch (err) {
+			object = null;
+		}
+
+		if (Object.prototype.toString.call(object) === "[object Object]") {
+			return Task.from(object);
+		}
+
+	}
+
+	return null;
+
+};
+
+
+Task.prototype = {
+
+	[Symbol.toStringTag]: "Task",
+
+	IsValid: function() {
+
+		if (
+			IsNumber(this.ID) === true
+			&& IsString(this.Project) === true
+			&& IsString(this.Title) === true
+			&& IsString(this.Description) === true
+			&& isComplexity(this.Complexity) === true
+			&& (isDatetime(this.Deadline) === true || this.Deadline === null)
+			&& isTime(this.Estimation) === true
+			&& IsBoolean(this.Eternal) === true
+			&& isRepeat(this.Repeat) === true
+			&& isTime(this.Duration) === true
+			&& IsBoolean(this.IsCompleted) === true
+			&& IsArray(this.Activities) === true
+		) {
+			return true;
+		}
+
+		return false;
+
+	},
+
+	"String": function() {
+		return this.toString();
+	},
+
+	toJSON: function() {
+
+		return {
+			"id":           this.ID,
+			"project":      this.Project,
+			"title":        this.Title,
+			"description":  this.Description,
+			"complexity":   this.Complexity,
+			"deadline":     this.Deadline,
+			"estimation":   this.Estimation,
+			"eternal":      this.Eternal,
+			"repeat":       this.Repeat,
+			"duration":     this.Duration,
+			"is_completed": this.IsCompleted,
+			"activities":   this.Activities
+		};
+
+	},
+
+	toString: function() {
+
+		return JSON.stringify(this.toJSON(), "", "\t");
+
+	}
 
 };
 

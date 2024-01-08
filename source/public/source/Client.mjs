@@ -1,16 +1,11 @@
 
-import { IsTask } from './structs/Task.mjs';
-
-const isArray    = (obj) => Object.prototype.toString.call(obj) === '[object Array]';
-const isFunction = (obj) => Object.prototype.toString.call(obj) === '[object Function]';
-const isObject   = (obj) => Object.prototype.toString.call(obj) === '[object Object]';
-const isString   = (obj) => Object.prototype.toString.call(obj) === '[object String]';
-
+import { IsArray, IsFunction, IsObject, IsString } from "/stdlib.mjs";
+import { Task, IsTask                            } from "./structs/Task.mjs";
 
 const Client = function(app, api) {
 
 	this.app = app;
-	this.api = isString(api) ? api : '/api';
+	this.api = IsString(api) ? api : "/api";
 
 };
 
@@ -19,45 +14,31 @@ Client.prototype = {
 
 	Update: function(callback) {
 
-		callback = isFunction(callback) ? callback : null;
+		callback = IsFunction(callback) ? callback : null;
 
 
 		if (callback !== null) {
 
 			let xhr1 = new XMLHttpRequest();
 
-			xhr1.open('GET', this.api + '/tasks');
-			xhr1.setRequestHeader('Content-Type', 'application/json');
+			xhr1.open("GET", this.api + "/tasks");
+			xhr1.responseType = "json";
+			xhr1.setRequestHeader("Content-Type", "application/json");
 
 			xhr1.onload = () => {
 
-				let tasks = null;
-
-				try {
-					tasks = JSON.parse(xhr1.response);
-				} catch (err) {
-					tasks = null;
-				}
-
-				if (isArray(tasks) === true) {
+				if (IsArray(xhr1.response) === true) {
 
 					let xhr2 = new XMLHttpRequest();
 
-					xhr2.open('GET', this.api + '/projects');
-					xhr2.setRequestHeader('Content-Type', 'application/json');
+					xhr2.open("GET", this.api + "/projects");
+					xhr2.responseType = "json";
+					xhr2.setRequestHeader("Content-Type", "application/json");
 
 					xhr2.onload = () => {
 
-						let projects = null;
-
-						try {
-							projects = JSON.parse(xhr2.response);
-						} catch (err) {
-							projects = null;
-						}
-
-						if (isObject(projects) === true) {
-							callback(tasks, projects);
+						if (IsObject(xhr2.response) === true) {
+							callback(xhr1.response, xhr2.response);
 						}
 
 					};
@@ -86,54 +67,55 @@ Client.prototype = {
 
 	Create: function(task, callback) {
 
-		task     = IsTask(task)         ? task     : null;
-		callback = isFunction(callback) ? callback : null;
+		callback = IsFunction(callback) ? callback : null;
 
 
-		if (task !== null && callback !== null) {
+		if (IsTask(task)) {
 
-			let payload = null;
-
-			try {
-				payload = JSON.stringify(task);
-			} catch (err) {
-				payload = null;
-			}
-
+			let payload = task.toString();
 			if (payload !== null) {
 
 				let xhr = new XMLHttpRequest();
 
-				xhr.open('POST', this.api + '/tasks/create');
-				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.open("POST", this.api + "/tasks/create");
+				xhr.responseType = "json";
+				xhr.setRequestHeader("Content-Type", "application/json");
 
 				xhr.onload = () => {
 
-					let data = null;
+					let response = Task.from(xhr.response);
 
-					try {
-						data = JSON.parse(xhr.response);
-					} catch (err) {
-						data = null;
-					}
+					if (IsTask(response) && response.IsValid()) {
 
-					if (IsTask(data) === true) {
-						callback(true, data);
+						if (callback !== null) {
+							callback(true, response);
+						}
+
 					} else {
-						callback(false, null);
+
+						if (callback !== null) {
+							callback(false, null);
+						}
+
 					}
 
 				};
 
 				xhr.onerror = () => {
-					callback(false, null);
+
+					if (callback !== null) {
+						callback(false, null);
+					}
+
 				};
 
 				xhr.send(payload);
 
 			} else {
 
-				callback(null);
+				if (callback !== null) {
+					callback(false, null);
+				}
 
 			}
 
@@ -143,40 +125,43 @@ Client.prototype = {
 
 	Modify: function(task, callback) {
 
-		task     = IsTask(task)         ? task     : null;
-		callback = isFunction(callback) ? callback : null;
+		callback = IsFunction(callback) ? callback : null;
 
 
-		if (task !== null && callback !== null) {
+		if (IsTask(task) && task.IsValid()) {
 
-			let payload = null;
-
-			try {
-				payload = JSON.stringify(task);
-			} catch (err) {
-				payload = null;
-			}
-
+			let payload = task.toString();
 			if (payload !== null) {
 
 				let xhr = new XMLHttpRequest();
 
-				xhr.open('POST', this.api + '/tasks/modify');
-				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.open("POST", this.api + "/tasks/modify");
+				xhr.responseType = "json";
+				xhr.setRequestHeader("Content-Type", "application/json");
 
 				xhr.onload = () => {
-					callback(true);
+
+					if (callback !== null) {
+						callback(true);
+					}
+
 				};
 
 				xhr.onerror = () => {
-					callback(false);
+
+					if (callback !== null) {
+						callback(false);
+					}
+
 				};
 
 				xhr.send(payload);
 
 			} else {
 
-				callback(false);
+				if (callback !== null) {
+					callback(false);
+				}
 
 			}
 
@@ -186,40 +171,42 @@ Client.prototype = {
 
 	Remove: function(task, callback) {
 
-		task     = IsTask(task)         ? task     : null;
-		callback = isFunction(callback) ? callback : null;
+		callback = IsFunction(callback) ? callback : null;
 
 
-		if (task !== null && callback !== null) {
+		if (IsTask(task) && task.IsValid()) {
 
-			let payload = null;
-
-			try {
-				payload = JSON.stringify(task);
-			} catch (err) {
-				payload = null;
-			}
-
+			let payload = task.toString();
 			if (payload !== null) {
 
 				let xhr = new XMLHttpRequest();
 
-				xhr.open('DELETE', this.api + '/tasks/remove');
-				xhr.setRequestHeader('Content-Type', 'application/json');
+				xhr.open("DELETE", this.api + "/tasks/remove");
+				xhr.setRequestHeader("Content-Type", "application/json");
 
 				xhr.onload = () => {
-					callback(true);
+
+					if (callback !== null) {
+						callback(true);
+					}
+
 				};
 
 				xhr.onerror = () => {
-					callback(false);
+
+					if (callback !== null) {
+						callback(false);
+					}
+
 				};
 
 				xhr.send(payload);
 
 			} else {
 
-				callback(null);
+				if (callback !== null) {
+					callback(false);
+				}
 
 			}
 

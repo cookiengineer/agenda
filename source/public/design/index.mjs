@@ -1,11 +1,11 @@
 
 const global   = window;
-const document = global['document'];
+const document = global["document"];
 
 
-import { initialize as initialize_Agenda   } from './view/Agenda.mjs';
-import { initialize as initialize_Calendar } from './view/Calendar.mjs';
-import { initialize as initialize_Editor   } from './view/Editor.mjs';
+import { initialize as initialize_Agenda   } from "./view/Agenda.mjs";
+import { initialize as initialize_Calendar } from "./view/Calendar.mjs";
+import { initialize as initialize_Editor   } from "./view/Editor.mjs";
 
 
 
@@ -17,8 +17,8 @@ const cleanify = (element) => {
 
 			let node = element.childNodes[c];
 			if (
-				node.nodeName === '#text'
-				&& node.textContent.trim() === ''
+				node.nodeName === "#text"
+				&& node.textContent.trim() === ""
 			) {
 
 				element.removeChild(node);
@@ -39,28 +39,28 @@ const cleanify = (element) => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-	let headers = Array.from(document.querySelectorAll('section > header'));
+	let headers = Array.from(document.querySelectorAll("section > header"));
 	if (headers.length > 0) {
 
 		headers.forEach((header) => {
 
 			cleanify(header);
 
-			let buttons = Array.from(header.querySelectorAll('button'));
+			let buttons = Array.from(header.querySelectorAll("button"));
 			if (buttons.length > 0) {
 
 				buttons.forEach((button) => {
 
-					button.addEventListener('click', () => {
+					button.addEventListener("click", () => {
 
-						let view = button.getAttribute('data-view');
-						if (view !== null && view !== '') {
+						let view = button.getAttribute("data-view");
+						if (view !== null && view !== "") {
 
 							let APP = window.APP || null;
 							if (APP !== null) {
-								APP.selector.datetime = null;
+								APP.Selector.datetime = null;
 								APP.Show(view);
 							}
 						}
@@ -71,21 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			}
 
-			let list = header.querySelector('ul');
+			let list = header.querySelector("ul");
 			if (list !== null) {
 
-				list.addEventListener('click', (event) => {
+				list.addEventListener("click", (event) => {
 
-					if (event.target.tagName.toLowerCase() === 'li') {
+					if (event.target.tagName.toLowerCase() === "li") {
 
 						let element = event.target;
 
-						Array.from(list.querySelectorAll('li')).forEach((item) => {
+						Array.from(list.querySelectorAll("li")).forEach((item) => {
 
 							if (item === element) {
-								item.className = item.className === 'active' ? '' : 'active';
+								item.className = item.className === "active" ? "" : "active";
 							} else {
-								item.className = '';
+								item.className = "";
 							}
 
 						});
@@ -95,13 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
 							let APP = window.APP || null;
 							let project = null;
 
-							if (element.className === 'active') {
-								project = element.getAttribute('data-project') || null;
+							if (element.className === "active") {
+								project = element.getAttribute("data-project") || null;
 							}
 
 							if (APP !== null) {
-								APP.selector.project = project;
-								APP.Refresh();
+								APP.Selector.project = project;
+								APP.Render();
 							}
 
 						}, 0);

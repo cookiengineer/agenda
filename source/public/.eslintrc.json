@@ -39,12 +39,12 @@
 		],
 		"no-unused-vars": [
 			"error", {
-				"varsIgnorePattern": "^(BROWSER|ELEMENTS|WIDGETS)$"
+				"varsIgnorePattern": "^(APP)$"
 			}
 		],
 		"quotes": [
 			"error",
-			"single"
+			"double"
 		],
 		"semi": [
 			"error",
