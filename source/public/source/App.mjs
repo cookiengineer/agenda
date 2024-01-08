@@ -22,6 +22,7 @@ const App = function(selector) {
 	this.selector = Object.assign({
 		completed: false, // true || false || null
 		datetime:  null,  // "2023-01" || "2023-01-02" || null
+		keywords:  [],    // [ "keyword", "additional-keyword" ] || []
 		project:   null   // "<project>" || null
 	}, selector);
 
@@ -147,6 +148,7 @@ App.prototype = {
 
 		let matches_completed = false;
 		let matches_datetime = false;
+		let matches_keywords = false;
 		let matches_project  = false;
 
 		let completed = this.selector.completed;
@@ -217,6 +219,40 @@ App.prototype = {
 			matches_datetime = true;
 		}
 
+		let keywords = this.selector.keywords;
+		if (keywords.length > 0) {
+
+			let matches = new Array(keywords.length);
+
+			for (let k = 0; k < keywords.length; k++) {
+
+				let keyword = keywords[k].toLowerCase();
+				let task_project     = task.project.toLowerCase();
+				let task_title       = task.title.toLowerCase();
+				let task_description = task.description.toLowerCase();
+				let task_deadline    = task.deadline !== null ? task.deadline : '';
+				let task_repeat      = task.repeat.map((v) => v.toLowerCase());
+
+				if (
+					task_project.includes(keyword)
+					|| task_title.includes(keyword)
+					|| task_description.includes(keyword)
+					|| task_deadline.includes(keyword)
+					|| task_repeat.includes(keyword)
+				) {
+					matches[k] = true;
+				} else {
+					matches[k] = false;
+				}
+
+			}
+
+			matches_keywords = matches.includes(false) === false;
+
+		} else {
+			matches_keywords = true;
+		}
+
 		let project = this.selector.project;
 		if (project !== null) {
 
@@ -230,7 +266,11 @@ App.prototype = {
 			matches_project = true;
 		}
 
-		return (matches_completed && matches_datetime && matches_project);
+		if (matches_completed && matches_datetime && matches_keywords && matches_project) {
+			return true;
+		}
+
+		return false;
 
 	}
 

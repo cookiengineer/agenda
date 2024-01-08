@@ -7,9 +7,6 @@
       show all immediate tasks which are scheduled for the next upcoming days (until the end
       of the week), and if there are none, recommend the next unscheduled task with the lowest
       complexity.
-- [ ] Implement a `Search` that fuzzy searches `project`, `title`, `description`, and `repeat[]`
-      of the displayed set of tasks. Implement this as an `APP.selector` so that it automatically
-      integrates with the other views.
 - [ ] Implement a `Start` button that starts a given task and sets the `APP.active` task to
       the selected one. There can be only one active task, and it should be stickied to the top
       and animated while the time duration counter increases. Save the active task to the Profile

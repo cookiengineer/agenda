@@ -145,7 +145,7 @@ export const NewTask = function(id) {
 		eternal:      false,
 		repeat:       [],
 		duration:     '00:00:00',
-		is_completed: false
+		is_completed: false,
 		activities:   []
 	};
 

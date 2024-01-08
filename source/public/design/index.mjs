@@ -112,29 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			}
 
-			if (false == true) {
-
-				selectors.forEach((element) => {
-
-					element.addEventListener('click', () => {
-
-						selectors.forEach((other) => {
-
-							if (other === element) {
-								other.className = 'active';
-							} else {
-								other.className = '';
-							}
-
-						});
-
-
-					});
-
-				});
-
-			}
-
 		});
 
 	}

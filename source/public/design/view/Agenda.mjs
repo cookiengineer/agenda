@@ -139,13 +139,46 @@ export const initialize = () => {
 
 		}
 
-		let search_agenda = footer.querySelector('input[data-action="search-agenda"]');
-		if (search_agenda !== null) {
+		let search = footer.querySelector('input[data-action="search"]');
+		if (search !== null) {
 
-			show_deadlines.addEventListener('change', () => {
+			search.addEventListener('keyup', () => {
 
-				// TODO: Show only Tasks that match search in either of:
-				// project, title, description
+				let APP = window.APP || null;
+				let keywords = search.value.trim().split(' ').map((value) => {
+
+					value = value.split('.').join('');
+					value = value.split(',').join('');
+					value = value.split('/').join('');
+
+					return value;
+
+				});
+
+				if (APP !== null) {
+					APP.selector.keywords = keywords;
+					APP.Refresh();
+				}
+
+			});
+
+			search.addEventListener('change', () => {
+
+				let APP = window.APP || null;
+				let keywords = search.value.trim().split(' ').map((value) => {
+
+					value = value.split('.').join('');
+					value = value.split(',').join('');
+					value = value.split('/').join('');
+
+					return value;
+
+				});
+
+				if (APP !== null) {
+					APP.selector.keywords = keywords;
+					APP.Refresh();
+				}
 
 			});
 

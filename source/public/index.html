@@ -26,7 +26,7 @@
 				<section></section>
 				<footer>
 					<button data-action="show-deadlines">Show Deadlines</button>
-					<input data-action="search-agenda" type="text" placeholder="Search for title, project or description">
+					<input data-action="search" type="text" placeholder="Search for title, project or description">
 					<button data-action="create">Create Task</button>
 				</footer>
 			</section>
@@ -176,10 +176,6 @@
 			import { App } from "./source/App.mjs";
 
 			window.APP = new App({});
-
-			setTimeout(() => {
-				window.APP.Show('calendar');
-			}, 3000);
 		</script>
 	</body>
 </html>
