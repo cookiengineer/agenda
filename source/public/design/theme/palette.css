@@ -5,6 +5,10 @@ body {
 	--default-background: #383c4a;
 	--default-border: #262a33;
 
+	--default-select-text: #bafcff;
+	--default-select-background: #5294e2;
+	--default-select-border: #5294e2;
+
 	/* UI Layout */
 
 	--menu-text: #d3dae3;
@@ -21,11 +25,13 @@ body {
 	--input-focus-background: #404552;
 	--input-focus-border: #5294e2;
 
+	--input-select-text: #bafcff;
+	--input-select-background: #5294e2;
+	--input-select-border: #5294e2;
+
 	--input-disabled-text: #a8b2bf;
 	--input-disabled-background: #262a33;
 	--input-disabled-border: #262a33;
-
-	/* TODO: input-disabled-text/background/border */
 
 	--input-invalid-text: #fffcba;
 	--input-invalid-background: #e25252;
@@ -59,4 +65,10 @@ body {
 	--button-primary-active-background: #60a2f0;
 	--button-primary-active-border: #2b2e39;
 
+}
+
+body *::selection {
+	color: var(--default-select-text);
+	background: var(--default-select-background);
+	border-color: var(--default-select-border);
 }

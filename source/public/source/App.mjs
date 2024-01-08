@@ -8,7 +8,6 @@ import { Task, IsTask                   } from "/source/structs/Task.mjs";
 import { Agenda                         } from "/source/view/Agenda.mjs";
 import { Calendar                       } from "/source/view/Calendar.mjs";
 import { Editor                         } from "/source/view/Editor.mjs";
-// import { Journal } from "/source/view/Journal.mjs";
 
 export const IsApp = (obj) => Object.prototype.toString.call(obj) === "[object App]";
 
@@ -36,18 +35,16 @@ export const App = function(selector) {
 		stop:      null
 	};
 	this.elements = {
-		"agenda":    document.querySelector("section#agenda"),
-		"calendar":  document.querySelector("section#calendar"),
-		"editor":    document.querySelector("section#editor"),
-		"journal":   document.querySelector("section#journal")
+		"agenda":   document.querySelector("section#agenda"),
+		"calendar": document.querySelector("section#calendar"),
+		"editor":   document.querySelector("section#editor")
 	};
 
 	this.view  = null;
 	this.views = {
 		"agenda":   new Agenda(this, this.elements["agenda"]),
 		"calendar": new Calendar(this, this.elements["calendar"]),
-		"editor":   new Editor(this, this.elements["editor"]),
-		// "journal": new Journal(this, this.elements["journal"])
+		"editor":   new Editor(this, this.elements["editor"])
 	};
 
 

@@ -38,19 +38,3 @@
 	font-style: normal;
 }
 
-
-::selection {
-	color: #ffffff;
-	background: #ff0000;
-}
-
-@media print {
-
-	* {
-		-webkit-print-color-adjust: exact !important;
-		print-color-adjust: exact !important;
-	}
-
-	/* TODO */
-
-}

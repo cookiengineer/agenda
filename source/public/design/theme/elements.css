@@ -166,6 +166,7 @@ fieldset input[type="time"][disabled]:invalid {
 	background: var(--input-disabled-background) !important;
 	border-color: var(--input-disabled-border) !important;
 	transition: 250ms all ease-out;
+	user-select: none;
 	cursor: not-allowed;
 }
 
@@ -201,6 +202,14 @@ fieldset input[type="text"]:hover {
 	transition: 250ms all ease-out;
 }
 
+footer input[type="text"]::selection,
+fieldset input[type="text"]::selection {
+	color: var(--input-select-text);
+	background: var(--input-select-background);
+	border-color: var(--input-select-border);
+	transition: 250ms all ease-out;
+}
+
 footer input[type="text"]:invalid,
 fieldset input[type="text"]:invalid {
 	color: var(--input-invalid-text);
@@ -226,6 +235,7 @@ fieldset input[type="text"][disabled]:invalid {
 	background: var(--input-disabled-background) !important;
 	border-color: var(--input-disabled-border) !important;
 	transition: 250ms all ease-out;
+	user-select: none;
 	cursor: not-allowed;
 }
 
@@ -268,6 +278,7 @@ fieldset select[disabled]:invalid {
 	background: var(--input-disabled-background) !important;
 	border-color: var(--input-disabled-border) !important;
 	transition: 250ms all ease-out;
+	user-select: none;
 	cursor: not-allowed;
 }
 
@@ -313,6 +324,13 @@ fieldset textarea:hover {
 	transition: 250ms all ease-out;
 }
 
+fieldset textarea::selection {
+	color: var(--input-select-text);
+	background: var(--input-select-background);
+	border-color: var(--input-select-border);
+	transition: 250ms all ease-out;
+}
+
 fieldset textarea:invalid {
 	color: var(--input-invalid-text);
 	background: var(--input-invalid-background);
@@ -332,6 +350,7 @@ fieldset textarea[disabled]:invalid {
 	background: var(--input-disabled-background) !important;
 	border-color: var(--input-disabled-border) !important;
 	transition: 250ms all ease-out;
+	user-select: none;
 	cursor: not-allowed;
 }
 
@@ -471,6 +490,7 @@ aside button[disabled]:first-of-type:hover {
 	background: var(--button-disabled-background) !important;
 	border-color: var(--button-disabled-border) !important;
 	transition: 250ms all ease-out;
+	user-select: none;
 	cursor: not-allowed;
 }
 

@@ -1,0 +1,46 @@
+
+@media print {
+
+	* {
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+
+	main,
+	main > section {
+		position: static;
+		overflow: unset;
+		color: #000000;
+		background: #ffffff;
+	}
+
+	main > section > header,
+	main > section > aside,
+	main > section > footer {
+		display: none;
+	}
+
+	main > section > section {
+		display: none;
+	}
+
+	main > section.active > section {
+		display: block;
+		position: static;
+	}
+
+	main > section article,
+	main > aside article {
+		color: #000000;
+		background: #ffffff;
+	}
+
+	main > section#agenda article[data-focus] footer {
+		display: none;
+	}
+
+	main > section#editor {
+		display: none;
+	}
+
+}

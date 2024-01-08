@@ -4,13 +4,14 @@
 		<meta charset="utf-8">
 		<!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
 
-		<link rel="stylesheet" href="./design/index.css">
-		<script type="module" src="./design/index.mjs"></script>
+		<link rel="stylesheet" href="/design/index.css">
+		<link rel="stylesheet" media="print" href="/design/theme/print.css">
+		<script type="module" src="/design/index.mjs"></script>
 
-		<link rel="apple-touch-icon" sizes="180x180" href="./design/asset/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="./design/asset/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="./design/asset/favicon-16x16.png">
-		<link rel="manifest" href="./index.webmanifest">
+		<link rel="apple-touch-icon" sizes="180x180" href="/design/asset/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/design/asset/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/design/asset/favicon-16x16.png">
+		<link rel="manifest" href="/index.webmanifest">
 
 		<title>Agenda Taskplanner</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -173,7 +174,7 @@
 			</section>
 		</main>
 		<script type="module">
-			import { App } from "./source/App.mjs";
+			import { App } from "/source/App.mjs";
 
 			window.APP = new App({});
 		</script>
