@@ -1,157 +1,74 @@
 
-const toArticle = (target) => {
-
-	let found   = null;
-	let current = target;
-
-	while (current.tagName !== 'BODY') {
-
-		if (current.tagName === 'ARTICLE') {
-
-			found = current;
-			break;
-
-		} else {
-
-			current = current.parentNode;
-
-		}
-
-	}
-
-	return found;
-
-};
-
-const toTask = function(identifier) {
-
-	let id = parseInt(identifier, 10);
-
-	if (Number.isNaN(id) === false && id !== 0) {
-
-		let APP = window.APP || null;
-		if (APP !== null) {
-			return APP.tasks.find((other) => other.id === id);
-		}
-
-	}
-
-	return null;
-
-};
-
-
+import { ToArticle, ToTask } from '../utils.mjs';
 
 export const initialize = () => {
 
-	// let section = document.querySelector('section#calendar > section');
-	// if (section !== null) {
+	let section = document.querySelector('section#calendar > section');
+	if (section !== null) {
 
-	// 	section.addEventListener('click', (event) => {
+		// TODO: Drag and Drop interaction
+		// TODO: click on article in table should open Editor
 
-	// 		let article = toArticle(event.target);
-	// 		if (article !== null) {
+	}
 
-	// 			if (event.target.tagName === 'BUTTON') {
+	let footer = document.querySelector('section#calendar > footer');
+	if (footer !== null) {
 
-	// 				let action = event.target.getAttribute('data-action');
-	// 				let task   = toTask(article.getAttribute('data-id'));
+		let prev_month = footer.querySelector('button[data-action="prev-month"]');
+		if (prev_month !== null) {
 
-	// 				if (action === 'edit' && task !== null) {
+			prev_month.addEventListener('click', () => {
 
-	// 					let APP = window.APP || null;
-	// 					if (APP !== null) {
-	// 						APP.Show('editor', task);
-	// 					}
+				let APP = window.APP || null;
+				if (APP !== null) {
 
-	// 				} else if (action === 'start' && task !== null) {
+					let year = APP.selector.datetime.year;
+					let month = APP.selector.datetime.month;
+					if (month > 1) {
+						month = month - 1;
+					} else if (month === 1) {
+						month = 12;
+						year  = year - 1;
+					}
 
-	// 					let APP = window.APP || null;
-	// 					if (APP !== null) {
-	// 						APP.Start(task);
-	// 					}
+					APP.selector.datetime.year  = year;
+					APP.selector.datetime.month = month;
+					APP.Refresh();
 
-	// 					event.target.setAttribute('data-action', 'stop');
-	// 					event.target.innerHTML = 'Stop';
+				}
 
-	// 				} else if (action === 'stop' && task !== null) {
+			});
 
-	// 					let APP = window.APP || null;
-	// 					if (APP !== null) {
-	// 						APP.Stop(task);
-	// 					}
+		}
 
-	// 					event.target.setAttribute('data-action', 'start');
-	// 					event.target.innerHTML = 'Start';
+		let next_month = footer.querySelector('button[data-action="next-month"]');
+		if (next_month !== null) {
 
-	// 				}
+			next_month.addEventListener('click', () => {
 
-	// 			} else {
+				let APP = window.APP || null;
+				if (APP !== null) {
 
-	// 				let articles = Array.from(section.querySelectorAll('article'));
-	// 				if (articles.length > 0) {
+					let year = APP.selector.datetime.year;
+					let month = APP.selector.datetime.month;
+					if (month < 12) {
+						month = month + 1;
+					} else {
+						year  = year + 1;
+						month = 1;
+					}
 
-	// 					articles.forEach((other) => {
+					APP.selector.datetime.year  = year;
+					APP.selector.datetime.month = month;
+					APP.Refresh();
 
-	// 						if (other === article) {
-	// 							other.setAttribute('data-focus', 'whatever');
-	// 						} else {
-	// 							other.removeAttribute('data-focus');
-	// 						}
+				}
 
-	// 					});
+			});
 
-	// 				}
+		}
 
-	// 			}
-
-	// 		}
-
-	// 	});
-
-	// }
-
-	// let footer = document.querySelector('section#agenda > footer');
-	// if (footer !== null) {
-
-	// 	let create = footer.querySelector('button[data-action="create"]');
-	// 	if (create !== null) {
-
-	// 		create.addEventListener('click', () => {
-
-	// 			let APP = window.APP || null;
-	// 			if (APP !== null) {
-	// 				APP.Show('editor', null);
-	// 			}
-
-	// 		});
-
-	// 	}
-
-	// 	let show_deadlines = footer.querySelector('button[data-action="show-deadlines"]');
-	// 	if (show_deadlines !== null) {
-
-	// 		show_deadlines.addEventListener('click', () => {
-
-	// 			// TODO: Show only important tasks with a deadline
-
-	// 		});
-
-	// 	}
-
-	// 	let search_agenda = footer.querySelector('input[data-action="search-agenda"]');
-	// 	if (search_agenda !== null) {
-
-	// 		show_deadlines.addEventListener('change', () => {
-
-	// 			// TODO: Show only Tasks that match search in either of:
-	// 			// project, title, description
-
-	// 		});
-
-	// 	}
-
-	// }
+	}
 
 };
 

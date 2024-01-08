@@ -1,46 +1,5 @@
 
-const toArticle = (target) => {
-
-	let found   = null;
-	let current = target;
-
-	while (current.tagName !== 'BODY') {
-
-		if (current.tagName === 'ARTICLE') {
-
-			found = current;
-			break;
-
-		} else {
-
-			current = current.parentNode;
-
-		}
-
-	}
-
-	return found;
-
-};
-
-const toTask = function(identifier) {
-
-	let id = parseInt(identifier, 10);
-
-	if (Number.isNaN(id) === false && id !== 0) {
-
-		let APP = window.APP || null;
-		if (APP !== null) {
-			return APP.tasks.find((other) => other.id === id);
-		}
-
-	}
-
-	return null;
-
-};
-
-
+import { ToArticle, ToTask } from '../utils.mjs';
 
 export const initialize = () => {
 
@@ -49,13 +8,13 @@ export const initialize = () => {
 
 		section.addEventListener('click', (event) => {
 
-			let article = toArticle(event.target);
+			let article = ToArticle(event.target);
 			if (article !== null) {
 
 				if (event.target.tagName === 'BUTTON') {
 
 					let action = event.target.getAttribute('data-action');
-					let task   = toTask(article.getAttribute('data-id'));
+					let task   = ToTask(article.getAttribute('data-id'));
 
 					if (action === 'edit' && task !== null) {
 

@@ -2,8 +2,6 @@
 import { DATETIME        } from '../../source/parsers/DATETIME.mjs';
 import { IsTask, NewTask } from '../../source/structs/Task.mjs';
 
-
-
 const DAYS = {
 	'Mon': 'Monday',
 	'Tue': 'Tuesday',
