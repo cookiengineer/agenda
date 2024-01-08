@@ -24,7 +24,7 @@ const renderEmpty = function() {
 
 const render = function(task, active) {
 
-	if (IsTask(task) === true) {
+	if (IsTask(task)) {
 
 		let element = document.createElement("article");
 		let html    = [];
@@ -42,13 +42,13 @@ const render = function(task, active) {
 		html.push("<span data-duration=\"" + task.Duration + "\">" + task.Duration + "</span>");
 		html.push(" / ");
 		html.push("<span data-estimation=\"" + task.Estimation + "\">" + task.Estimation + "</span>");
-		if (IsArray(task.Repeat) === true && task.Repeat.length > 0) {
+		if (IsArray(task.Repeat) && task.Repeat.length > 0) {
 			html.push("<br>");
 			html.push("<span data-repeat=\"" + task.Repeat.join(",") + "\">(every " + task.Repeat.join(", ") + ")</span>");
 		}
 		html.push("</div>");
 
-		if (IsString(task.Deadline) === true) {
+		if (IsString(task.Deadline)) {
 
 			html.push("<div>");
 
@@ -62,14 +62,14 @@ const render = function(task, active) {
 			) {
 				html.push("<span title=\"Must be done today!\">!</span> <span data-deadline=\"" + task.Deadline + "\">" + task.Deadline + "</span>");
 			} else {
-				html.push("<span data-deadline=\"" + task.Deadline + "\">" + task.deadline + "</span>");
+				html.push("<span data-deadline=\"" + task.Deadline + "\">" + task.Deadline + "</span>");
 			}
 			html.push("</div>");
 
 		}
 
 		html.push("<div>");
-		if (IsString(task.Description) === true) {
+		if (IsString(task.Description)) {
 			html.push(task.Description.split("\n").join("<br>\n"));
 		}
 		html.push("</div>");

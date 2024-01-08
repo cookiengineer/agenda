@@ -27,7 +27,7 @@ Client.prototype = {
 
 			xhr1.onload = () => {
 
-				if (IsArray(xhr1.response) === true) {
+				if (IsArray(xhr1.response)) {
 
 					let xhr2 = new XMLHttpRequest();
 
@@ -37,7 +37,7 @@ Client.prototype = {
 
 					xhr2.onload = () => {
 
-						if (IsObject(xhr2.response) === true) {
+						if (IsObject(xhr2.response)) {
 							callback(xhr1.response, xhr2.response);
 						}
 

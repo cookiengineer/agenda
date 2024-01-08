@@ -217,18 +217,18 @@ Task.prototype = {
 	IsValid: function() {
 
 		if (
-			IsNumber(this.ID) === true
-			&& IsString(this.Project) === true
-			&& IsString(this.Title) === true
-			&& IsString(this.Description) === true
-			&& isComplexity(this.Complexity) === true
-			&& (isDatetime(this.Deadline) === true || this.Deadline === null)
-			&& isTime(this.Estimation) === true
-			&& IsBoolean(this.Eternal) === true
-			&& isRepeat(this.Repeat) === true
-			&& isTime(this.Duration) === true
-			&& IsBoolean(this.IsCompleted) === true
-			&& IsArray(this.Activities) === true
+			IsNumber(this.ID)
+			&& IsString(this.Project)
+			&& IsString(this.Title)
+			&& IsString(this.Description)
+			&& isComplexity(this.Complexity)
+			&& (isDatetime(this.Deadline) || this.Deadline === null)
+			&& isTime(this.Estimation)
+			&& IsBoolean(this.Eternal)
+			&& isRepeat(this.Repeat)
+			&& isTime(this.Duration)
+			&& IsBoolean(this.IsCompleted)
+			&& IsArray(this.Activities)
 		) {
 			return true;
 		}

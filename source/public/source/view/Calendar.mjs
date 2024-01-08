@@ -115,7 +115,7 @@ const renderCalendar = function(selector) {
 
 const render = function(task, active) {
 
-	if (IsTask(task) === true) {
+	if (IsTask(task)) {
 
 		let element = document.createElement("article");
 		let html    = [];
@@ -140,7 +140,7 @@ const render = function(task, active) {
 		html.push("<span data-estimation=\"" + task.Estimation + "\">" + task.Estimation + "</span>");
 		html.push("</div>");
 
-		if (IsString(task.Deadline) === true) {
+		if (IsString(task.Deadline)) {
 
 			html.push("<div>");
 			html.push("<span data-deadline=\"" + task.Deadline + "\">" + task.Deadline + "</span>");
@@ -149,7 +149,7 @@ const render = function(task, active) {
 		}
 
 		html.push("<div>");
-		if (IsString(task.Description) === true) {
+		if (IsString(task.Description)) {
 			html.push(task.Description.split("\n").join("<br>\n"));
 		}
 		html.push("</div>");
@@ -212,9 +212,9 @@ Calendar.prototype = {
 				return SortTaskByDeadline(a, b);
 			}).forEach((task) => {
 
-				if (IsTask(task) === true) {
+				if (IsTask(task)) {
 
-					if (IsString(task.Deadline) === true) {
+					if (IsString(task.Deadline)) {
 
 						let element = render.call(this, task, this.app.active === task);
 						if (element !== null) {

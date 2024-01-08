@@ -222,12 +222,64 @@ const toTask = (section) => {
 export const initialize = () => {
 
 	let header = document.querySelector("section#editor > header");
+	let section = document.querySelector("section#editor > section");
+	let footer = document.querySelector("section#editor > footer");
+
 	if (header !== null) {
 		// Do Nothing
 	}
 
-	let section = document.querySelector("section#editor > section");
-	let footer = document.querySelector("section#editor > footer");
+	if (section !== null) {
+
+		let project = section.querySelector("input#editor-project");
+		if (project !== null) {
+
+			project.addEventListener("input", (event) => {
+
+				if (
+					event.inputType === "insertFromPaste"
+					|| event.inputType === "deleteContentForward"
+					|| event.inputType === "deleteContentBackward"
+				) {
+
+					// Do Nothing
+
+				} else if (
+					event.inputType === "insertText"
+				) {
+
+					let APP = window.APP || null;
+					if (APP !== null) {
+
+						let projects    = Object.keys(APP.Projects).sort();
+						let suggestions = [];
+						let value       = project.value;
+
+						projects.forEach((project) => {
+
+							if (project.startsWith(value)) {
+								suggestions.push(project);
+							}
+
+						});
+
+						// Only auto-complete if there's exactly one match
+						if (suggestions.length === 1) {
+
+							project.value = suggestions[0];
+							project.setSelectionRange(value.length, project.value.length);
+
+						}
+
+					}
+
+				}
+
+			});
+
+		}
+
+	}
 
 	if (section !== null && footer !== null) {
 

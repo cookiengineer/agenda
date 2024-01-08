@@ -27,20 +27,19 @@ const render = function(task) {
 	};
 
 
-	if (IsTask(task) === true) {
+	if (IsTask(task)) {
 
-		elements["id"].value            = (task["id"]).toString();
-		elements["project"].value       = task["project"];
-		elements["title"].value         = task["title"];
-		elements["description"].value   = task["description"];
-		elements["complexity"].value    = (task["complexity"]).toString();
-		elements["duration"].value      = task["duration"];
-		elements["estimation"].value    = task["estimation"];
+		elements["id"].value          = (task.ID).toString();
+		elements["project"].value     = task.Project;
+		elements["title"].value       = task.Title;
+		elements["description"].value = task.Description;
+		elements["complexity"].value  = (task.Complexity).toString();
+		elements["duration"].value    = task.Duration;
+		elements["estimation"].value  = task.Estimation;
 
-		if (task["deadline"] !== null) {
+		if (IsString(task.Deadline)) {
 
-			let datetime = Datetime.from(task["deadline"]);
-
+			let datetime = Datetime.from(task.Deadline);
 			if (datetime.IsValid()) {
 
 				elements["deadline"]["date"].value = ToDateString(datetime);
@@ -50,10 +49,10 @@ const render = function(task) {
 
 		}
 
-		elements["eternal"].checked = task["eternal"];
+		elements["eternal"].checked = task.Eternal;
 		elements["repeat"].forEach((element) => {
 
-			if (task["repeat"].includes(element.value) === true) {
+			if (task.Repeat.includes(element.value)) {
 				element.checked = true;
 			} else {
 				element.checked = false;
@@ -94,7 +93,7 @@ const renderHeader = function(title) {
 
 const renderFooter = function(task) {
 
-	if (IsTask(task) === true) {
+	if (IsTask(task)) {
 
 		this.actions["remove"].removeAttribute("disabled");
 
@@ -157,7 +156,7 @@ Editor.prototype = {
 		if (task !== null) {
 
 			render.call(this, task);
-			renderHeader.call(this, "Edit Task #" + task.id);
+			renderHeader.call(this, "Edit Task #" + task.ID);
 			renderFooter.call(this, task);
 
 		} else if (task === null) {

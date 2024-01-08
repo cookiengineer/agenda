@@ -274,13 +274,13 @@ App.prototype = {
 		let completed = this.Selector.completed;
 		if (completed === true) {
 
-			if (task.IsCompleted === true) {
+			if (task.IsCompleted) {
 				matches_completed = true;
 			}
 
 		} else if (completed === false) {
 
-			if (task.IsCompleted === false) {
+			if (!task.IsCompleted) {
 				matches_completed = true;
 			}
 
