@@ -11,9 +11,9 @@ main {
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	color: #d3dae3;
+	color: var(--default-text);
+	background: var(--default-background);
 	text-align: left;
-	background: #383c4a;
 	border: 0px solid transparent;
 	border-radius: 0px;
 	-webkit-user-select: auto;
@@ -27,7 +27,8 @@ main > section {
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
-	background: #383c4a;
+	color: var(--default-text);
+	background: var(--default-background);
 	transition: 250ms opacity ease-out;
 	opacity: 0;
 	z-index: -1;
@@ -91,9 +92,10 @@ main > section > header {
 	left: 0px;
 	text-align: center;
 	vertical-align: middle;
-	background: #2f343f;
+	color: var(--menu-text);
+	background: var(--menu-background);
 	border: 0px solid transparent;
-	border-bottom: 2px solid #262a33;
+	border-bottom: 2px solid var(--menu-border);
 	border-radius: 0px;
 	user-select: none;
 	-webkit-user-select: none;
@@ -108,7 +110,7 @@ main > section > header b {
 	padding: 0px;
 	text-align: center;
 	line-height: 32px;
-	color: #d3dae3;
+	color: var(--default-text);
 	font-family: 'cantarell';
 	font-size: 24px;
 	font-style: normal;
@@ -129,15 +131,15 @@ main > section > header ul li {
 	padding: 0px 8px;
 	height: 32px;
 	line-height: 30px;
-	color: #a8b2bf;
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	background: #414857;
-	border-top: 1px solid #2b2e39;
+	color: var(--button-text);
+	background: var(--button-background);
+	border-top: 1px solid var(--button-border);
 	border-right: 1px solid transparent;
-	border-bottom: 1px solid #2b2e39;
+	border-bottom: 1px solid var(--button-border);
 	border-left: 1px solid transparent;
 	border-radius: 0px;
 	box-sizing: border-box;
@@ -146,23 +148,23 @@ main > section > header ul li {
 }
 
 main > section > header ul li:hover {
-	color: #acb6c3;
-	background: #4f5665;
-	border-color: #393e4a;
+	color: var(--button-focus-text);
+	background: var(--button-focus-background);
+	border-color: var(--button-focus-border);
 }
 
 main > section > header ul li:first-of-type {
-	border-top: 1px solid #2b2e39;
+	border-top: 1px solid var(--button-border);
 	border-right: 1px solid transparent;
-	border-bottom: 1px solid #2b2e39;
-	border-left: 1px solid #2b2e39;
+	border-bottom: 1px solid var(--button-border);
+	border-left: 1px solid var(--button-border);
 	border-radius: 4px 0px 0px 4px;
 }
 
 main > section > header ul li:last-of-type {
-	border-top: 1px solid #2b2e39;
-	border-right: 1px solid #2b2e39;
-	border-bottom: 1px solid #2b2e39;
+	border-top: 1px solid var(--button-border);
+	border-right: 1px solid var(--button-border);
+	border-bottom: 1px solid var(--button-border);
 	border-left: 1px solid transparent;
 	border-radius: 0px 4px 4px 0px;
 }
@@ -172,9 +174,9 @@ main > section > header ul li:first-of-type:last-of-type {
 }
 
 main > section > header ul li.active {
-	color: #ffffff;
-	background: #5294e2;
-	border-color: #2f343f;
+	color: var(--button-active-text);
+	background: var(--button-active-background);
+	border-color: var(--button-active-border);
 }
 
 
@@ -202,9 +204,10 @@ main > section > aside {
 	left: 0px;
 	text-align: center;
 	vertical-align: top;
-	background: #2f343f;
+	color: var(--menu-text);
+	background: var(--menu-background);
 	border: 0px solid transparent;
-	border-right: 2px solid #262a33;
+	border-right: 2px solid var(--menu-border);
 	border-radius: 0px;
 	user-select: none;
 	overflow: hidden auto;
@@ -222,11 +225,12 @@ main > aside article {
 	width: 720px;
 	margin: 32px auto;
 	padding: 8px;
-	border-top: 2px solid #262a33;
-	border-right: 16px solid #262a33;
-	border-bottom: 2px solid #262a33;
-	border-left: 16px solid #262a33;
-	background: #383c4a;
+	color: var(--default-text);
+	background: var(--default-background);
+	border-top: 2px solid var(--default-border);
+	border-right: 16px solid var(--default-border);
+	border-bottom: 2px solid var(--default-border);
+	border-left: 16px solid var(--default-border);
 	box-sizing: border-box;
 	transition: border-color 250ms ease-out;
 }
@@ -261,9 +265,10 @@ main > section > footer {
 	left: 0px;
 	text-align: center;
 	vertical-align: middle;
-	background: #2f343f;
+	color: var(--menu-text);
+	background: var(--menu-background);
 	border: 0px solid transparent;
-	border-top: 2px solid #262a33;
+	border-top: 2px solid var(--menu-border);
 	border-radius: 0px;
 	user-select: none;
 	-webkit-user-select: none;

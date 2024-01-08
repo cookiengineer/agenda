@@ -1,16 +1,4 @@
 
-main em {
-	display: inline-block;
-	margin: 0px;
-	padding: 0px 4px;
-	color: #ffffff;
-	background: #404552;
-	font-weight: normal;
-	font-style: normal;
-	font-family: 'monospace';
-	border-radius: 4px;
-}
-
 h3 {
 	display: block;
 	text-align: center;
@@ -47,17 +35,6 @@ fieldset + fieldset {
 	margin-top: 32px;
 }
 
-fieldset legend {
-	margin: 0px;
-	padding: 0px 4px;
-	font-weight: bold;
-	font-size: 20px;
-	text-align: center;
-	background: #383c4a;
-	border: 1px solid #333643;
-	border-radius: 4px;
-}
-
 fieldset label[for] {
 	display: inline-block;
 	width: auto;
@@ -85,14 +62,14 @@ fieldset input[type="checkbox"] {
 	line-height: 30px;
 	margin: 0px;
 	padding: 0px 8px;
-	color: #ffffff;
-	background: #404552;
+	color: var(--input-text);
+	background: var(--input-background);
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
 	vertical-align: top;
-	border: 1px solid #262a33;
+	border: 1px solid var(--input-border);
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
@@ -103,17 +80,29 @@ fieldset input[type="checkbox"] {
 }
 
 fieldset input[type="checkbox"]:checked {
-	color: #ffffff;
-	background: #60a2f0;
+	color: var(--button-active-text);
+	background: var(--button-active-background);
+	border-color: var(--button-active-border);
 }
 
-fieldset input[type="checkbox"]:checked:before {
+fieldset input[type="checkbox"][disabled],
+fieldset input[type="checkbox"][disabled]:checked {
+	color: var(--input-disabled-text) !important;
+	background: var(--input-disabled-background) !important;
+	border-color: var(--input-disabled-border) !important;
+	transition: 250ms all ease-out;
+	cursor: not-allowed;
+}
+
+fieldset input[type="checkbox"]:checked:before,
+fieldset input[type="checkbox"][disabled]:checked:before {
 	display: block;
 	content: 'X';
 	font-family: 'vera-mono';
 	font-size: 20px;
 	font-weight: bold;
 	line-height: 32px;
+	color: var(--input-text);
 	text-align: center;
 	vertical-align: middle;
 }
@@ -126,13 +115,13 @@ fieldset input[type="time"] {
 	line-height: 30px;
 	margin: 0px;
 	padding: 0px 8px;
-	color: #ffffff;
-	background: #404552;
+	color: var(--input-text);
+	background: var(--input-background);
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	border: 1px solid #262a33;
+	border: 1px solid var(--input-border);
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
@@ -146,8 +135,38 @@ fieldset input[type="date"]:focus,
 fieldset input[type="date"]:hover,
 fieldset input[type="time"]:focus,
 fieldset input[type="time"]:hover {
-	border-color: #5294e2;
+	color: var(--input-focus-text);
+	background: var(--input-focus-background);
+	border-color: var(--input-focus-border);
 	transition: 250ms all ease-out;
+}
+
+fieldset input[type="date"]:invalid,
+fieldset input[type="time"]:invalid {
+	color: var(--input-invalid-text);
+	background: var(--input-invalid-background);
+	border-color: var(--input-invalid-border);
+	transition: 250ms all ease-out;
+}
+
+fieldset input[type="date"]:invalid::placeholder,
+fieldset input[type="time"]:invalid::placeholder {
+	color: var(--input-invalid-text);
+}
+
+fieldset input[type="date"][disabled],
+fieldset input[type="date"][disabled]:focus,
+fieldset input[type="date"][disabled]:hover,
+fieldset input[type="date"][disabled]:invalid,
+fieldset input[type="time"][disabled],
+fieldset input[type="time"][disabled]:focus,
+fieldset input[type="time"][disabled]:hover,
+fieldset input[type="time"][disabled]:invalid {
+	color: var(--input-disabled-text) !important;
+	background: var(--input-disabled-background) !important;
+	border-color: var(--input-disabled-border) !important;
+	transition: 250ms all ease-out;
+	cursor: not-allowed;
 }
 
 footer input[type="text"],
@@ -158,13 +177,13 @@ fieldset input[type="text"] {
 	line-height: 30px;
 	margin: 0px;
 	padding: 0px 8px;
-	color: #ffffff;
-	background: #404552;
+	color: var(--input-text);
+	background: var(--input-background);
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	border: 1px solid #262a33;
+	border: 1px solid var(--input-border);
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
@@ -176,15 +195,38 @@ footer input[type="text"]:focus,
 footer input[type="text"]:hover,
 fieldset input[type="text"]:focus,
 fieldset input[type="text"]:hover {
-	border-color: #5294e2;
+	color: var(--input-focus-text);
+	background: var(--input-focus-background);
+	border-color: var(--input-focus-border);
 	transition: 250ms all ease-out;
 }
 
 footer input[type="text"]:invalid,
 fieldset input[type="text"]:invalid {
-	color: #fffcba;
-	background: #e25252;
+	color: var(--input-invalid-text);
+	background: var(--input-invalid-background);
+	border-color: var(--input-invalid-border);
 	transition: 250ms all ease-out;
+}
+
+footer input[type="text"]:invalid::placeholder,
+fieldset input[type="text"]:invalid::placeholder {
+	color: var(--input-invalid-text);
+}
+
+footer input[type="text"][disabled],
+footer input[type="text"][disabled]:focus,
+footer input[type="text"][disabled]:hover,
+footer input[type="text"][disabled]:invalid,
+fieldset input[type="text"][disabled],
+fieldset input[type="text"][disabled]:focus,
+fieldset input[type="text"][disabled]:hover,
+fieldset input[type="text"][disabled]:invalid {
+	color: var(--input-disabled-text) !important;
+	background: var(--input-disabled-background) !important;
+	border-color: var(--input-disabled-border) !important;
+	transition: 250ms all ease-out;
+	cursor: not-allowed;
 }
 
 fieldset select {
@@ -194,13 +236,13 @@ fieldset select {
 	line-height: 30px;
 	margin: 0px;
 	padding: 0px 8px;
-	color: #ffffff;
-	background: #404552;
+	color: var(--input-text);
+	background: var(--input-background);
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	border: 1px solid #262a33;
+	border: 1px solid var(--input-border);
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
@@ -212,8 +254,21 @@ fieldset select {
 
 fieldset select:focus,
 fieldset select:hover {
-	border-color: #5294e2;
+	/* color: var(--input-focus-text); */
+	/* background: var(--input-focus-background); */
+	border-color: var(--input-focus-border);
 	transition: 250ms all ease-out;
+}
+
+fieldset select[disabled],
+fieldset select[disabled]:focus,
+fieldset select[disabled]:hover,
+fieldset select[disabled]:invalid {
+	color: var(--input-disabled-text) !important;
+	background: var(--input-disabled-background) !important;
+	border-color: var(--input-disabled-border) !important;
+	transition: 250ms all ease-out;
+	cursor: not-allowed;
 }
 
 fieldset select option {
@@ -224,8 +279,9 @@ fieldset select option {
 
 fieldset select option:focus,
 fieldset select option:hover {
-	color: #ffffff;
-	background-color: #5294e2;
+	color: var(--input-focus-text);
+	background: var(--input-focus-background);
+	border-color: var(--input-focus-border);
 }
 
 fieldset textarea {
@@ -235,13 +291,13 @@ fieldset textarea {
 	line-height: 32px;
 	margin: 0px;
 	padding: 0px 8px;
-	color: #ffffff;
-	background: #404552;
+	color: var(--input-text);
+	background: var(--input-background);
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	border: 1px solid #262a33;
+	border: 1px solid var(--input-border);
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
@@ -251,14 +307,32 @@ fieldset textarea {
 
 fieldset textarea:focus,
 fieldset textarea:hover {
-	border-color: #5294e2;
+	color: var(--input-focus-text);
+	background: var(--input-focus-background);
+	border-color: var(--input-focus-border);
 	transition: 250ms all ease-out;
 }
 
 fieldset textarea:invalid {
-	color: #fffcba;
-	background: #e25252;
+	color: var(--input-invalid-text);
+	background: var(--input-invalid-background);
+	border-color: var(--input-invalid-border);
 	transition: 250ms all ease-out;
+}
+
+fieldset textarea:invalid::placeholder {
+	color: var(--input-invalid-text);
+}
+
+fieldset textarea[disabled],
+fieldset textarea[disabled]:focus,
+fieldset textarea[disabled]:hover,
+fieldset textarea[disabled]:invalid {
+	color: var(--input-disabled-text) !important;
+	background: var(--input-disabled-background) !important;
+	border-color: var(--input-disabled-border) !important;
+	transition: 250ms all ease-out;
+	cursor: not-allowed;
 }
 
 
@@ -272,13 +346,13 @@ aside button {
 	line-height: 30px;
 	margin: 0px;
 	padding: 0px 8px;
-	color: #a8b2bf;
-	background: #414857;
+	color: var(--button-text);
+	background: var(--button-background);
 	font-family: 'cantarell';
 	font-size: 16px;
 	font-style: normal;
 	font-weight: normal;
-	border: 1px solid #2a2f39;
+	border: 1px solid var(--button-border);
 	border-radius: 4px;
 	box-sizing: border-box;
 	transition: 250ms all ease-out;
@@ -294,9 +368,20 @@ footer button:focus,
 footer button:hover,
 aside button:focus,
 aside button:hover {
-	color: #acb6c3;
-	background: #4f5665;
-	border-color: #393e4a;
+	color: var(--button-focus-text);
+	background: var(--button-focus-background);
+	border-color: var(--button-focus-border);
+	transition: 250ms all ease-out;
+	cursor: pointer;
+}
+
+fieldset button:active,
+header button:active,
+footer button:active,
+aside button:active {
+	color: var(--button-active-text);
+	background: var(--button-active-background);
+	border-color: var(--button-active-border);
 	transition: 250ms all ease-out;
 	cursor: pointer;
 }
@@ -304,9 +389,9 @@ aside button:hover {
 header button:first-of-type,
 footer button:first-of-type,
 aside button:first-of-type {
-	color: #a8b2bf;
-	background: #414857;
-	border-color: #2a2f39;
+	color: var(--button-text);
+	background: var(--button-background);
+	border-color: var(--button-border);
 	transition: 250ms all ease-out;
 }
 
@@ -316,18 +401,27 @@ footer button:first-of-type:focus,
 footer button:first-of-type:hover,
 aside button:first-of-type:focus,
 aside button:first-of-type:hover {
-	color: #ffffff;
-	background: #4f5665;
-	border-color: #393e4a;
+	color: var(--button-focus-text);
+	background: var(--button-focus-background);
+	border-color: var(--button-focus-border);
 	transition: 250ms all ease-out;
 	cursor: pointer;
 }
 
+header button:first-of-type:active,
+footer button:first-of-type:active,
+aside button:first-of-type:active {
+	color: var(--button-active-text);
+	background: var(--button-active-background);
+	border-color: var(--button-active-border);
+	transition: 250ms all ease-out;
+}
+
 footer button:last-of-type,
 aside button:last-of-type {
-	color: #bafcff;
-	background: #5294e2;
-	border-color: #2b2e39;
+	color: var(--button-primary-text);
+	background: var(--button-primary-background);
+	border-color: var(--button-primary-border);
 	transition: 250ms all ease-out;
 }
 
@@ -335,9 +429,17 @@ footer button:last-of-type:focus,
 footer button:last-of-type:hover,
 aside button:last-of-type:focus,
 aside button:last-of-type:hover {
-	color: #ffffff;
-	background: #60a2f0;
-	border-color: #2b2e39;
+	color: var(--button-primary-focus-text);
+	background: var(--button-primary-focus-background);
+	border-color: var(--button-primary-focus-border);
+	transition: 250ms all ease-out;
+}
+
+footer button:last-of-type:active,
+aside button:last-of-type:active {
+	color: var(--button-primary-active-text);
+	background: var(--button-primary-active-background);
+	border-color: var(--button-primary-active-border);
 	transition: 250ms all ease-out;
 }
 
@@ -365,9 +467,9 @@ aside button[disabled]:first-of-type:focus,
 header button[disabled]:first-of-type:hover
 footer button[disabled]:first-of-type:hover
 aside button[disabled]:first-of-type:hover {
-	color: #a8b2bf;
-	background: #2a2f39;
-	border-color: #2a2f39;
+	color: var(--button-disabled-text) !important;
+	background: var(--button-disabled-background) !important;
+	border-color: var(--button-disabled-border) !important;
 	transition: 250ms all ease-out;
 	cursor: not-allowed;
 }

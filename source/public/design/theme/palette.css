@@ -1,0 +1,62 @@
+
+body {
+
+	--default-text: #d3dae3;
+	--default-background: #383c4a;
+	--default-border: #262a33;
+
+	/* UI Layout */
+
+	--menu-text: #d3dae3;
+	--menu-background: #2f343f;
+	--menu-border: #262a33;
+
+	/* UI Elements */
+
+	--input-text: #ffffff;
+	--input-background: #404552;
+	--input-border: #262a33;
+
+	--input-focus-text: #ffffff;
+	--input-focus-background: #404552;
+	--input-focus-border: #5294e2;
+
+	--input-disabled-text: #a8b2bf;
+	--input-disabled-background: #262a33;
+	--input-disabled-border: #262a33;
+
+	/* TODO: input-disabled-text/background/border */
+
+	--input-invalid-text: #fffcba;
+	--input-invalid-background: #e25252;
+	--input-invalid-border: #db2626;
+
+	--button-text: #a8b2bf;
+	--button-background: #414857;
+	--button-border: #2a2f39;
+
+	--button-disabled-text: #a8b2bf;
+	--button-disabled-background: #262a33;
+	--button-disabled-border: #262a33;
+
+	--button-focus-text: #ffffff;
+	--button-focus-background: #4f5665;
+	--button-focus-border: #393e4a;
+
+	--button-active-text: #ffffff;
+	--button-active-background: #5294e2;
+	--button-active-border: #2b2e39;
+
+	--button-primary-text: #bafcff;
+	--button-primary-background: #5294e2;
+	--button-primary-border: #2b2e39;
+
+	--button-primary-focus-text: #ffffff;
+	--button-primary-focus-background: #60a2f0;
+	--button-primary-focus-border: #2b2e39;
+
+	--button-primary-active-text: #ffffff;
+	--button-primary-active-background: #60a2f0;
+	--button-primary-active-border: #2b2e39;
+
+}

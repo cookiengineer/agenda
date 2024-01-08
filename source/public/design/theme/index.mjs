@@ -37,19 +37,42 @@ export const update = () => {
 
 			let stylesheet = [];
 
+			stylesheet.push("body {");
+			Object.keys(palette).forEach((project) => {
+				stylesheet.push("\t--project-" + project + "-text: #ffffff;");
+				stylesheet.push("\t--project-" + project + "-background: " + palette[project] + ";");
+				stylesheet.push("\t--project-" + project + "-border: " + palette[project] + ";");
+			});
+			stylesheet.push("}");
+
 			Object.keys(palette).forEach((project) => {
 
-				let color = palette[project];
-
-				stylesheet.push("main > section > header ul li[data-project=\"" + project + "\"].active { background-color: " + color + "; }");
-				stylesheet.push("main > section article[data-project=\"" + project + "\"] { border-color: " + color + "; }");
-				stylesheet.push("main > section#agenda article[data-project=\"" + project + "\"] h3 span[data-complexity] { color: #ffffff; background-color: " + color + "; }");
-				stylesheet.push("main > section#calendar article[data-project=\"" + project + "\"] { border-color: " + color + "; }");
-				stylesheet.push("main > section#calendar article[data-project=\"" + project + "\"] h3 span[data-complexity] { color: #ffffff; background-color: " + color + "; }");
 				stylesheet.push("");
+				stylesheet.push("main > section > header ul li[data-project=\"" + project + "\"].active {");
+				stylesheet.push("\tcolor: var(--project-" + project + "-text);");
+				stylesheet.push("\tbackground-color: var(--project-" + project + "-background);");
+				stylesheet.push("}");
+
+				stylesheet.push("");
+				stylesheet.push("main > section#agenda article[data-project=\"" + project + "\"],");
+				stylesheet.push("main > section#calendar article[data-project=\"" + project + "\"],");
+				stylesheet.push("main > section#gantt article[data-project=\"" + project + "\"],");
+				stylesheet.push("main > section#journal article[data-project=\"" + project + "\"] {");
+				stylesheet.push("\tborder-color: var(--project-" + project + "-border);");
+				stylesheet.push("}");
+
+				stylesheet.push("");
+				stylesheet.push("main > section#agenda article[data-project=\"" + project + "\"] h3 span[data-complexity],");
+				stylesheet.push("main > section#calendar article[data-project=\"" + project + "\"] h3 span[data-complexity],");
+				stylesheet.push("main > section#gantt article[data-project=\"" + project + "\"] h3 span[data-complexity],");
+				stylesheet.push("main > section#journal article[data-project=\"" + project + "\"] h3 span[data-complexity] {");
+				stylesheet.push("\tcolor: var(--project-" + project + "-text);");
+				stylesheet.push("\tbackground-color: var(--project-" + project + "-background);");
+				stylesheet.push("}");
 
 			});
 
+			STYLE.setAttribute("title", "Generated Project Color Palette");
 			STYLE.innerHTML = stylesheet.join("\n");
 
 			if (STYLE.parentNode === null) {
