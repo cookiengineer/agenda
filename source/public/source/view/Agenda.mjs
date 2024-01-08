@@ -12,12 +12,12 @@ const renderEmpty = function() {
 	let element = document.createElement('article');
 	let html    = [];
 
-	html.push('<h3>');
-	html.push('Nothing to do. Great job!');
-	html.push('</h3>');
-
+	html.push('<h3>No tasks found. Great job!</h3>');
 	html.push('<div>');
-	html.push('If you want to create a Task, use the "Create Task" button in the bottom left corner.');
+	html.push('- Change the scope of tasks with the buttons for each project in the header.<br>');
+	html.push('- Refine your search with the search field in the footer.<br>');
+	html.push('- Create a new task with the button in the bottom right corner.<br>');
+	html.push('- Switch to another view with the menu in the top left corner.<br>');
 	html.push('</div>');
 
 	element.innerHTML = html.join('');
@@ -123,14 +123,27 @@ Agenda.prototype = {
 		} else {
 
 			let rendered = [];
+			let has_active = false;
 
 			this.app.tasks.filter((task) => {
 				return this.app.IsVisible(task);
 			}).forEach((task) => {
 
-				let element = render.call(this, task, this.app.active === task);
-				if (element !== null) {
-					rendered.push(element);
+				if (this.app.active === task) {
+
+					let element = render.call(this, task, true);
+					if (element !== null) {
+						has_active = true;
+						rendered.unshift(element);
+					}
+
+				} else {
+
+					let element = render.call(this, task, false);
+					if (element !== null) {
+						rendered.push(element);
+					}
+
 				}
 
 			});
@@ -140,9 +153,31 @@ Agenda.prototype = {
 			});
 
 			if (rendered.length > 0) {
+
+				if (has_active === true) {
+
+					let active_article  = rendered[0];
+					let active_interval = setInterval(() => {
+
+						if (this.app.active !== null) {
+
+							let duration = active_article.querySelector('span[data-duration]');
+							if (duration !== null) {
+								duration.innerHTML = this.app.active.duration;
+							}
+
+						} else {
+							clearInterval(active_interval);
+						}
+
+					}, 1000);
+
+				}
+
 				rendered.forEach((article) => {
 					this.element.appendChild(article);
 				});
+
 			} else {
 				this.element.appendChild(renderEmpty());
 			}

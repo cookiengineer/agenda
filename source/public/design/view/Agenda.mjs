@@ -28,6 +28,7 @@ export const initialize = () => {
 						let APP = window.APP || null;
 						if (APP !== null) {
 							APP.Start(task);
+							APP.Refresh();
 						}
 
 						event.target.setAttribute('data-action', 'stop');
@@ -38,6 +39,7 @@ export const initialize = () => {
 						let APP = window.APP || null;
 						if (APP !== null) {
 							APP.Stop(task);
+							APP.Refresh();
 						}
 
 						event.target.setAttribute('data-action', 'start');

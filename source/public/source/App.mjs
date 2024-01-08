@@ -1,5 +1,6 @@
 
 import { update as update_theme } from '../design/theme/index.mjs';
+import { FormatInt              } from './utils/FormatInt.mjs';
 import { Client                 } from './Client.mjs';
 import { DATETIME               } from './parsers/DATETIME.mjs';
 import { IsTask                 } from './structs/Task.mjs';
@@ -11,8 +12,6 @@ import { Editor                 } from './view/Editor.mjs';
 const isFunction = (obj) => Object.prototype.toString.call(obj) === '[object Function]';
 const isObject   = (obj) => Object.prototype.toString.call(obj) === '[object Object]';
 const isString   = (obj) => Object.prototype.toString.call(obj) === '[object String]';
-
-
 
 const App = function(selector) {
 
@@ -29,6 +28,13 @@ const App = function(selector) {
 	this.client = new Client(this);
 
 	this.active   = null;
+	this.activity = {
+		index:     0,
+		interval1: null,
+		interval2: null,
+		start:     null,
+		stop:      null
+	};
 	this.elements = {
 		'agenda':    document.querySelector('section#agenda'),
 		'calendar':  document.querySelector('section#calendar'),
@@ -114,14 +120,93 @@ App.prototype = {
 
 	Start: function(task) {
 
-		// TODO: Start Interval / duration update for task
-		// TODO: Integrate Interval with rendering in DOM
+		this.active = task;
+		this.activity.start = DATETIME.parse(new Date());
+
+		let offset = DATETIME.parse(this.active.duration);
+		if (offset.hour > 0) {
+			// TODO: Offset via DATETIME?
+		}
+
+		if (offset.minute > 0) {
+			// TODO
+		}
+
+		if (offset.second > 0) {
+			// TODO
+		}
+
+		if (this.active.activities.length > 0) {
+			this.activity.index = this.active.activities.length;
+		} else {
+			this.activity.index = 0;
+		}
+
+		this.activity.interval1 = setInterval(() => {
+
+			let now = DATETIME.parse(new Date());
+
+			if (this.active !== null) {
+
+				let delta_hour   = now.hour   - this.activity.start.hour;
+				let delta_minute = now.minute - this.activity.start.minute;
+				let delta_second = now.second - this.activity.start.second;
+
+				this.active.activities[this.activity.index] = DATETIME.render(this.activity.start) + ' - ' + DATETIME.render(now);
+				this.active.duration = FormatInt(delta_hour, 2) + ':' + FormatInt(delta_minute, 2) + ':' + FormatInt(delta_second, 2);
+
+			}
+
+		}, 1000);
+
+		this.activity.interval2 = setInterval(() => {
+
+			if (this.active !== null) {
+				this.client.Modify(this.active);
+			}
+
+		}, 60 * 1000);
 
 	},
 
 	Stop: function(task) {
 
-		// TODO: Stop Interval / duration update for task
+		if (this.active !== null) {
+
+			if (this.active === task) {
+
+				let now = DATETIME.parse(new Date());
+
+				let delta_hour   = now.hour   - this.activity.start.hour;
+				let delta_minute = now.minute - this.activity.start.minute;
+				let delta_second = now.second - this.activity.start.second;
+
+				this.active.activities[this.activity.index] = DATETIME.render(this.activity.start) + ' - ' + DATETIME.render(now);
+				this.active.duration = FormatInt(delta_hour, 2) + ':' + FormatInt(delta_minute, 2) + ':' + FormatInt(delta_second, 2);
+
+				this.client.Modify(this.active, () => {
+					this.active = null;
+				});
+
+			} else {
+				this.active = null;
+			}
+
+			this.activity.index = 0;
+			this.activity.start = null;
+			this.activity.stop  = null;
+
+		}
+
+		if (this.activity.interval1 !== null) {
+			clearInterval(this.activity.interval1);
+			this.activity.interval1 = null;
+		}
+
+		if (this.activity.interval2 !== null) {
+			clearInterval(this.activity.interval2);
+			this.activity.interval2 = null;
+		}
 
 	},
 
