@@ -108,77 +108,66 @@ Agenda.prototype = {
 
 	[Symbol.toStringTag]: "view/Agenda",
 
-	Render: function(task) {
+	Render: function() {
 
-		task = IsTask(task) ? task : null;
+		let rendered = [];
+		let has_active = false;
 
+		this.app.Tasks.filter((task) => {
+			return this.app.IsVisible(task);
+		}).forEach((task) => {
 
-		if (task !== null) {
+			if (this.app.active === task) {
 
-			// Do Nothing
-
-		} else {
-
-			let rendered = [];
-			let has_active = false;
-
-			this.app.Tasks.filter((task) => {
-				return this.app.IsVisible(task);
-			}).forEach((task) => {
-
-				if (this.app.active === task) {
-
-					let element = render.call(this, task, true);
-					if (element !== null) {
-						has_active = true;
-						rendered.unshift(element);
-					}
-
-				} else {
-
-					let element = render.call(this, task, false);
-					if (element !== null) {
-						rendered.push(element);
-					}
-
+				let element = render.call(this, task, true);
+				if (element !== null) {
+					has_active = true;
+					rendered.unshift(element);
 				}
-
-			});
-
-			Array.from(this.element.querySelectorAll("article")).forEach((article) => {
-				article.parentNode.removeChild(article);
-			});
-
-			if (rendered.length > 0) {
-
-				if (has_active === true) {
-
-					let active_article  = rendered[0];
-					let active_interval = setInterval(() => {
-
-						if (this.app.active !== null) {
-
-							let duration = active_article.querySelector("span[data-duration]");
-							if (duration !== null) {
-								duration.innerHTML = this.app.active.duration;
-							}
-
-						} else {
-							clearInterval(active_interval);
-						}
-
-					}, 1000);
-
-				}
-
-				rendered.forEach((article) => {
-					this.element.appendChild(article);
-				});
 
 			} else {
-				this.element.appendChild(renderEmpty());
+
+				let element = render.call(this, task, false);
+				if (element !== null) {
+					rendered.push(element);
+				}
+
 			}
 
+		});
+
+		Array.from(this.element.querySelectorAll("article")).forEach((article) => {
+			article.parentNode.removeChild(article);
+		});
+
+		if (rendered.length > 0) {
+
+			if (has_active === true) {
+
+				let active_article  = rendered[0];
+				let active_interval = setInterval(() => {
+
+					if (this.app.active !== null) {
+
+						let duration = active_article.querySelector("span[data-duration]");
+						if (duration !== null) {
+							duration.innerHTML = this.app.active.duration;
+						}
+
+					} else {
+						clearInterval(active_interval);
+					}
+
+				}, 1000);
+
+			}
+
+			rendered.forEach((article) => {
+				this.element.appendChild(article);
+			});
+
+		} else {
+			this.element.appendChild(renderEmpty());
 		}
 
 	}

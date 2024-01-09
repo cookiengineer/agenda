@@ -1,4 +1,12 @@
 
+main > section#calendar > aside {
+	width: 256px;
+}
+
+main > section#calendar > aside + section {
+	left: 256px;
+}
+
 main > section#calendar table {
 	width: 100%;
 	table-layout: fixed;
@@ -39,6 +47,7 @@ main > section#calendar table tr td {
 
 main > section#calendar table tr td:hover {
 	background: rgba(255,255,255,0.1);
+	border-color: #d3dae3;
 }
 
 main > section#calendar table tr:first-of-type td {
@@ -56,6 +65,7 @@ main > section#calendar table tr td:last-of-type {
 	border-right: 0px solid transparent;
 }
 
+main > section#calendar table tr td.dragover,
 main > section#calendar table tr td.today {
 	background: rgba(255,255,255,0.1);
 	border-color: #d3dae3;
@@ -67,12 +77,22 @@ main > section#calendar table tr td:empty {
 	vertical-align: middle;
 }
 
+main > section#calendar table tr td.today:empty:before {
+	display: inline-block;
+	content: "(Today)" "\A" "\A" attr(data-date) "\A" "\A" "\A";
+	white-space: pre-wrap;
+	text-align: center;
+}
+
 main > section#calendar table tr td:empty:before {
 	display: inline-block;
 	content: attr(data-date);
 	text-align: center;
 }
 
+/*
+ * ARTICLE
+ */
 
 main > section#calendar article h3 span[data-complexity] {
 	display: inline-block;
@@ -96,13 +116,6 @@ main > section#calendar article div:nth-of-type(1) {
 	text-align: right;
 }
 
-main > section#calendar article div:nth-of-type(2) {
-	display: block;
-	margin: 16px 0px;
-	padding: 0px;
-	text-align: left;
-}
-
 main > section#calendar article div:nth-of-type(1) b {
 	display: inline-block;
 	width: calc(100% - 70px);
@@ -112,7 +125,6 @@ main > section#calendar article div:nth-of-type(1) b {
 	text-align: left;
 }
 
-
 main > section#calendar aside article {
 	display: block;
 	position: relative;
@@ -121,14 +133,25 @@ main > section#calendar aside article {
 	border-right: 16px solid #262a33;
 	border-bottom: 2px solid #262a33;
 	border-left: 16px solid #262a33;
+	cursor: pointer;
 }
 
-main > section#calendar article div:nth-of-type(2) {
-	max-height: 22px;
-	overflow: hidden;
-	overflow-wrap: break-word;
-	text-wrap: nowrap;
-	text-overflow: ellipsis;
+main > section#calendar aside article[data-time]:after {
+	display: inline-block;
+	position: absolute;
+	content: attr(data-time);
+	width: auto;
+	height: 32px;
+	margin: 0px;
+	padding: 0px;
+	line-height: 32px;
+	top: 8px;
+	right: 0px;
+	bottom: auto;
+	left: auto;
+	border-radius: 4px 0px 0px 4px;
+	color: #ffffff;
+	background: inherit;
 }
 
 main > section#calendar table tr td article {
@@ -140,19 +163,25 @@ main > section#calendar table tr td article {
 	border-top: 2px solid #262a33;
 	border-right: 2px solid #262a33;
 	border-bottom: 2px solid #262a33;
-	border-left: 2px solid #262a33;
+	border-left: 8px solid #262a33;
+	transition: all 250ms ease-out;
+	cursor: pointer;
 }
 
 main > section#calendar table tr td article:after {
 	display: inline-block;
-	content: attr(data-time);
 	position: absolute;
+	content: attr(data-time);
+	width: auto;
+	height: 16px;
 	margin: 0px;
-	padding: 4px 4px 4px 4px;
-	top: 0px;
+	padding: 0px;
+	line-height: 16px;
+	top: 4px;
 	right: 0px;
 	bottom: auto;
 	left: auto;
+	border-radius: 4px 0px 0px 4px;
 	color: #ffffff;
 	background: inherit;
 }
@@ -167,15 +196,13 @@ main > section#calendar table tr td article h3 {
 main > section#calendar table tr td article h3 span[data-complexity] {
 	width: 16px;
 	height: 16px;
-	margin: 0px 8px 0px 0px;
+	margin: 0px 4px 0px 0px;
 	padding: 0px;
 	font-size: 12px;
 	border-radius: 16px;
 }
 
-main > section#calendar table tr td article div:nth-of-type(1),
-main > section#calendar table tr td article div:nth-of-type(2),
-main > section#calendar table tr td article div:nth-of-type(3) {
+main > section#calendar table tr td article div:nth-of-type(1) {
 	display: none;
 }
 

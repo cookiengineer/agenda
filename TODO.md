@@ -1,9 +1,6 @@
 
 # Construction Sites
 
-- [ ] Port public/source/parsers/DATETIME.mjs to public/source/structs/Datetime.mjs
-- [ ] Implement `Offset("+12:34")` method
-
 # Agenda View
 
 - [ ] Implement a `Show Suggested` button which toggles to `Show All`. This button should
@@ -17,12 +14,6 @@
 - [ ] Implement a `Stop` button that stops a given task and sets the `APP.active` task to `null`,
       while storing the measured `time duration` on the stopped task. After the Stop button is
       clicked, there should be a displayed dialog that asks whether or not the task is completed.
-
-# Calendar View
-
-- [ ] Implement a Drag and Drop feature that drags `<article>` elements from the `<aside>`
-      to the table's `<td>` cells. This leads to the `task.deadline` property being set to
-      that cell's `data-date` property. The `time` property should be `23:59:59` by default.
 
 # Gantt View
 

@@ -78,6 +78,8 @@ const renderCalendar = function(selector) {
 
 		let row = document.createElement("tr");
 
+		row.style.height = "calc(100% / " + calendar.length + ")";
+
 		week.forEach((datetime) => {
 
 			let cell = document.createElement("td");
@@ -123,6 +125,7 @@ const render = function(task, active) {
 		element.setAttribute("data-id",      task.ID);
 		element.setAttribute("data-project", task.Project);
 		element.setAttribute("data-view",    "editor");
+		element.setAttribute("draggable",    true);
 
 		if (task.Deadline !== null) {
 			element.setAttribute("data-date", ToDateString(Datetime.from(task.Deadline)));
@@ -138,20 +141,6 @@ const render = function(task, active) {
 		html.push("<div>");
 		html.push("<b>" + task.Project + "</b>");
 		html.push("<span data-estimation=\"" + task.Estimation + "\">" + task.Estimation + "</span>");
-		html.push("</div>");
-
-		if (IsString(task.Deadline)) {
-
-			html.push("<div>");
-			html.push("<span data-deadline=\"" + task.Deadline + "\">" + task.Deadline + "</span>");
-			html.push("</div>");
-
-		}
-
-		html.push("<div>");
-		if (IsString(task.Description)) {
-			html.push(task.Description.split("\n").join("<br>\n"));
-		}
 		html.push("</div>");
 
 		element.className = active === true ? "active" : "";
@@ -178,10 +167,7 @@ const Calendar = function(app, element) {
 
 Calendar.prototype = {
 
-	Render: function(task) {
-
-		task = IsTask(task) ? task : null;
-
+	Render: function() {
 
 		let datetime = this.app.Selector.datetime;
 		if (datetime === null) {
@@ -189,6 +175,7 @@ Calendar.prototype = {
 			let now = Datetime.from(new Date());
 			if (now !== null) {
 				this.app.Selector.datetime = Datetime.from(ToDateString(now));
+				this.app.Selector.datetime.Day = null;
 			}
 
 		}
@@ -197,69 +184,61 @@ Calendar.prototype = {
 			renderCalendar.call(this, this.app.Selector.datetime);
 		}
 
-		if (task !== null) {
+		let calendar = [];
+		let sidebar = [];
 
-			// Do Nothing
+		this.app.Tasks.filter((task) => {
+			return this.app.IsVisible(task);
+		}).sort((a, b) => {
+			return SortTaskByDeadline(a, b);
+		}).forEach((task) => {
 
-		} else {
+			if (IsTask(task)) {
 
-			let calendar = [];
-			let sidebar = [];
+				if (IsString(task.Deadline)) {
 
-			this.app.Tasks.filter((task) => {
-				return this.app.IsVisible(task);
-			}).sort((a, b) => {
-				return SortTaskByDeadline(a, b);
-			}).forEach((task) => {
+					let element = render.call(this, task, this.app.active === task);
+					if (element !== null) {
+						calendar.push(element);
+					}
 
-				if (IsTask(task)) {
+				} else {
 
-					if (IsString(task.Deadline)) {
-
-						let element = render.call(this, task, this.app.active === task);
-						if (element !== null) {
-							calendar.push(element);
-						}
-
-					} else {
-
-						let element = render.call(this, task, this.app.active === task);
-						if (element !== null) {
-							sidebar.push(element);
-						}
-
+					let element = render.call(this, task, this.app.active === task);
+					if (element !== null) {
+						sidebar.push(element);
 					}
 
 				}
 
-			});
-
-			Array.from(this.element.querySelectorAll("article")).forEach((article) => {
-				article.parentNode.removeChild(article);
-			});
-
-			if (calendar.length > 0) {
-				calendar.forEach((article) => {
-
-					let date = article.getAttribute("data-date");
-					let cell = this.element.querySelector("table tbody td[data-date=\"" + date + "\"]");
-					if (cell !== null) {
-						cell.appendChild(article);
-					}
-
-				});
 			}
 
-			Array.from(this.sidebar.querySelectorAll("article")).forEach((article) => {
-				article.parentNode.removeChild(article);
+		});
+
+		Array.from(this.element.querySelectorAll("article")).forEach((article) => {
+			article.parentNode.removeChild(article);
+		});
+
+		if (calendar.length > 0) {
+			calendar.forEach((article) => {
+
+				let date = article.getAttribute("data-date");
+				let cell = this.element.querySelector("table tbody td[data-date=\"" + date + "\"]");
+				if (cell !== null) {
+					cell.appendChild(article);
+				}
+
 			});
+		}
 
-			if (sidebar.length > 0) {
-				sidebar.forEach((article) => {
-					this.sidebar.appendChild(article);
-				});
-			}
+		Array.from(this.sidebar.querySelectorAll("article")).forEach((article) => {
+			article.parentNode.removeChild(article);
+		});
 
+		if (sidebar.length > 0) {
+			sidebar.forEach((article) => {
+				this.sidebar.appendChild(article);
+			});
 		}
 
 	}

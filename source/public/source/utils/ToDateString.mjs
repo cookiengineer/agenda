@@ -15,12 +15,18 @@ export const ToDateString = (datetime) => {
 			mm = "00".substr(2 - mm.length) + mm;
 		}
 
-		let dd = (datetime.Day).toString();
-		if (dd.length < 2) {
-			dd = "00".substr(2 - dd.length) + dd;
-		}
+		if (datetime.Day !== null) {
 
-		return yyyy + "-" + mm + "-" + dd;
+			let dd = (datetime.Day).toString();
+			if (dd.length < 2) {
+				dd = "00".substr(2 - dd.length) + dd;
+			}
+
+			return yyyy + "-" + mm + "-" + dd;
+
+		} else {
+			return yyyy + "-" + mm;
+		}
 
 	}
 

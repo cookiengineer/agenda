@@ -1,5 +1,5 @@
 
-import { ToArticle } from "/design/utils/ToArticle.mjs";
+import { ToElement } from "/design/utils/ToElement.mjs";
 import { ToAppTask } from "/design/utils/ToAppTask.mjs";
 
 export const initialize = () => {
@@ -9,7 +9,7 @@ export const initialize = () => {
 
 		section.addEventListener("click", (event) => {
 
-			let article = ToArticle(event.target);
+			let article = ToElement("article", event.target);
 			if (article !== null) {
 
 				if (event.target.tagName === "BUTTON") {
