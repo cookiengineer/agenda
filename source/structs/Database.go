@@ -1,8 +1,10 @@
 package structs
 
+import "agenda/console"
 import "encoding/json"
 import "os"
 import "slices"
+import "strconv"
 import "strings"
 
 type Database struct {
@@ -91,6 +93,14 @@ func NewDatabase() Database {
 		}
 
 	}
+
+	console.Group("Database")
+
+	for project, task_ids := range database.Projects {
+		console.Log("Project \"" + project + "\" has " + strconv.Itoa(len(task_ids)) + " Tasks")
+	}
+
+	console.GroupEnd("Database")
 
 	return database
 
