@@ -1,9 +1,9 @@
 package main
 
 import "github.com/webview/webview"
+import "agenda/console"
 import "agenda/server"
 import "embed"
-import "fmt"
 import "io/fs"
 import "os"
 
@@ -30,14 +30,36 @@ func main() {
 
 		fsys := os.DirFS("public")
 
-		fmt.Println("Listening on http://localhost:13337")
+		console.Clear()
+		console.Group("agenda: Command-Line Arguments")
+		console.Inspect(struct {
+			Mode string
+		}{
+			Mode: mode,
+		})
+		console.GroupEnd("")
+
+		console.Log("Listening on http://localhost:13337")
 		server.Serve(fsys, 13337)
 
 	} else if mode == "production" {
 
 		fsys, _ := fs.Sub(EMBED_FS, "public")
 
+		console.Clear()
+		console.Group("agenda: Command-Line Arguments")
+		console.Inspect(struct {
+			Mode string
+		}{
+			Mode: mode,
+		})
+		console.GroupEnd("")
+
+		console.Log("Listening on http://localhost:13337")
+
 		go func() {
+
+			console.Log("Opening WebView...")
 
 			view := webview.New(true)
 			defer view.Destroy()
@@ -48,7 +70,6 @@ func main() {
 
 		}()
 
-		fmt.Println("Listening on http://localhost:13337")
 		server.Serve(fsys, 13337)
 
 	}

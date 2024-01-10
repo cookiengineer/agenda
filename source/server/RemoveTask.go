@@ -1,7 +1,7 @@
 package server
 
+import "agenda/console"
 import "agenda/structs"
-import "fmt"
 import "net/http"
 import "strconv"
 
@@ -9,17 +9,15 @@ func RemoveTask(database *structs.Database, response http.ResponseWriter, reques
 
 	if request.Method == http.MethodDelete {
 
-		task, err1 := structs.NewTask(request.Body)
+		task, err1 := structs.TaskFrom(request.Body)
 
 		if err1 == nil {
 
-			var result bool = database.RemoveTask(task)
+			result := database.Remove(task)
 
 			if result == true {
 
-				database.Update()
-
-				fmt.Println("RemoveTask(ID=" + strconv.Itoa(task.ID) + "): OK")
+				console.Info("RemoveTask(Project=" + task.Project + ", ID=" + strconv.Itoa(task.ID) + "): OK")
 
 				response.Header().Set("Content-Type", "application/json")
 				response.WriteHeader(http.StatusOK)
@@ -27,7 +25,7 @@ func RemoveTask(database *structs.Database, response http.ResponseWriter, reques
 
 			} else {
 
-				fmt.Println("RemoveTask(ID=" + strconv.Itoa(task.ID) + "): Forbidden")
+				console.Error("RemoveTask(Project=" + task.Project + ", ID=" + strconv.Itoa(task.ID) + "): Forbidden")
 
 				response.Header().Set("Content-Type", "application/json")
 				response.WriteHeader(http.StatusForbidden)

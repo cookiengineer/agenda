@@ -133,7 +133,7 @@ main > section#calendar aside article {
 	border-right: 16px solid #262a33;
 	border-bottom: 2px solid #262a33;
 	border-left: 16px solid #262a33;
-	cursor: pointer;
+	cursor: grab;
 }
 
 main > section#calendar aside article[draggable] {
@@ -170,7 +170,7 @@ main > section#calendar table tr td article {
 	border-bottom: 2px solid #262a33;
 	border-left: 8px solid #262a33;
 	transition: all 250ms ease-out;
-	cursor: pointer;
+	cursor: grab;
 }
 
 main > section#calendar table tr td article[draggable] {

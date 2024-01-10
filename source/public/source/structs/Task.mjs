@@ -41,7 +41,7 @@ const isTime = (value) => {
 
 	let result = false;
 
-	if (value.includes(":")) {
+	if (IsString(value) && value.includes(":")) {
 
 		let chunks = value.split(":");
 

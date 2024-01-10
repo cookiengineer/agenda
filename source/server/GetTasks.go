@@ -6,32 +6,26 @@ import "agenda/structs"
 
 func GetTasks(database *structs.Database, response http.ResponseWriter, request *http.Request) {
 
-	database.Update()
-
 	if request.Method == http.MethodGet {
 
-		if len(database.Tasks) > 0 {
+		payload := make([]structs.Task, 0)
 
-			json, err := json.MarshalIndent(database.Tasks, "", "\t")
+		for _, task := range database.Tasks {
+			payload = append(payload, *task)
+		}
 
-			if err == nil {
+		json, err := json.MarshalIndent(payload, "", "\t")
 
-				response.Header().Set("Content-Type", "application/json")
-				response.WriteHeader(http.StatusOK)
-				response.Write(json)
+		if err == nil {
 
-			} else {
-
-				response.Header().Set("Content-Type", "application/json")
-				response.WriteHeader(http.StatusInternalServerError)
-				response.Write([]byte("[]"))
-
-			}
+			response.Header().Set("Content-Type", "application/json")
+			response.WriteHeader(http.StatusOK)
+			response.Write(json)
 
 		} else {
 
 			response.Header().Set("Content-Type", "application/json")
-			response.WriteHeader(http.StatusOK)
+			response.WriteHeader(http.StatusInternalServerError)
 			response.Write([]byte("[]"))
 
 		}

@@ -1,30 +1,27 @@
 package server
 
+import "agenda/console"
 import "agenda/structs"
 import "encoding/json"
-import "fmt"
 import "net/http"
-import "strconv"
 
 func CreateTask(database *structs.Database, response http.ResponseWriter, request *http.Request) {
 
 	if request.Method == http.MethodPost {
 
-		task, err1 := structs.NewTask(request.Body)
+		task, err1 := structs.TaskFrom(request.Body)
 
 		if err1 == nil {
 
-			database.Update()
+			result := database.Create(task)
 
-			var result bool = database.Create(task)
+			if result != nil {
 
-			if result == true {
-
-				json, err2 := json.Marshal(task)
+				json, err2 := json.Marshal(result)
 
 				if err2 == nil {
 
-					fmt.Println("CreateTask(ID=" + strconv.Itoa(task.ID) + "): OK")
+					console.Info("CreateTask(Project=" + result.Project + "): OK")
 
 					response.Header().Set("Content-Type", "application/json")
 					response.WriteHeader(http.StatusOK)
@@ -32,7 +29,7 @@ func CreateTask(database *structs.Database, response http.ResponseWriter, reques
 
 				} else {
 
-					fmt.Println("CreateTask(ID=" + strconv.Itoa(task.ID) + "): Error")
+					console.Error("CreateTask(Project=" + result.Project + "): Error")
 
 					response.Header().Set("Content-Type", "application/json")
 					response.WriteHeader(http.StatusInternalServerError)
@@ -42,7 +39,7 @@ func CreateTask(database *structs.Database, response http.ResponseWriter, reques
 
 			} else {
 
-				fmt.Println("CreateTask(ID=" + strconv.Itoa(task.ID) + "): Forbidden")
+				console.Error("CreateTask(Project=" + task.Project + "): Forbidden")
 
 				response.Header().Set("Content-Type", "application/json")
 				response.WriteHeader(http.StatusInternalServerError)

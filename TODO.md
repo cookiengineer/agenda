@@ -3,8 +3,6 @@
 
 # Backend
 
-- [ ] Reimplement the Database which should use a subfolder for each `project`.
-
 # Agenda View
 
 - [ ] Implement a `Show Suggested` button which toggles to `Show All`. This button should
@@ -18,6 +16,8 @@
 - [ ] Implement a `Stop` button that stops a given task and sets the `APP.active` task to `null`,
       while storing the measured `time duration` on the stopped task. After the Stop button is
       clicked, there should be a displayed dialog that asks whether or not the task is completed.
+- [ ] Implement a client side detection if the last activity of a Task has the format `YYYY-MM-DD HH:ii:ss -`,
+      then set the `App.active` Task.
 
 # Gantt View
 

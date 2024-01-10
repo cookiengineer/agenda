@@ -287,7 +287,6 @@ Calendar.prototype = {
 
 					task.Deadline = null;
 
-					DRAGGED.className = "";
 					DRAGGED.removeAttribute("data-date");
 					DRAGGED.removeAttribute("data-time");
 					DRAGGED.removeAttribute("title");
@@ -374,7 +373,6 @@ Calendar.prototype = {
 
 					task.Deadline = date + " " + time;
 
-					DRAGGED.className = "";
 					DRAGGED.setAttribute("data-date", date);
 					DRAGGED.setAttribute("data-time", time);
 					DRAGGED.setAttribute("title", task.Deadline);

@@ -10,14 +10,17 @@ const renderEmpty = function() {
 	let element = document.createElement("article");
 	let html    = [];
 
-	html.push("<h3>No tasks found. Great job!</h3>");
+	html.push("<h3>No tasks found. Good job!</h3>");
 	html.push("<div>");
-	html.push("- Change the scope of tasks with the buttons for each project in the header.<br>");
-	html.push("- Refine your search with the search field in the footer.<br>");
-	html.push("- Create a new task with the button in the bottom right corner.<br>");
-	html.push("- Switch to another view with the menu in the top left corner.<br>");
+	html.push("<ul>");
+	html.push("<li>Switch to another view with the buttons in the header.</li>");
+	html.push("<li>Search for a specific project with the selector in the header.</li>");
+	html.push("<li>Search for a specific task with the text field in the footer.</li>");
+	html.push("<li>Create a new task with the button in the footer.</li>");
+	html.push("</ul>");
 	html.push("</div>");
 
+	element.classList.add("help");
 	element.innerHTML = html.join("");
 
 	return element;
