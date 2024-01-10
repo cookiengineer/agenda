@@ -2,12 +2,7 @@
 const global   = window;
 const document = global["document"];
 
-
-import { initialize as initialize_Agenda   } from "./view/Agenda.mjs";
-import { initialize as initialize_Calendar } from "./view/Calendar.mjs";
-import { initialize as initialize_Editor   } from "./view/Editor.mjs";
-
-
+import { OnResize } from "./bugfixes.mjs";
 
 const cleanify = (element) => {
 
@@ -116,9 +111,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	}
 
-	initialize_Agenda();
-	initialize_Calendar();
-	initialize_Editor();
+	window.addEventListener("resize", OnResize);
+
+	setTimeout(() => {
+		OnResize();
+	}, 0);
 
 }, true);
 

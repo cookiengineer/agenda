@@ -2,6 +2,8 @@
 import { IsArray, IsString } from "/stdlib.mjs";
 import { Datetime          } from "/source/structs/Datetime.mjs";
 import { IsTask            } from "/source/structs/Task.mjs";
+import { IsElement         } from "/source/utils/IsElement.mjs";
+import { ToElement         } from "/source/utils/ToElement.mjs";
 
 const renderEmpty = function() {
 
@@ -100,13 +102,118 @@ const render = function(task, active) {
 const Agenda = function(app, element) {
 
 	this.app     = app;
-	this.element = element.querySelector("section");
+	this.section = element.querySelector("section");
+	this.footer  = element.querySelector("footer");
+
+	this.actions = {
+		"create": this.footer.querySelector("button[data-action=\"create\"]"),
+		"search": this.footer.querySelector("input[data-action=\"search\"]"),
+	};
+
+	this.Init();
 
 };
 
 Agenda.prototype = {
 
 	[Symbol.toStringTag]: "view/Agenda",
+
+	Init: function() {
+
+		this.section.addEventListener("click", (event) => {
+
+			let article = ToElement("article", event.target);
+			if (article !== null) {
+
+				if (IsElement("button", event.target)) {
+
+					let action = event.target.getAttribute("data-action");
+					let task   = this.app.ToTask(article.getAttribute("data-id"));
+
+					if (action === "edit" && task !== null) {
+
+						this.app.Show("editor", task);
+
+					} else if (action === "start" && task !== null) {
+
+						this.app.Start(task);
+						this.app.Render();
+
+						event.target.setAttribute("data-action", "stop");
+						event.target.innerHTML = "Stop";
+
+					} else if (action === "stop" && task !== null) {
+
+						this.app.Stop(task);
+						this.app.Render();
+
+						event.target.setAttribute("data-action", "start");
+						event.target.innerHTML = "Start";
+
+					}
+
+				} else {
+
+					let articles = Array.from(this.section.querySelectorAll("article"));
+					if (articles.length > 0) {
+
+						articles.forEach((other) => {
+
+							if (other === article) {
+								other.setAttribute("data-focus", true);
+							} else {
+								other.removeAttribute("data-focus");
+							}
+
+						});
+
+					}
+
+				}
+
+			}
+
+		});
+
+		this.actions["create"].addEventListener("click", () => {
+			this.app.Show("editor", null);
+		});
+
+		this.actions["search"].addEventListener("keyup", () => {
+
+			let keywords = this.actions["search"].value.trim().split(" ").map((value) => {
+
+				value = value.split(".").join("");
+				value = value.split(",").join("");
+				value = value.split("/").join("");
+
+				return value;
+
+			});
+
+			this.app.Selector.keywords = keywords;
+			this.app.Render();
+
+		});
+
+		this.actions["search"].addEventListener("change", () => {
+
+			let keywords = this.actions["search"].value.trim().split(" ").map((value) => {
+
+				value = value.split(".").join("");
+				value = value.split(",").join("");
+				value = value.split("/").join("");
+
+				return value;
+
+			});
+
+			this.app.Selector.keywords = keywords;
+			this.app.Render();
+
+		});
+
+	},
 
 	Render: function() {
 
@@ -136,7 +243,7 @@ Agenda.prototype = {
 
 		});
 
-		Array.from(this.element.querySelectorAll("article")).forEach((article) => {
+		Array.from(this.section.querySelectorAll("article")).forEach((article) => {
 			article.parentNode.removeChild(article);
 		});
 
@@ -163,11 +270,11 @@ Agenda.prototype = {
 			}
 
 			rendered.forEach((article) => {
-				this.element.appendChild(article);
+				this.section.appendChild(article);
 			});
 
 		} else {
-			this.element.appendChild(renderEmpty());
+			this.section.appendChild(renderEmpty());
 		}
 
 	}

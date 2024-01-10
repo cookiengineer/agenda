@@ -136,6 +136,11 @@ main > section#calendar aside article {
 	cursor: pointer;
 }
 
+main > section#calendar aside article[draggable] {
+	-webkit-user-drag: element;
+	-webkit-user-select: none;
+}
+
 main > section#calendar aside article[data-time]:after {
 	display: inline-block;
 	position: absolute;
@@ -166,6 +171,11 @@ main > section#calendar table tr td article {
 	border-left: 8px solid #262a33;
 	transition: all 250ms ease-out;
 	cursor: pointer;
+}
+
+main > section#calendar table tr td article[draggable] {
+	-webkit-user-drag: element;
+	-webkit-user-select: none;
 }
 
 main > section#calendar table tr td article:after {

@@ -1,6 +1,10 @@
 
 # Construction Sites
 
+# Backend
+
+- [ ] Reimplement the Database which should use a subfolder for each `project`.
+
 # Agenda View
 
 - [ ] Implement a `Show Suggested` button which toggles to `Show All`. This button should

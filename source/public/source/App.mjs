@@ -1,13 +1,13 @@
 
-import { IsFunction, IsObject, IsString } from "/stdlib.mjs";
-import { update as update_theme         } from "/design/theme/index.mjs";
-import { FormatInt                      } from "/source/utils/FormatInt.mjs";
-import { Client                         } from "/source/Client.mjs";
-import { Datetime                       } from "/source/structs/Datetime.mjs";
-import { Task, IsTask                   } from "/source/structs/Task.mjs";
-import { Agenda                         } from "/source/view/Agenda.mjs";
-import { Calendar                       } from "/source/view/Calendar.mjs";
-import { Editor                         } from "/source/view/Editor.mjs";
+import { IsFunction, IsNumber, IsObject, IsString } from "/stdlib.mjs";
+import { update as update_theme                   } from "/design/theme/index.mjs";
+import { FormatInt                                } from "/source/utils/FormatInt.mjs";
+import { Client                                   } from "/source/Client.mjs";
+import { Datetime                                 } from "/source/structs/Datetime.mjs";
+import { Task, IsTask                             } from "/source/structs/Task.mjs";
+import { Agenda                                   } from "/source/view/Agenda.mjs";
+import { Calendar                                 } from "/source/view/Calendar.mjs";
+import { Editor                                   } from "/source/view/Editor.mjs";
 
 export const IsApp = (obj) => Object.prototype.toString.call(obj) === "[object App]";
 
@@ -388,6 +388,47 @@ App.prototype = {
 		}
 
 		return false;
+
+	},
+
+	ToTask: function(identifier) {
+
+		let id = 0;
+
+		if (IsNumber(identifier)) {
+
+			if (identifier !== 0) {
+				id = identifier;
+			}
+
+		} else if (IsString(identifier)) {
+
+			let num = parseInt(identifier, 10);
+
+			if (!Number.isNaN(num) && num !== 0) {
+				id = num;
+			}
+
+		}
+
+		if (id !== 0) {
+
+			let found = null;
+
+			for (let t = 0; t < this.Tasks.length; t++) {
+
+				if (this.Tasks[t].ID === id) {
+					found = this.Tasks[t];
+					break;
+				}
+
+			}
+
+			return found;
+
+		}
+
+		return null;
 
 	}
 
