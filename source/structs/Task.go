@@ -149,26 +149,30 @@ func (task *Task) IsValid() bool {
 
 			if len(activity) == 2 {
 
-				before := DatetimeFrom(activity[0])
-				after := DatetimeFrom(activity[1])
+				if activity[1] == "" && a == len(task.Activities)-1 {
 
-				if before.IsBefore(after) {
-					// Do Nothing
+					before := DatetimeFrom(activity[0])
+					now := DatetimeFrom(time.Now().Format(time.RFC3339))
+
+					if before.IsBefore(now) {
+						// Do Nothing
+					} else {
+						valid_activities = false
+						break
+					}
+
 				} else {
-					valid_activities = false
-					break
-				}
 
-			} else if len(activity) == 1 && a == len(task.Activities)-1 {
+					before := DatetimeFrom(activity[0])
+					after := DatetimeFrom(activity[1])
 
-				before := DatetimeFrom(activity[0])
-				now := DatetimeFrom(time.Now().Format(time.RFC3339))
+					if before.IsBefore(after) {
+						// Do Nothing
+					} else {
+						valid_activities = false
+						break
+					}
 
-				if before.IsBefore(now) {
-					// Do Nothing
-				} else {
-					valid_activities = false
-					break
 				}
 
 			}

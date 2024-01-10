@@ -10,8 +10,8 @@
 	main > section {
 		position: static;
 		overflow: unset;
-		color: #000000;
-		background: #ffffff;
+		color: #000000 !important;
+		background: #ffffff !important;
 	}
 
 	main > section > header,
@@ -31,8 +31,8 @@
 
 	main > section article,
 	main > aside article {
-		color: #000000;
-		background: #ffffff;
+		color: #000000 !important;
+		background: #ffffff !important;
 	}
 
 	main > section#agenda article[data-focus] footer {

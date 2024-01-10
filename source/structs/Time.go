@@ -49,69 +49,6 @@ func TimeFrom(value string) Time {
 
 }
 
-func (time *Time) Parse(value string) {
-
-	if strings.Contains(value, ":") {
-
-		var chunks = strings.Split(value, ":")
-
-		if len(chunks) == 3 {
-
-			num1, err1 := strconv.ParseUint(chunks[0], 10, 64)
-			num2, err2 := strconv.ParseUint(chunks[1], 10, 64)
-			num3, err3 := strconv.ParseUint(chunks[2], 10, 64)
-
-			if err1 == nil {
-
-				if num1 >= 0 && num1 <= 24 {
-					time.Hour = uint(num1)
-				}
-
-			}
-
-			if err2 == nil {
-
-				if num2 >= 0 && num2 <= 60 {
-					time.Minute = uint(num2)
-				}
-
-			}
-
-			if err3 == nil {
-
-				if num3 >= 0 && num3 <= 60 {
-					time.Second = uint(num3)
-				}
-
-			}
-
-		} else if len(chunks) == 2 {
-
-			num1, err1 := strconv.ParseUint(chunks[0], 10, 64)
-			num2, err2 := strconv.ParseUint(chunks[1], 10, 64)
-
-			if err1 == nil {
-
-				if num1 >= 0 && num1 <= 24 {
-					time.Hour = uint(num1)
-				}
-
-			}
-
-			if err2 == nil {
-
-				if num2 >= 0 && num2 <= 60 {
-					time.Minute = uint(num2)
-				}
-
-			}
-
-		}
-
-	}
-
-}
-
 func (time *Time) IsAfter(other Time) bool {
 
 	var result bool = false
@@ -245,6 +182,69 @@ func (time *Time) Offset(offset string) {
 
 			time.Hour = uint(hour)
 			time.Minute = uint(minute)
+
+		}
+
+	}
+
+}
+
+func (time *Time) Parse(value string) {
+
+	if strings.Contains(value, ":") {
+
+		var chunks = strings.Split(value, ":")
+
+		if len(chunks) == 3 {
+
+			num1, err1 := strconv.ParseUint(chunks[0], 10, 64)
+			num2, err2 := strconv.ParseUint(chunks[1], 10, 64)
+			num3, err3 := strconv.ParseUint(chunks[2], 10, 64)
+
+			if err1 == nil {
+
+				if num1 >= 0 && num1 <= 24 {
+					time.Hour = uint(num1)
+				}
+
+			}
+
+			if err2 == nil {
+
+				if num2 >= 0 && num2 <= 60 {
+					time.Minute = uint(num2)
+				}
+
+			}
+
+			if err3 == nil {
+
+				if num3 >= 0 && num3 <= 60 {
+					time.Second = uint(num3)
+				}
+
+			}
+
+		} else if len(chunks) == 2 {
+
+			num1, err1 := strconv.ParseUint(chunks[0], 10, 64)
+			num2, err2 := strconv.ParseUint(chunks[1], 10, 64)
+
+			if err1 == nil {
+
+				if num1 >= 0 && num1 <= 24 {
+					time.Hour = uint(num1)
+				}
+
+			}
+
+			if err2 == nil {
+
+				if num2 >= 0 && num2 <= 60 {
+					time.Minute = uint(num2)
+				}
+
+			}
 
 		}
 

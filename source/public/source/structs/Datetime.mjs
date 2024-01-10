@@ -569,7 +569,11 @@ Datetime.from = function(value) {
 
 	} else if (Object.prototype.toString.call(value) === "[object String]") {
 
-		return NewDatetime(value);
+		let datetime = new Datetime();
+
+		datetime.Parse(value);
+
+		return datetime;
 
 	}
 
@@ -676,7 +680,7 @@ Datetime.prototype = {
 			tmp = tmp.split("(")[0].trim();
 		}
 
-		let now = NewDatetime(tmp);
+		let now = Datetime.from(tmp);
 
 		return this.IsBefore(now);
 
@@ -689,7 +693,7 @@ Datetime.prototype = {
 			tmp = tmp.split("(")[0].trim();
 		}
 
-		let now = NewDatetime(tmp);
+		let now = Datetime.from(tmp);
 
 		return this.IsAfter(now);
 
@@ -710,6 +714,32 @@ Datetime.prototype = {
 		}
 
 		return false;
+
+	},
+
+	PrevDay: function() {
+
+		let datetime = new Datetime();
+
+		if (this.Day === 1) {
+
+			if (this.Month === 1) {
+				datetime.Year  = this.Year - 1;
+				datetime.Month = 12;
+				datetime.Day   = datetime.ToDays();
+			} else {
+				datetime.Year  = this.Year;
+				datetime.Month = this.Month - 1;
+				datetime.Day   = datetime.ToDays();
+			}
+
+		} else {
+			datetime.Year  = this.Year;
+			datetime.Month = this.Month;
+			datetime.Day   = this.Day - 1;
+		}
+
+		return datetime;
 
 	},
 
@@ -858,6 +888,137 @@ Datetime.prototype = {
 
 	},
 
+	Parse: function(value) {
+
+		let chunks = toChunks(value);
+		let isZulu = false;
+
+		if (isISO8601(value.trim())) {
+
+			if (chunks[0].includes("T")) {
+
+				let time_suffix = chunks[0].split("T")[1];
+
+				if (time_suffix.endsWith("Z")) {
+
+					parseISO8601(this, chunks[0]);
+					isZulu = true;
+
+				} else if (time_suffix.includes("+")) {
+
+					parseISO8601(this, chunks[0].substr(0, 18));
+
+					this.Offset(time_suffix.split("+")[1]);
+					isZulu = true;
+
+				} else if (time_suffix.includes("-")) {
+
+					parseISO8601(this, chunks[0].substr(0, 18));
+
+					this.Offset(time_suffix.split("-")[1]);
+					isZulu = true;
+
+				}
+
+			}
+
+		} else if (chunks.length === 1) {
+
+			if (isISO8601Date(chunks[0])) {
+
+				parseISO8601Date(this, chunks[0]);
+				isZulu = true;
+
+			} else if (isYYYYMMDD(chunks[0])) {
+
+				parseYYYYMMDD(this, chunks[0]);
+				isZulu = true;
+
+			} else if (isYYYYMM(chunks[0])) {
+
+				parseYYYYMM(this, chunks[0]);
+				isZulu = true;
+
+			}
+
+		} else if (chunks.length === 2) {
+
+			if (isISO8601Date(chunks[0]) && isTime(chunks[1])) {
+
+				parseISO8601Date(this, chunks[0]);
+				parseTime(this, chunks[1]);
+				isZulu = true;
+
+			}
+
+		} else if (chunks.length === 3) {
+
+			if (isMonth(chunks[0]) && isDay(chunks[1]) && isTime(chunks[2])) {
+
+				this.Year = new Date().getFullYear();
+
+				parseMonth(this, chunks[0]);
+				parseDay(this, chunks[1]);
+				parseTime(this, chunks[2]);
+
+			}
+
+		} else if (chunks.length === 5) {
+
+			if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isYear(chunks[4])) {
+
+				parseMonth(this, chunks[1]);
+				parseDay(this, chunks[2]);
+				parseTime(this, chunks[3]);
+				parseYear(this, chunks[4]);
+
+			}
+
+		} else if (chunks.length === 6) {
+
+			if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isYear(chunks[5])) {
+
+				parseMonth(this, chunks[1]);
+				parseDay(this, chunks[2]);
+				parseTime(this, chunks[3]);
+				parseYear(this, chunks[5]);
+
+				if (chunks[4] == "PM") {
+					this.Hour += 12;
+				}
+
+			} else if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isTimezone(chunks[4]) && isYear(chunks[5])) {
+
+				parseMonth(this, chunks[1]);
+				parseDay(this, chunks[2]);
+				parseTime(this, chunks[3]);
+				parseYear(this, chunks[5]);
+
+			}
+
+		} else if (chunks.length === 7) {
+
+			if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isTimezone(chunks[5]) && isYear(chunks[6])) {
+
+				parseMonth(this, chunks[1]);
+				parseDay(this, chunks[2]);
+				parseTime(this, chunks[3]);
+				parseYear(this, chunks[6]);
+
+				if (chunks[4] == "PM") {
+					this.Hour += 12;
+				}
+
+			}
+
+		}
+
+		if (isZulu === false) {
+			this.ToZulu();
+		}
+
+	},
+
 	"String": function() {
 		return this.toString();
 	},
@@ -936,136 +1097,3 @@ Datetime.prototype = {
 
 };
 
-export const NewDatetime = function(str) {
-
-	let chunks = toChunks(str);
-	let datetime = new Datetime();
-	let isZulu = false;
-
-	if (isISO8601(str.trim())) {
-
-		if (chunks[0].includes("T")) {
-
-			let time_suffix = chunks[0].split("T")[1];
-
-			if (time_suffix.endsWith("Z")) {
-
-				parseISO8601(datetime, chunks[0]);
-				isZulu = true;
-
-			} else if (time_suffix.includes("+")) {
-
-				parseISO8601(datetime, chunks[0].substr(0, 18));
-
-				datetime.Offset(time_suffix.split("+")[1]);
-				isZulu = true;
-
-			} else if (time_suffix.includes("-")) {
-
-				parseISO8601(datetime, chunks[0].substr(0, 18));
-
-				datetime.Offset(time_suffix.split("-")[1]);
-				isZulu = true;
-
-			}
-
-		}
-
-	} else if (chunks.length === 1) {
-
-		if (isISO8601Date(chunks[0])) {
-
-			parseISO8601Date(datetime, chunks[0]);
-			isZulu = true;
-
-		} else if (isYYYYMMDD(chunks[0])) {
-
-			parseYYYYMMDD(datetime, chunks[0]);
-			isZulu = true;
-
-		} else if (isYYYYMM(chunks[0])) {
-
-			parseYYYYMM(datetime, chunks[0]);
-			isZulu = true;
-
-		}
-
-	} else if (chunks.length === 2) {
-
-		if (isISO8601Date(chunks[0]) && isTime(chunks[1])) {
-
-			parseISO8601Date(datetime, chunks[0]);
-			parseTime(datetime, chunks[1]);
-			isZulu = true;
-
-		}
-
-	} else if (chunks.length === 3) {
-
-		if (isMonth(chunks[0]) && isDay(chunks[1]) && isTime(chunks[2])) {
-
-			datetime.Year = new Date().getFullYear();
-
-			parseMonth(datetime, chunks[0]);
-			parseDay(datetime, chunks[1]);
-			parseTime(datetime, chunks[2]);
-
-		}
-
-	} else if (chunks.length === 5) {
-
-		if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isYear(chunks[4])) {
-
-			parseMonth(datetime, chunks[1]);
-			parseDay(datetime, chunks[2]);
-			parseTime(datetime, chunks[3]);
-			parseYear(datetime, chunks[4]);
-
-		}
-
-	} else if (chunks.length === 6) {
-
-		if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isYear(chunks[5])) {
-
-			parseMonth(datetime, chunks[1]);
-			parseDay(datetime, chunks[2]);
-			parseTime(datetime, chunks[3]);
-			parseYear(datetime, chunks[5]);
-
-			if (chunks[4] == "PM") {
-				datetime.Hour += 12;
-			}
-
-		} else if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isTimezone(chunks[4]) && isYear(chunks[5])) {
-
-			parseMonth(datetime, chunks[1]);
-			parseDay(datetime, chunks[2]);
-			parseTime(datetime, chunks[3]);
-			parseYear(datetime, chunks[5]);
-
-		}
-
-	} else if (chunks.length === 7) {
-
-		if (isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isTimezone(chunks[5]) && isYear(chunks[6])) {
-
-			parseMonth(datetime, chunks[1]);
-			parseDay(datetime, chunks[2]);
-			parseTime(datetime, chunks[3]);
-			parseYear(datetime, chunks[6]);
-
-			if (chunks[4] == "PM") {
-				datetime.Hour += 12;
-			}
-
-		}
-
-	}
-
-	if (isZulu === false) {
-		datetime.ToZulu();
-	}
-
-	return datetime;
-
-};

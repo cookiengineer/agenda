@@ -1,8 +1,8 @@
 
 import { IsFunction, IsNumber, IsObject, IsString } from "/stdlib.mjs";
 import { update as update_theme                   } from "/design/theme/index.mjs";
-import { FormatInt                                } from "/source/utils/FormatInt.mjs";
 import { Client                                   } from "/source/Client.mjs";
+import { Activity                                 } from "/source/structs/Activity.mjs";
 import { Datetime                                 } from "/source/structs/Datetime.mjs";
 import { Task, IsTask                             } from "/source/structs/Task.mjs";
 import { Agenda                                   } from "/source/view/Agenda.mjs";
@@ -15,6 +15,7 @@ export const App = function(selector) {
 
 	selector = IsObject(selector) ? selector : {};
 
+	this.Activity = new Activity();
 	this.Client   = new Client(this);
 	this.Projects = {};
 	this.Selector = Object.assign({
@@ -25,15 +26,6 @@ export const App = function(selector) {
 	}, selector);
 	this.Tasks    = [];
 
-
-	this.active   = null;
-	this.activity = {
-		index:     0,
-		interval1: null,
-		interval2: null,
-		start:     null,
-		stop:      null
-	};
 	this.elements = {
 		"agenda":   document.querySelector("section#agenda"),
 		"calendar": document.querySelector("section#calendar"),
@@ -147,43 +139,12 @@ App.prototype = {
 
 		if (IsTask(task)) {
 
-			this.active = task;
-			this.activity.start = Datetime.from(new Date());
+			this.Activity.Start(task);
 
-			if (this.active.duration !== "00:00:00") {
+			this.interval = setInterval(() => {
 
-				let offset = Datetime.from(this.active.duration);
-				this.activity.start.Offset(offset);
-
-			}
-
-			if (this.active.activities.length > 0) {
-				this.activity.index = this.active.activities.length;
-			} else {
-				this.activity.index = 0;
-			}
-
-			this.activity.interval1 = setInterval(() => {
-
-				let now = Datetime.from(new Date());
-
-				if (this.active !== null) {
-
-					let delta_hour   = now.hour   - this.activity.start.hour;
-					let delta_minute = now.minute - this.activity.start.minute;
-					let delta_second = now.second - this.activity.start.second;
-
-					this.active.activities[this.activity.index] = this.activity.start.toString() + " - " + now.toString();
-					this.active.duration = FormatInt(delta_hour, 2) + ":" + FormatInt(delta_minute, 2) + ":" + FormatInt(delta_second, 2);
-
-				}
-
-			}, 1000);
-
-			this.activity.interval2 = setInterval(() => {
-
-				if (this.active !== null) {
-					this.Client.Modify(this.active);
+				if (this.Activity.IsRunning()) {
+					this.Client.Modify(this.Activity.Task);
 				}
 
 			}, 60 * 1000);
@@ -192,43 +153,20 @@ App.prototype = {
 
 	},
 
-	Stop: function(task) {
+	Stop: function() {
 
-		if (IsTask(this.active)) {
+		if (this.Activity.IsRunning()) {
 
-			if (this.active === task) {
+			let task = this.Activity.Task;
 
-				let now = Datetime.from(new Date());
-
-				let delta_hour   = now.hour   - this.activity.start.hour;
-				let delta_minute = now.minute - this.activity.start.minute;
-				let delta_second = now.second - this.activity.start.second;
-
-				this.active.activities[this.activity.index] = this.activity.start.toString() + " - " + now.toString();
-				this.active.duration = FormatInt(delta_hour, 2) + ":" + FormatInt(delta_minute, 2) + ":" + FormatInt(delta_second, 2);
-
-				this.Client.Modify(this.active, () => {
-					this.active = null;
-				});
-
-			} else {
-				this.active = null;
-			}
-
-			this.activity.index = 0;
-			this.activity.start = null;
-			this.activity.stop  = null;
+			this.Activity.Stop();
+			this.Client.Modify(task);
 
 		}
 
-		if (this.activity.interval1 !== null) {
-			clearInterval(this.activity.interval1);
-			this.activity.interval1 = null;
-		}
-
-		if (this.activity.interval2 !== null) {
-			clearInterval(this.activity.interval2);
-			this.activity.interval2 = null;
+		if (this.interval !== null) {
+			clearInterval(this.interval);
+			this.interval = null;
 		}
 
 	},
@@ -246,7 +184,13 @@ App.prototype = {
 
 				let task = Task.from(data);
 				if (task.IsValid()) {
+
 					this.Tasks.push(task);
+
+					if (task.IsRunning()) {
+						this.Start(task);
+					}
+
 				}
 
 			});

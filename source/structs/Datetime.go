@@ -556,134 +556,11 @@ type Datetime struct {
 	Second uint // `json:"second"`
 }
 
-func DatetimeFrom(str string) Datetime {
+func DatetimeFrom(value string) Datetime {
 
-	var chunks []string = toChunks(str)
 	var datetime Datetime
-	var isZulu bool = false
 
-	if isISO8601(strings.TrimSpace(str)) {
-
-		if strings.Contains(chunks[0], "T") {
-
-			var time_suffix = strings.Split(chunks[0], "T")[1]
-
-			if strings.HasSuffix(time_suffix, "Z") {
-
-				parseISO8601(&datetime, chunks[0])
-				isZulu = true
-
-			} else if strings.Contains(time_suffix, "+") {
-
-				parseISO8601(&datetime, chunks[0][0:19])
-
-				datetime.Offset(strings.Split(time_suffix, "+")[1])
-				isZulu = true
-
-			} else if strings.Contains(time_suffix, "-") {
-
-				parseISO8601(&datetime, chunks[0][0:19])
-				datetime.Offset(strings.Split(time_suffix, "-")[1])
-				isZulu = true
-
-			}
-
-		}
-
-	} else if len(chunks) == 1 {
-
-		if isISO8601Date(chunks[0]) {
-
-			parseISO8601Date(&datetime, chunks[0])
-			isZulu = true
-
-		} else if isYYYYMMDD(chunks[0]) {
-
-			parseYYYYMMDD(&datetime, chunks[0])
-			isZulu = true
-
-		} else if isYYYYMM(chunks[0]) {
-
-			parseYYYYMM(&datetime, chunks[0])
-			isZulu = true
-
-		}
-
-	} else if len(chunks) == 2 {
-
-		if isISO8601Date(chunks[0]) && isTime(chunks[1]) {
-
-			parseISO8601Date(&datetime, chunks[0])
-			parseTime(&datetime, chunks[1])
-			isZulu = true
-
-		}
-
-	} else if len(chunks) == 3 {
-
-		if isMonth(chunks[0]) && isDay(chunks[1]) && isTime(chunks[2]) {
-
-			datetime.Year = uint(time.Now().Year())
-
-			parseMonth(&datetime, chunks[0])
-			parseDay(&datetime, chunks[1])
-			parseTime(&datetime, chunks[2])
-
-		}
-
-	} else if len(chunks) == 5 {
-
-		if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isYear(chunks[4]) {
-
-			parseMonth(&datetime, chunks[1])
-			parseDay(&datetime, chunks[2])
-			parseTime(&datetime, chunks[3])
-			parseYear(&datetime, chunks[4])
-
-		}
-
-	} else if len(chunks) == 6 {
-
-		if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isYear(chunks[5]) {
-
-			parseMonth(&datetime, chunks[1])
-			parseDay(&datetime, chunks[2])
-			parseTime(&datetime, chunks[3])
-			parseYear(&datetime, chunks[5])
-
-			if chunks[4] == "PM" {
-				datetime.Hour += 12
-			}
-
-		} else if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isTimezone(chunks[4]) && isYear(chunks[5]) {
-
-			parseMonth(&datetime, chunks[1])
-			parseDay(&datetime, chunks[2])
-			parseTime(&datetime, chunks[3])
-			parseYear(&datetime, chunks[5])
-
-		}
-
-	} else if len(chunks) == 7 {
-
-		if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isTimezone(chunks[5]) && isYear(chunks[6]) {
-
-			parseMonth(&datetime, chunks[1])
-			parseDay(&datetime, chunks[2])
-			parseTime(&datetime, chunks[3])
-			parseYear(&datetime, chunks[6])
-
-			if chunks[4] == "PM" {
-				datetime.Hour += 12
-			}
-
-		}
-
-	}
-
-	if isZulu == false {
-		datetime.ToZulu()
-	}
+	datetime.Parse(value)
 
 	return datetime
 
@@ -922,6 +799,136 @@ func (datetime *Datetime) Offset(offset string) {
 
 		}
 
+	}
+
+}
+
+func (datetime *Datetime) Parse(value string) {
+
+	var chunks []string = toChunks(value)
+	var isZulu bool = false
+
+	if isISO8601(strings.TrimSpace(value)) {
+
+		if strings.Contains(chunks[0], "T") {
+
+			var time_suffix = strings.Split(chunks[0], "T")[1]
+
+			if strings.HasSuffix(time_suffix, "Z") {
+
+				parseISO8601(datetime, chunks[0])
+				isZulu = true
+
+			} else if strings.Contains(time_suffix, "+") {
+
+				parseISO8601(datetime, chunks[0][0:19])
+
+				datetime.Offset(strings.Split(time_suffix, "+")[1])
+				isZulu = true
+
+			} else if strings.Contains(time_suffix, "-") {
+
+				parseISO8601(datetime, chunks[0][0:19])
+				datetime.Offset(strings.Split(time_suffix, "-")[1])
+				isZulu = true
+
+			}
+
+		}
+
+	} else if len(chunks) == 1 {
+
+		if isISO8601Date(chunks[0]) {
+
+			parseISO8601Date(datetime, chunks[0])
+			isZulu = true
+
+		} else if isYYYYMMDD(chunks[0]) {
+
+			parseYYYYMMDD(datetime, chunks[0])
+			isZulu = true
+
+		} else if isYYYYMM(chunks[0]) {
+
+			parseYYYYMM(datetime, chunks[0])
+			isZulu = true
+
+		}
+
+	} else if len(chunks) == 2 {
+
+		if isISO8601Date(chunks[0]) && isTime(chunks[1]) {
+
+			parseISO8601Date(datetime, chunks[0])
+			parseTime(datetime, chunks[1])
+			isZulu = true
+
+		}
+
+	} else if len(chunks) == 3 {
+
+		if isMonth(chunks[0]) && isDay(chunks[1]) && isTime(chunks[2]) {
+
+			datetime.Year = uint(time.Now().Year())
+
+			parseMonth(datetime, chunks[0])
+			parseDay(datetime, chunks[1])
+			parseTime(datetime, chunks[2])
+
+		}
+
+	} else if len(chunks) == 5 {
+
+		if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isYear(chunks[4]) {
+
+			parseMonth(datetime, chunks[1])
+			parseDay(datetime, chunks[2])
+			parseTime(datetime, chunks[3])
+			parseYear(datetime, chunks[4])
+
+		}
+
+	} else if len(chunks) == 6 {
+
+		if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isYear(chunks[5]) {
+
+			parseMonth(datetime, chunks[1])
+			parseDay(datetime, chunks[2])
+			parseTime(datetime, chunks[3])
+			parseYear(datetime, chunks[5])
+
+			if chunks[4] == "PM" {
+				datetime.Hour += 12
+			}
+
+		} else if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isTimezone(chunks[4]) && isYear(chunks[5]) {
+
+			parseMonth(datetime, chunks[1])
+			parseDay(datetime, chunks[2])
+			parseTime(datetime, chunks[3])
+			parseYear(datetime, chunks[5])
+
+		}
+
+	} else if len(chunks) == 7 {
+
+		if isWeekday(chunks[0]) && isMonth(chunks[1]) && isDay(chunks[2]) && isTime(chunks[3]) && isMeridiem(chunks[4]) && isTimezone(chunks[5]) && isYear(chunks[6]) {
+
+			parseMonth(datetime, chunks[1])
+			parseDay(datetime, chunks[2])
+			parseTime(datetime, chunks[3])
+			parseYear(datetime, chunks[6])
+
+			if chunks[4] == "PM" {
+				datetime.Hour += 12
+			}
+
+		}
+
+	}
+
+	if isZulu == false {
+		datetime.ToZulu()
 	}
 
 }

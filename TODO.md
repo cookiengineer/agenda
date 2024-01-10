@@ -5,19 +5,10 @@
 
 # Agenda View
 
-- [ ] Implement a `Show Suggested` button which toggles to `Show All`. This button should
-      show all immediate tasks which are scheduled for the next upcoming days (until the end
-      of the week), and if there are none, recommend the next unscheduled task with the lowest
-      complexity.
-- [ ] Implement a `Start` button that starts a given task and sets the `APP.active` task to
-      the selected one. There can be only one active task, and it should be stickied to the top
-      and animated while the time duration counter increases. Save the active task to the Profile
-      so that the Agenda App can be closed and re-opened later.
-- [ ] Implement a `Stop` button that stops a given task and sets the `APP.active` task to `null`,
-      while storing the measured `time duration` on the stopped task. After the Stop button is
-      clicked, there should be a displayed dialog that asks whether or not the task is completed.
-- [ ] Implement a client side detection if the last activity of a Task has the format `YYYY-MM-DD HH:ii:ss -`,
-      then set the `App.active` Task.
+- [ ] Implement a toggle button that switches `Show Suggested` and `Show All`.
+- [ ] `Show Suggested` shows the upcoming tasks until the end of the week.
+      If there are none, recommend the task with the lowest complexity.
+- [ ] `Show All` shows all tasks, sorted by deadline first, then by complexity.
 
 # Gantt View
 

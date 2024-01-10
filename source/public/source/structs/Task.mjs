@@ -214,6 +214,23 @@ Task.prototype = {
 
 	[Symbol.toStringTag]: "Task",
 
+	IsRunning: function() {
+
+		let result = false;
+
+		if (this.Activities.length > 0) {
+
+			let check = this.Activities[this.Activities.length - 1];
+			if (check.endsWith(" - ")) {
+				result = true;
+			}
+
+		}
+
+		return result;
+
+	},
+
 	IsValid: function() {
 
 		if (

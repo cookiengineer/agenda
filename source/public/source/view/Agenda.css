@@ -97,3 +97,17 @@ main > section#agenda > footer input[type="text"] {
 
 }
 
+
+
+@page {
+	margin: 0cm 0cm 0cm 0cm;
+	size: A4 portrait;
+}
+
+
+
+@media print {
+
+	/* Do Nothing */
+
+}

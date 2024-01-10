@@ -216,22 +216,33 @@ Agenda.prototype = {
 
 		});
 
+		this.interval = setInterval(() => {
+
+			if (this.app.Activity.IsRunning()) {
+
+				let duration = this.section.querySelector("article[data-id=\"" + this.app.Activity.Task.ID + "\"] span[data-duration]");
+				if (duration !== null) {
+					duration.innerHTML = this.app.Activity.ToDurationString();
+				}
+
+			}
+
+		}, 1000);
+
 	},
 
 	Render: function() {
 
 		let rendered = [];
-		let has_active = false;
 
 		this.app.Tasks.filter((task) => {
 			return this.app.IsVisible(task);
 		}).forEach((task) => {
 
-			if (this.app.active === task) {
+			if (this.app.Activity.IsRunning() && this.app.Activity.Task === task) {
 
 				let element = render.call(this, task, true);
 				if (element !== null) {
-					has_active = true;
 					rendered.unshift(element);
 				}
 
@@ -251,26 +262,6 @@ Agenda.prototype = {
 		});
 
 		if (rendered.length > 0) {
-
-			if (has_active === true) {
-
-				let active_article  = rendered[0];
-				let active_interval = setInterval(() => {
-
-					if (this.app.active !== null) {
-
-						let duration = active_article.querySelector("span[data-duration]");
-						if (duration !== null) {
-							duration.innerHTML = this.app.active.duration;
-						}
-
-					} else {
-						clearInterval(active_interval);
-					}
-
-				}, 1000);
-
-			}
 
 			rendered.forEach((article) => {
 				this.section.appendChild(article);

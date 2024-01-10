@@ -216,3 +216,25 @@ main > section#calendar table tr td article div:nth-of-type(1) {
 	display: none;
 }
 
+
+
+@page {
+	margin: 0cm 0cm 0cm 0cm;
+	size: A4 landscape;
+}
+
+
+
+@media print {
+
+	main > section#calendar table tr td article:after {
+		display: none;
+	}
+
+	main > section#calendar table tr td.dragover,
+	main > section#calendar table tr td.today {
+		background: unset;
+		border-color: transparent;
+	}
+
+}
