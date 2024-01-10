@@ -97,7 +97,7 @@ func NewDatabase() Database {
 	console.Group("Database")
 
 	for project, task_ids := range database.Projects {
-		console.Log("Project \"" + project + "\" has " + strconv.Itoa(len(task_ids)) + " Tasks")
+		console.Log("> Project \"" + project + "\" has " + strconv.Itoa(len(task_ids)) + " Tasks")
 	}
 
 	console.GroupEnd("Database")
