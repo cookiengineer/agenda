@@ -107,10 +107,16 @@ const Agenda = function(app, element) {
 	this.app     = app;
 	this.section = element.querySelector("section");
 	this.footer  = element.querySelector("footer");
+	this.dialog  = element.querySelector("dialog");
 
 	this.actions = {
 		"create": this.footer.querySelector("button[data-action=\"create\"]"),
 		"search": this.footer.querySelector("input[data-action=\"search\"]"),
+	};
+
+	this.dialog_actions = {
+		"yes": this.dialog.querySelector("button[data-confirm=\"yes\"]"),
+		"no":  this.dialog.querySelector("button[data-confirm=\"no\"]")
 	};
 
 	this.Init();
@@ -122,6 +128,41 @@ Agenda.prototype = {
 	[Symbol.toStringTag]: "view/Agenda",
 
 	Init: function() {
+
+		this.dialog.addEventListener("click", (event) => {
+
+			if (IsElement("button", event.target)) {
+
+				let confirm = event.target.getAttribute("data-confirm");
+
+				if (confirm === "yes") {
+
+					if (this.activity.Task !== null) {
+
+						this.activity.Task.IsCompleted = true;
+						this.app.Stop();
+						this.app.Render();
+
+					}
+
+					this.dialog.removeAttribute("open");
+
+				} else if (confirm === "no") {
+
+					if (this.activity.Task !== null) {
+
+						this.app.Stop();
+						this.app.Render();
+
+					}
+
+					this.dialog.removeAttribute("open");
+
+				}
+
+			}
+
+		});
 
 		this.section.addEventListener("click", (event) => {
 
@@ -147,8 +188,7 @@ Agenda.prototype = {
 
 					} else if (action === "stop" && task !== null) {
 
-						this.app.Stop(task);
-						this.app.Render();
+						this.dialog.setAttribute("open", true);
 
 						event.target.setAttribute("data-action", "start");
 						event.target.innerHTML = "Start";

@@ -5,6 +5,35 @@ import { Time         } from "/source/structs/Time.mjs";
 import { ToDateString } from "/source/utils/ToDateString.mjs";
 import { ToTimeString } from "/source/utils/ToTimeString.mjs";
 
+const toTime = (activity) => {
+
+	let time = Time.from("00:00:00");
+
+	let tmp = activity.split(" - ");
+	if (tmp.length === 2) {
+
+		if (tmp[1].trim() === "") {
+
+			let start = Datetime.from(tmp[0].trim());
+			let end   = Datetime.from(new Date());
+
+			time = start.ToTimeDifference(end);
+
+		} else {
+
+			let start = Datetime.from(tmp[0].trim());
+			let end   = Datetime.from(tmp[1].trim());
+
+			time = start.ToTimeDifference(end);
+
+		}
+
+	}
+
+	return time;
+
+};
+
 export const Activity = function() {
 
 	this.Datetime = null;
@@ -35,26 +64,25 @@ Activity.prototype = {
 
 			this.Task = task;
 
-			let activity = null;
+			let start = null;
 
 			if (this.Task.Activities.length > 0) {
 
-				let check = this.Task.Activities.length - 1;
-				if (this.Task.Activities[check].endsWith(" - ")) {
-					activity = this.Task.Activities[check];
-					this.Index = check;
-				} else {
-					this.Index = this.Task.Activities.length;
+				let check = this.Task.Activities[this.Task.Activities.length - 1];
+				if (check.endsWith(" - ")) {
+					start = Datetime.from(check.split(" - ")[0]);
 				}
 
-			} else {
-				this.Index = 0;
 			}
 
-			if (activity !== null) {
+			// this.Duration        = Time.from("00:00:00");
+			// this.Duration.Hour   = (24 - start.Hour)   + now.Hour;
+			// this.Duration.Minute = (60 - start.Minute) + now.Minute;
+			// this.Duration.Second = (60 - start.Second) + now.Second;
+
+			if (start !== null) {
 
 				let now = Datetime.from(new Date());
-				let start = Datetime.from(activity.split(" - ")[0]);
 
 				if (now.Year !== start.Year || now.Month !== start.Month || now.Day !== start.Day) {
 
@@ -62,58 +90,42 @@ Activity.prototype = {
 
 					if (yesterday.Year === start.Year && yesterday.Month === start.Month && yesterday.Day === start.Day && start.Hour > 12 && now.Hour < 12) {
 
-						this.Datetime        = start;
-						this.Duration        = Time.from("00:00:00");
-						this.Duration.Hour   = (24 - start.Hour)   + now.Hour;
-						this.Duration.Minute = (60 - start.Minute) + now.Minute;
-						this.Duration.Second = (60 - start.Second) + now.Second;
+						this.Datetime = start;
+						this.Index    = this.Task.Activities.length;
 
 					} else {
 
 						this.Task.Activities[this.Index] = ToDateString(start) + " " + ToTimeString(start) + " - " + ToDateString(start) + " 23:59:59";
 						this.Datetime = Datetime.from(new Date());
-						this.Duration = Time.from(this.Task.Duration);
-						this.Index = this.Task.Activities.length;
+						this.Index    = this.Task.Activities.length;
 
 					}
 
 				} else {
 
-					this.Datetime      = start;
-					this.Duration      = Time.from("00:00:00");
-
-					let delta_hour   = now.Hour - start.Hour;
-					let delta_second = (60 - start.Second) + now.Second;
-					let delta_minute = (60 - start.Minute) + now.Minute;
-
-					if (delta_second > 60) {
-						delta_minute += 1;
-						delta_second -= 60;
-					}
-
-					if (delta_minute > 60) {
-						delta_hour   += 1;
-						delta_minute -= 60;
-					}
-
-					this.Duration.Hour   = delta_hour;
-					this.Duration.Minute = delta_minute;
-					this.Duration.Second = delta_second;
+					this.Datetime = start;
+					this.Index    = this.Task.Activities.length;
 
 				}
 
 			} else {
 
 				this.Datetime = Datetime.from(new Date());
-				this.Duration = Time.from(this.Task.Duration);
+				this.Index    = this.Task.Activities.length;
 
 			}
+
+			this.Duration = Time.from("00:00:00");
+
+			this.Task.Activities.forEach((activity) => {
+				this.Duration.AddTime(toTime(activity));
+			});
 
 			this.interval = setInterval(() => {
 
 				if (this.Duration !== null) {
 
-					this.Duration.IncrementSecond();
+					this.Duration.AddSecond();
 
 					if (this.Task !== null) {
 						this.Task.Duration = this.Duration.toString();

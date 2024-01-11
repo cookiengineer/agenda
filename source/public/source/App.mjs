@@ -139,7 +139,13 @@ App.prototype = {
 
 		if (IsTask(task)) {
 
+			if (this.interval !== null) {
+				clearInterval(this.interval);
+				this.interval = null;
+			}
+
 			this.Activity.Start(task);
+			this.Client.Modify(this.Activity.Task);
 
 			this.interval = setInterval(() => {
 

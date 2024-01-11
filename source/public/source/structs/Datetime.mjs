@@ -1,4 +1,6 @@
 
+import { Time } from "/source/structs/Time.mjs";
+
 const WEEKDAYS  = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" ];
 const MONTHS    = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 const MONTHDAYS = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
@@ -1061,6 +1063,120 @@ Datetime.prototype = {
 		}
 
 		return days;
+
+	},
+
+	ToTimeDifference: function(other) {
+
+		let time = new Time();
+
+		let days    = 0;
+		let hours   = (24 - this.Hour)   + other.Hour;
+		let minutes = (60 - this.Minute) + other.Minute;
+		let seconds = (60 - this.Second) + other.Second;
+
+		let tmp = Datetime.from(this.toString());
+
+		if (tmp.Year !== other.Year) {
+
+			while (tmp.Year < other.Year - 1) {
+
+				if (isLeapYear(tmp.Year)) {
+					days += 366;
+				} else {
+					days += 365;
+				}
+
+				tmp.Year += 1;
+
+			}
+
+			days += (tmp.ToDays() - tmp.Day);
+			tmp.Day = tmp.ToDays();
+			tmp.Month += 1;
+
+			while (tmp.Month <= 12) {
+				days += tmp.ToDays();
+				tmp.Month += 1;
+			}
+
+			days += 1;
+			tmp.Year += 1;
+			tmp.Month = 1;
+			tmp.Day = 1;
+
+		}
+
+		if (tmp.Year === other.Year) {
+
+			if (tmp.Month === other.Month) {
+
+				if (tmp.Day !== other.Day) {
+					days += (other.Day - tmp.Day);
+				}
+
+			} else {
+
+				days += (tmp.ToDays() - tmp.Day);
+				tmp.Month += 1;
+
+				while (tmp.Month !== other.Month) {
+					days += tmp.ToDays();
+					tmp.Month += 1;
+				}
+
+				days += other.Day;
+
+			}
+
+		}
+
+		if (days > 0) {
+			hours += (days - 1) * 24;
+		} else {
+			hours -= 24;
+		}
+
+		if (minutes > 0 || seconds > 0) {
+
+			hours -= 1;
+
+			if (seconds > 60) {
+				seconds -= 60;
+				minutes += 1;
+			}
+
+			if (seconds > 60) {
+				seconds -= 60;
+				minutes += 1;
+			}
+
+			if (minutes > 60) {
+				minutes -= 60;
+				hours   += 1;
+			}
+
+			if (minutes > 60) {
+				minutes -= 60;
+				hours   += 1;
+			}
+
+			if (minutes === 60 && seconds === 60) {
+				seconds = 0;
+				minutes = 0;
+				hours += 1;
+			} else if (minutes === 60) {
+				minutes = 0;
+				hours += 1;
+			}
+
+		}
+
+		time.Hour   = hours;
+		time.Minute = minutes;
+		time.Second = seconds;
+
+		return time;
 
 	},
 

@@ -30,7 +30,7 @@ export const Time = function() {
 	this.Hour   = 0;
 	this.Minute = 0;
 	this.Second = 0;
-	this.valid  = false;
+	this.iszero = false;
 
 };
 
@@ -63,20 +63,16 @@ Time.from = function(value) {
 
 				time.Parse(value);
 
-				if (value === "00:00:00" && time.Hour === 0 && time.Minute === 0 && time.Second === 0) {
-					time.valid = true;
-				} else if (time.Hour !== 0 || time.Minute !== 0 || time.Second !== 0) {
-					time.valid = true;
+				if (value === "00:00:00") {
+					time.iszero = true;
 				}
 
 			} else if (chunks.length === 2) {
 
 				time.Parse(value);
 
-				if (value === "00:00" && time.Hour === 0 && time.Minute === 0 && time.Second === 0) {
-					time.valid = true;
-				} else if (time.Hour !== 0 || time.Minute !== 0) {
-					time.valid = true;
+				if (value === "00:00") {
+					time.iszero = true;
 				}
 
 			}
@@ -95,7 +91,28 @@ Time.prototype = {
 
 	[Symbol.toStringTag]: "Time",
 
-	IncrementSecond: function() {
+	AddHour: function() {
+
+		this.Hour = this.Hour + 1;
+
+	},
+
+	AddMinute: function() {
+
+		let hour   = this.Hour;
+		let minute = this.Minute + 1;
+
+		if (minute > 60) {
+			hour += 1;
+			minute -= 60;
+		}
+
+		this.Hour   = hour;
+		this.Minute = minute;
+
+	},
+
+	AddSecond: function() {
 
 		let hour   = this.Hour;
 		let minute = this.Minute;
@@ -107,7 +124,29 @@ Time.prototype = {
 		}
 
 		if (minute > 60) {
-			hour += 1;
+			hour   += 1;
+			minute -= 60;
+		}
+
+		this.Hour   = hour;
+		this.Minute = minute;
+		this.Second = second;
+
+	},
+
+	AddTime: function(other) {
+
+		let hour   = this.Hour   + other.Hour;
+		let minute = this.Minute + other.Minute;
+		let second = this.Second + other.Second;
+
+		if (second > 60) {
+			minute += 1;
+			second -= 60;
+		}
+
+		if (minute > 60) {
+			hour   += 1;
 			minute -= 60;
 		}
 
@@ -196,7 +235,21 @@ Time.prototype = {
 	},
 
 	IsValid: function() {
-		return this.valid;
+
+		if (this.iszero === true && this.Hour === 0 && this.Minute === 0 && this.Second === 0) {
+
+			return true;
+
+		} else {
+
+			if (this.Hour !== 0 || this.Minute !== 0 || this.Second !== 0) {
+				return true;
+			}
+
+		}
+
+		return false;
+
 	},
 
 	Offset: function(offset) {

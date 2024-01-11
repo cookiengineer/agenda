@@ -49,6 +49,71 @@ func TimeFrom(value string) Time {
 
 }
 
+func (time *Time) AddHour() {
+
+	time.Hour = time.Hour + 1
+
+}
+
+func (time *Time) AddMinute() {
+
+	var hour   uint = time.Hour
+	var minute uint = time.Minute + 1
+
+	if minute > 60 {
+		hour   += 1
+		minute -= 60
+	}
+
+	time.Hour   = hour
+	time.Minute = minute
+
+}
+
+func (time *Time) AddSecond() {
+
+	var hour   uint = time.Hour
+	var minute uint = time.Minute
+	var second uint = time.Second + 1
+
+	if second > 60 {
+		minute += 1
+		second -= 60
+	}
+
+	if minute > 60 {
+		hour   += 1
+		minute -= 60
+	}
+
+	time.Hour   = hour
+	time.Minute = minute
+	time.Second = second
+
+}
+
+func (time *Time) AddTime(other Time) {
+
+	var hour   uint = time.Hour   + other.Hour
+	var minute uint = time.Minute + other.Minute
+	var second uint = time.Second + other.Second
+
+	if second > 60 {
+		minute += 1
+		second -= 60
+	}
+
+	if minute > 60 {
+		hour   += 1
+		minute -= 60
+	}
+
+	time.Hour   = hour
+	time.Minute = minute
+	time.Second = second
+
+}
+
 func (time *Time) IsAfter(other Time) bool {
 
 	var result bool = false
