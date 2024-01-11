@@ -1,0 +1,41 @@
+
+main > section article,
+main > aside article {
+	display: block;
+	width: 720px;
+	margin: 32px auto;
+	padding: 8px;
+	color: var(--default-text);
+	background: var(--default-background);
+	border-top: 2px solid var(--default-border);
+	border-right: 16px solid var(--default-border);
+	border-bottom: 2px solid var(--default-border);
+	border-left: 16px solid var(--default-border);
+	box-sizing: border-box;
+	transition: border-color 250ms ease-out;
+}
+
+main > section article h3,
+main > aside article h3 {
+	display: block;
+	margin: 0px 0px 8px 0px;
+	padding: 0px;
+	font-size: 24px;
+	line-height: 32px;
+	text-align: left;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+
+
+@media screen and (max-width: 720px) {
+
+	main > section article {
+		width: auto;
+	}
+
+}
+

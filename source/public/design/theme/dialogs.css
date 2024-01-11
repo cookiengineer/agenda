@@ -1,0 +1,126 @@
+
+main > section:has(dialog) {
+	z-index: 0;
+}
+
+main > section:has(dialog):after {
+	display: block;
+	position: absolute;
+	content: "";
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	background: rgba(0,0,0,0);
+	transition: 250ms all ease-out;
+	pointer-events: none;
+	opacity: 0;
+	z-index: -1;
+}
+
+main > section:has(dialog[open]):after {
+	background: rgba(0,0,0,0.5);
+	transition: 250ms all ease-out;
+	pointer-events: all;
+	opacity: 1;
+	z-index: 1;
+}
+
+main > section > dialog {
+    display: block;
+	position: fixed;
+	width: fit-content;
+	height: fit-content;
+	top: 50%;
+	right: auto;
+	bottom: auto;
+	left: 50%;
+	margin: 0px;
+	padding: 0px;
+	color: var(--default-text);
+	background: var(--default-background);
+	border: 2px solid var(--menu-border);
+	border-radius: 8px;
+	transform: translate(-50%, calc(-50% - 20vh));
+	opacity: 0;
+	z-index: -1;
+}
+
+main > section > dialog[open] {
+	opacity: 1;
+	z-index: 2;
+}
+
+main > section > dialog > header {
+	display: flex;
+	position: static;
+	justify-content: space-between;
+	width: auto;
+	height: auto;
+	margin: 0px;
+	padding: 8px;
+	text-align: center;
+	vertical-align: middle;
+	color: var(--menu-text);
+	background: var(--menu-background);
+	border: 0px solid transparent;
+	border-bottom: 2px solid var(--menu-border);
+	border-radius: 8px 8px 0px 0px;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+}
+
+main > section > dialog > header b {
+	display: inline-block;
+	width: auto;
+	height: 32px;
+	margin: 0px auto;
+	padding: 0px;
+	text-align: center;
+	line-height: 32px;
+	color: var(--default-text);
+	font-family: 'cantarell';
+	font-size: 24px;
+	font-style: normal;
+	font-weight: bold;
+}
+
+main > section > dialog > section {
+	display: block;
+	position: static;
+	margin: 0px;
+	padding: 8px 16px;
+	text-align: center;
+	vertical-align: middle;
+	color: var(--default-text);
+	background: var(--default-background);
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+main > section > dialog > footer {
+	display: flex;
+	position: static;
+	justify-content: space-between;
+	width: auto;
+	height: auto;
+	margin: 0px;
+	padding: 8px;
+	text-align: center;
+	vertical-align: middle;
+	color: var(--menu-text);
+	background: var(--menu-background);
+	border: 0px solid transparent;
+	border-top: 2px solid var(--menu-border);
+	border-radius: 0px 0px 8px 8px;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+main > section > dialog > footer button {
+	display: inline-block;
+	width: auto;
+	margin: 0px;
+}
+

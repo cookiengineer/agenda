@@ -1,7 +1,12 @@
 
 @import url("./palette.css");
 @import url("./elements.css");
-@import url("./layout.css");
+@import url("./articles.css");
+@import url("./sections.css");
+@import url("./asides.css");
+@import url("./headers.css");
+@import url("./footers.css");
+@import url("./dialogs.css");
 
 @font-face {
 	font-family: 'cantarell';

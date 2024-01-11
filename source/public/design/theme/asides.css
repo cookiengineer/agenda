@@ -1,0 +1,25 @@
+
+main > section > aside {
+	position: absolute;
+	box-sizing: border-box;
+	width: 20vw;
+	height: auto;
+	margin: 0px;
+	padding: 8px;
+	top: 50px;
+	right: auto;
+	bottom: 50px;
+	left: 0px;
+	text-align: center;
+	vertical-align: top;
+	color: var(--menu-text);
+	background: var(--menu-background);
+	border: 0px solid transparent;
+	border-right: 2px solid var(--menu-border);
+	border-radius: 0px;
+	user-select: none;
+	overflow: hidden auto;
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+}
+

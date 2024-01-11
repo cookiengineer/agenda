@@ -1,0 +1,117 @@
+
+main > section > header {
+	transition: 250ms transform ease-out;
+	transform: translate(0%, -100%);
+}
+
+main > section.active > header {
+	transition: 250ms transform ease-out;
+	transform: translate(0%, 0%);
+}
+
+main > section.inactive > header {
+	transition: 250ms transform ease-out;
+	transform: translate(0%, -100%);
+}
+
+main > section > header {
+	display: flex;
+	position: fixed;
+	justify-content: space-between;
+	width: auto;
+	height: auto;
+	margin: 0px;
+	padding: 8px;
+	top: 0px;
+	right: 0px;
+	bottom: auto;
+	left: 0px;
+	text-align: center;
+	vertical-align: middle;
+	color: var(--menu-text);
+	background: var(--menu-background);
+	border: 0px solid transparent;
+	border-bottom: 2px solid var(--menu-border);
+	border-radius: 0px;
+	user-select: none;
+	-webkit-user-select: none;
+	-webkit-app-region: drag;
+}
+
+main > section > header b {
+	display: inline-block;
+	width: auto;
+	height: 32px;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+	line-height: 32px;
+	color: var(--default-text);
+	font-family: 'cantarell';
+	font-size: 24px;
+	font-style: normal;
+	font-weight: bold;
+}
+
+main > section > header ul {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	-webkit-app-region: no-drag;
+}
+
+main > section > header ul li {
+	display: inline-block;
+	margin: 0px;
+	padding: 0px 8px;
+	height: 32px;
+	line-height: 30px;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--button-text);
+	background: var(--button-background);
+	border-top: 1px solid var(--button-border);
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid var(--button-border);
+	border-left: 1px solid transparent;
+	border-radius: 0px;
+	box-sizing: border-box;
+	transition: 250ms all ease-out;
+	cursor: pointer;
+}
+
+main > section > header ul li:hover {
+	color: var(--button-focus-text);
+	background: var(--button-focus-background);
+	border-color: var(--button-focus-border);
+}
+
+main > section > header ul li:first-of-type {
+	border-top: 1px solid var(--button-border);
+	border-right: 1px solid transparent;
+	border-bottom: 1px solid var(--button-border);
+	border-left: 1px solid var(--button-border);
+	border-radius: 4px 0px 0px 4px;
+}
+
+main > section > header ul li:last-of-type {
+	border-top: 1px solid var(--button-border);
+	border-right: 1px solid var(--button-border);
+	border-bottom: 1px solid var(--button-border);
+	border-left: 1px solid transparent;
+	border-radius: 0px 4px 4px 0px;
+}
+
+main > section > header ul li:first-of-type:last-of-type {
+	border-radius: 4px 4px 4px 4px;
+}
+
+main > section > header ul li.active {
+	color: var(--button-active-text);
+	background: var(--button-active-background);
+	border-color: var(--button-active-border);
+}
+

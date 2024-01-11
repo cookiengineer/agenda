@@ -1,0 +1,62 @@
+
+main {
+	position: fixed;
+	width: auto;
+	height: auto;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	font-family: 'cantarell';
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text);
+	background: var(--default-background);
+	text-align: left;
+	border: 0px solid transparent;
+	border-radius: 0px;
+	-webkit-user-select: auto;
+	-webkit-app-region: no-drag;
+}
+
+main > section {
+	display: block;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	color: var(--default-text);
+	background: var(--default-background);
+	transition: 250ms opacity ease-out;
+	opacity: 0;
+	z-index: -1;
+}
+
+main > section.active {
+	transition: 250ms all ease-out;
+	opacity: 1;
+	z-index: 0;
+}
+
+main > section.inactive {
+	transition: 0ms all ease-out;
+	opacity: 0;
+	z-index: -1;
+}
+
+main > section > section {
+	position: absolute;
+	box-sizing: border-box;
+	top: 50px;
+	right: 0px;
+	bottom: 50px;
+	left: 0px;
+	overflow: hidden auto;
+}
+
+main > section > aside + section {
+	left: 20vw;
+}
+
