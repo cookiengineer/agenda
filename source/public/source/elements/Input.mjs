@@ -14,6 +14,14 @@ export const ToBoolean = (element) => {
 				value = true;
 			}
 
+		} else if (type === "hidden") {
+
+			if (element.value === "true") {
+				value = true;
+			} else if (element.value === "false") {
+				value = false;
+			}
+
 		} else if (type === "text") {
 
 			if (element.value.trim() !== "") {
@@ -35,7 +43,7 @@ export const ToDateString = (element) => {
 	if (element !== null && element.tagName === "INPUT") {
 
 		let type = element.getAttribute("type");
-		if (type === "date") {
+		if (type === "date" || type === "hidden") {
 
 			let tmp = element.value.trim();
 			if (tmp !== "") {
@@ -61,11 +69,16 @@ export const ToNumber = (element) => {
 
 	if (element !== null && element.tagName === "INPUT") {
 
-		let tmp = element.value.trim();
-		let num = parseInt(tmp, 10);
+		let type = element.getAttribute("type");
+		if (type === "text" || type === "hidden") {
 
-		if (!Number.isNaN(num) && (num).toString() === tmp) {
-			value = num;
+			let tmp = element.value.trim();
+			let num = parseInt(tmp, 10);
+
+			if (!Number.isNaN(num) && (num).toString() === tmp) {
+				value = num;
+			}
+
 		}
 
 	}
@@ -80,9 +93,14 @@ export const ToString = (element) => {
 
 	if (element !== null && element.tagName === "INPUT") {
 
-		let tmp = element.value.trim();
-		if (tmp !== "") {
-			value = tmp;
+		let type = element.getAttribute("type");
+		if (type === "text" || type === "hidden") {
+
+			let tmp = element.value.trim();
+			if (tmp !== "") {
+				value = tmp;
+			}
+
 		}
 
 	}
@@ -98,7 +116,7 @@ export const ToTimeString = (element) => {
 	if (element !== null && element.tagName === "INPUT") {
 
 		let type = element.getAttribute("type");
-		if (type === "time") {
+		if (type === "time" || type === "hidden") {
 
 			let tmp = element.value.trim();
 

@@ -1,10 +1,5 @@
 
-import { IsString     } from "/stdlib.mjs";
-import { Datetime     } from "/source/structs/Datetime.mjs";
-import { IsTask, Task } from "/source/structs/Task.mjs";
-import { ToDateString } from "/source/utils/ToDateString.mjs";
-import { ToTimeString } from "/source/utils/ToTimeString.mjs";
-
+import { IsArray, IsString                 } from "/stdlib.mjs";
 import { ToBoolean    as InputToBoolean    } from "/source/elements/Input.mjs";
 import { ToNumber     as InputToNumber     } from "/source/elements/Input.mjs";
 import { ToString     as InputToString     } from "/source/elements/Input.mjs";
@@ -12,6 +7,10 @@ import { ToNumber     as SelectToNumber    } from "/source/elements/Select.mjs";
 import { ToString     as TextareaToString  } from "/source/elements/Textarea.mjs";
 import { ToDateString as InputToDateString } from "/source/elements/Input.mjs";
 import { ToTimeString as InputToTimeString } from "/source/elements/Input.mjs";
+import { Datetime                          } from "/source/structs/Datetime.mjs";
+import { IsTask, Task                      } from "/source/structs/Task.mjs";
+import { ToDateString                      } from "/source/utils/ToDateString.mjs";
+import { ToTimeString                      } from "/source/utils/ToTimeString.mjs";
 
 const CheckboxesToStrings = (elements) => {
 
@@ -20,6 +19,22 @@ const CheckboxesToStrings = (elements) => {
 	elements.forEach((element) => {
 
 		if (element !== null && element.checked === true) {
+			filtered.push(InputToString(element));
+		}
+
+	});
+
+	return filtered;
+
+};
+
+const InputsToStrings = (elements) => {
+
+	let filtered = [];
+
+	elements.forEach((element) => {
+
+		if (element !== null) {
 			filtered.push(InputToString(element));
 		}
 
@@ -42,6 +57,8 @@ const toTask = function() {
 	task.Estimation  = InputToString(this.section.querySelector("input[data-name=\"estimation\"]"));
 	task.Eternal     = InputToBoolean(this.section.querySelector("input[data-name=\"eternal\"]"));
 	task.Repeat      = CheckboxesToStrings(Array.from(this.section.querySelectorAll("input[data-name=\"repeat\"]")));
+	task.IsCompleted = InputToBoolean(this.section.querySelector("input[data-name=\"iscompleted\"]"));
+	task.Activities  = InputsToStrings(Array.from(this.section.querySelectorAll("input[data-name=\"activities\"]")));
 
 	let date = InputToDateString(this.section.querySelector("input[data-name=\"deadline-date\"]"));
 	let time = InputToTimeString(this.section.querySelector("input[data-name=\"deadline-time\"]"));
@@ -77,8 +94,10 @@ const render = function(task) {
 		this.elements["title"].value       = task.Title;
 		this.elements["description"].value = task.Description;
 		this.elements["complexity"].value  = (task.Complexity).toString();
-		this.elements["duration"].value    = task.Duration;
 		this.elements["estimation"].value  = task.Estimation;
+		this.elements["eternal"].checked   = task.Eternal;
+		this.elements["duration"].value    = task.Duration;
+		this.elements["iscompleted"].value = task.IsCompleted;
 
 		if (IsString(task.Deadline)) {
 
@@ -92,32 +111,67 @@ const render = function(task) {
 
 		}
 
-		this.elements["eternal"].checked = task.Eternal;
-		this.elements["repeat"].forEach((element) => {
+		if (IsArray(task.Repeat)) {
 
-			if (task.Repeat.includes(element.value)) {
-				element.checked = true;
-			} else {
-				element.checked = false;
-			}
+			this.elements["repeat"].forEach((element) => {
 
-		});
+				if (task.Repeat.includes(element.value)) {
+					element.checked = true;
+				} else {
+					element.checked = false;
+				}
+
+			});
+
+		}
+
+		if (IsArray(task.Activities)) {
+
+			this.elements["activities"].forEach((element) => {
+				element.parentNode.removeChild(element);
+			});
+			this.elements["activities"] = [];
+
+			task.Activities.forEach((activity) => {
+
+				let input = document.createElement("input");
+
+				input.setAttribute("data-name", "activities");
+				input.setAttribute("type", "hidden");
+
+				input.value = activity;
+
+				let article = this.section.querySelector("article");
+				let fieldset = this.section.querySelector("article fieldset:nth-of-type(1)");
+
+				article.insertBefore(input, fieldset);
+
+			});
+
+		}
 
 	} else {
 
-		this.elements["id"].value            = "0";
-		this.elements["project"].value       = "";
-		this.elements["title"].value         = "";
-		this.elements["description"].value   = "";
-		this.elements["complexity"].value    = "1";
-		this.elements["duration"].value      = "00:00:00";
-		this.elements["estimation"].value    = "";
+		this.elements["id"].value               = "0";
+		this.elements["project"].value          = "";
+		this.elements["title"].value            = "";
+		this.elements["description"].value      = "";
+		this.elements["complexity"].value       = "1";
 		this.elements["deadline"]["date"].value = "";
 		this.elements["deadline"]["time"].value = "";
-		this.elements["eternal"].checked = false;
+		this.elements["estimation"].value       = "";
+		this.elements["eternal"].checked        = false;
+		this.elements["duration"].value         = "00:00:00";
+		this.elements["iscompleted"].value      = false;
+
 		this.elements["repeat"].forEach((element) => {
 			element.checked = false;
 		});
+
+		this.elements["activities"].forEach((element) => {
+			element.parentNode.removeChild(element);
+		});
+		this.elements["activities"] = [];
 
 	}
 
@@ -158,20 +212,26 @@ const renderFooter = function(task) {
 
 const reset = function() {
 
-	this.elements["id"].value            = "0";
-	// Keep Project State
-	// this.elements["project"].value       = "";
-	this.elements["title"].value         = "";
-	this.elements["description"].value   = "";
-	this.elements["complexity"].value    = "1";
-	this.elements["duration"].value      = "00:00:00";
-	this.elements["estimation"].value    = "";
+	// Keep project value
+	this.elements["id"].value               = "0";
+	this.elements["title"].value            = "";
+	this.elements["description"].value      = "";
+	this.elements["complexity"].value       = "1";
+	this.elements["estimation"].value       = "";
 	this.elements["deadline"]["date"].value = "";
 	this.elements["deadline"]["time"].value = "";
-	this.elements["eternal"].checked = false;
+	this.elements["eternal"].checked        = false;
+	this.elements["duration"].value         = "00:00:00";
+	this.elements["iscompleted"].value      = false;
+
 	this.elements["repeat"].forEach((element) => {
 		element.checked = false;
 	});
+
+	this.elements["activities"].forEach((element) => {
+		element.parentNode.removeChild(element);
+	});
+	this.elements["activities"] = [];
 
 };
 
@@ -202,8 +262,10 @@ const Editor = function(app, element) {
 			"date": this.section.querySelector("input[data-name=\"deadline-date\"]"),
 			"time": this.section.querySelector("input[data-name=\"deadline-time\"]"),
 		},
-		"eternal":  this.section.querySelector("input[data-name=\"eternal\"]"),
-		"repeat":   Array.from(this.section.querySelectorAll("input[data-name=\"repeat\"]"))
+		"eternal":     this.section.querySelector("input[data-name=\"eternal\"]"),
+		"repeat":      Array.from(this.section.querySelectorAll("input[data-name=\"repeat\"]")),
+		"iscompleted": this.section.querySelector("input[data-name=\"iscompleted\"]"),
+		"activities":  Array.from(this.section.querySelectorAll("input[data-name=\"activities\"]"))
 	};
 
 
