@@ -1,7 +1,12 @@
 
 # Construction Sites
 
-# Backend
+# Backend / Structs
+
+- [ ] Task needs an `Interval` property, which can be either of `weekly`, `bi-weekly`, `monthly` or `yearly`.
+      By default, the `Interval` property should be `nil` (or `null`).
+- [ ] Eternal Tasks need a `ToDatetimes(before, after)` method that returns an Array of Datetime instances for the given time range.
+      Limit the latest datetime to the earliest of `after` and `task.Deadline` so that no entries beyond the deadline are generated.
 
 # Agenda View
 
@@ -9,6 +14,14 @@
 - [ ] `Show Suggested` shows the upcoming tasks until the end of the week.
       If there are none, recommend the task with the lowest complexity.
 - [ ] `Show All` shows all tasks, sorted by deadline first, then by complexity.
+
+# Calendar View
+
+- [ ] Eternal Tasks are not rendered correctly. Use `ToDatetimes(first_day_of_month, end_of_month)` to get the correct Array of Datetime entries for each Task.
+
+# Editor View
+
+- [ ] Implement support for the `task.Interval` property, and use a `<select>` element for it.
 
 # Gantt View
 
