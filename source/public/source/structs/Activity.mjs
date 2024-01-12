@@ -75,11 +75,6 @@ Activity.prototype = {
 
 			}
 
-			// this.Duration        = Time.from("00:00:00");
-			// this.Duration.Hour   = (24 - start.Hour)   + now.Hour;
-			// this.Duration.Minute = (60 - start.Minute) + now.Minute;
-			// this.Duration.Second = (60 - start.Second) + now.Second;
-
 			if (start !== null) {
 
 				let now = Datetime.from(new Date());
@@ -95,7 +90,7 @@ Activity.prototype = {
 
 					} else {
 
-						this.Task.Activities[this.Index] = ToDateString(start) + " " + ToTimeString(start) + " - " + ToDateString(start) + " 23:59:59";
+						this.Task.Activities[this.Task.Activities.length - 1] = ToDateString(start) + " " + ToTimeString(start) + " - " + ToDateString(start) + " 23:59:59";
 						this.Datetime = Datetime.from(new Date());
 						this.Index    = this.Task.Activities.length;
 
