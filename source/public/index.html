@@ -98,7 +98,7 @@
 						<!-- Hidden Fields -->
 						<input data-name="id" type="hidden" value="0">
 						<input data-name="duration" type="hidden" value="00:00:00">
-						<input data-name="iscompleted" type="hidden" value="false">
+						<input data-name="is-completed" type="hidden" value="false">
 						<!-- /Hidden Fields -->
 
 						<fieldset>
@@ -142,40 +142,49 @@
 						</fieldset>
 						<fieldset>
 							<div>
-								<label for="editor-eternal">Eternal?</label>
-								<input id="editor-eternal" data-name="eternal" type="checkbox">
-								<label for="editor-eternal">After completing this task, I'll have to do it again.</label>
+								<label for="editor-toggle-repeat">Repeat?</label>
+								<input id="editor-toggle-repeat" data-action="toggle-repeat" type="checkbox">
+								<label for="editor-toggle-repeat">This Task repeats regularly until its Deadline.</label>
 							</div>
 							<div>
-								<label for="editor-repeat-monday">Repeat?</label>
-								<ul id="editor-repeat">
+								<label for="editor-repeat">Interval</label>
+								<select id="editor-repeat" data-name="repeat">
+									<option value="weekly">weekly</option>
+									<option value="bi-weekly">bi-weekly</option>
+									<option value="monthly">monthly</option>
+									<option value="yearly">yearly</option>
+								</select>
+							</div>
+							<div>
+								<label for="editor-repeat-weekdays" data-action="toggle-repeat-weekdays">Weekdays</label>
+								<ul id="editor-repeat-weekdays">
 									<li>
-										<input id="editor-repeat-monday" data-name="repeat" type="checkbox" value="Monday">
-										<label for="editor-repeat-monday" title="Monday">Mon</label>
+										<input id="editor-repeat-weekdays-monday" data-name="repeat-weekdays" type="checkbox" value="Monday">
+										<label for="editor-repeat-weekdays-monday" title="Monday">Mon</label>
 									</li>
 									<li>
-										<input id="editor-repeat-tuesday" data-name="repeat" type="checkbox" value="Tuesday">
-										<label for="editor-repeat-tuesday" title="Tuesday">Tue</label>
+										<input id="editor-repeat-weekdays-tuesday" data-name="repeat-weekdays" type="checkbox" value="Tuesday">
+										<label for="editor-repeat-weekdays-tuesday" title="Tuesday">Tue</label>
 									</li>
 									<li>
-										<input id="editor-repeat-wednesday" data-name="repeat" type="checkbox" value="Wednesday">
-										<label for="editor-repeat-wednesday" title="Wednesday">Wed</label>
+										<input id="editor-repeat-weekdays-wednesday" data-name="repeat-weekdays" type="checkbox" value="Wednesday">
+										<label for="editor-repeat-weekdays-wednesday" title="Wednesday">Wed</label>
 									</li>
 									<li>
-										<input id="editor-repeat-thursday" data-name="repeat" type="checkbox" value="Thursday">
-										<label for="editor-repeat-thursday" title="Thursday">Thu</label>
+										<input id="editor-repeat-weekdays-thursday" data-name="repeat-weekdays" type="checkbox" value="Thursday">
+										<label for="editor-repeat-weekdays-thursday" title="Thursday">Thu</label>
 									</li>
 									<li>
-										<input id="editor-repeat-friday" data-name="repeat" type="checkbox" value="Friday">
-										<label for="editor-repeat-friday" title="Friday">Fri</label>
+										<input id="editor-repeat-weekdays-friday" data-name="repeat-weekdays" type="checkbox" value="Friday">
+										<label for="editor-repeat-weekdays-friday" title="Friday">Fri</label>
 									</li>
 									<li>
-										<input id="editor-repeat-saturday" data-name="repeat" type="checkbox" value="Saturday">
-										<label for="editor-repeat-saturday" title="Saturday">Sat</label>
+										<input id="editor-repeat-weekdays-saturday" data-name="repeat-weekdays" type="checkbox" value="Saturday">
+										<label for="editor-repeat-weekdays-saturday" title="Saturday">Sat</label>
 									</li>
 									<li>
-										<input id="editor-repeat-sunday" data-name="repeat" type="checkbox" value="Sunday">
-										<label for="editor-repeat-sunday" title="Sunday">Sun</label>
+										<input id="editor-repeat-weekdays-sunday" data-name="repeat-weekdays" type="checkbox" value="Sunday">
+										<label for="editor-repeat-weekdays-sunday" title="Sunday">Sun</label>
 									</li>
 								</ul>
 							</div>

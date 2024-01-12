@@ -1,5 +1,5 @@
 
-const DAYS = {
+const WEEKDAYS = {
 	"Mon": "Monday",
 	"Tue": "Tuesday",
 	"Wed": "Wednesday",
@@ -22,13 +22,13 @@ export const OnResize = () => {
 
 		if (mode !== "desktop") {
 
-			let repeat = Array.from(document.querySelectorAll("section#editor > section fieldset ul#editor-repeat li label"));
+			let repeat = Array.from(document.querySelectorAll("section#editor > section fieldset ul#editor-repeat-weekdays li label"));
 			if (repeat.length > 0) {
 
 				repeat.forEach((element) => {
 
-					let keys = Object.keys(DAYS);
-					let vals = Object.values(DAYS);
+					let keys = Object.keys(WEEKDAYS);
+					let vals = Object.values(WEEKDAYS);
 					let text = element.innerHTML.trim();
 
 					if (vals.includes(text) === true) {
@@ -47,13 +47,13 @@ export const OnResize = () => {
 
 		if (mode !== "mobile") {
 
-			let repeat = Array.from(document.querySelectorAll("section#editor > section fieldset ul#editor-repeat li label"));
+			let repeat = Array.from(document.querySelectorAll("section#editor > section fieldset ul#editor-repeat-weekdays li label"));
 			if (repeat.length > 0) {
 
 				repeat.forEach((element) => {
 
-					let keys = Object.keys(DAYS);
-					let vals = Object.values(DAYS);
+					let keys = Object.keys(WEEKDAYS);
+					let vals = Object.values(WEEKDAYS);
 					let text = element.innerHTML.trim();
 
 					if (keys.includes(text) === true) {

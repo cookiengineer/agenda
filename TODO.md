@@ -3,8 +3,6 @@
 
 # Backend / Structs
 
-- [ ] Task needs an `Interval` property, which can be either of `weekly`, `bi-weekly`, `monthly` or `yearly`.
-      By default, the `Interval` property should be `nil` (or `null`).
 - [ ] Eternal Tasks need a `ToDatetimes(before, after)` method that returns an Array of Datetime instances for the given time range.
       Limit the latest datetime to the earliest of `after` and `task.Deadline` so that no entries beyond the deadline are generated.
 

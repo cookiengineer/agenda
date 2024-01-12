@@ -14,7 +14,14 @@ const COMPLEXITIES = [
 	21
 ];
 
-const DAYS = [
+const REPEAT = [
+	"weekly",
+	"bi-weekly",
+	"monthly",
+	"yearly"
+];
+
+const WEEKDAYS = [
 	"Monday",
 	"Tuesday",
 	"Wednesday",
@@ -79,14 +86,27 @@ const isDatetime = function(datetime) {
 
 const isRepeat = function(repeat) {
 
-	if (IsArray(repeat)) {
+	if (
+		IsString(repeat)
+		&& REPEAT.includes(repeat)
+	) {
+		return true;
+	}
 
-		let days  = repeat.map((v) => v.trim());
+	return false;
+
+};
+
+const isRepeatWeekdays = function(weekdays) {
+
+	if (IsArray(weekdays)) {
+
+		let days  = weekdays.map((v) => v.trim());
 		let valid = true;
 
 		days.forEach((day) => {
 
-			if (DAYS.includes(day)) {
+			if (WEEKDAYS.includes(day)) {
 				valid = false;
 			}
 
@@ -114,18 +134,18 @@ export const NewTask = function(id) {
 
 export const Task = function() {
 
-	this.ID          = 0;
-	this.Project     = "life";
-	this.Title       = null;
-	this.Description = "";
-	this.Complexity  = COMPLEXITIES[0];
-	this.Deadline    = null;
-	this.Estimation  = "01:00:00";
-	this.Eternal     = false;
-	this.Repeat      = [];
-	this.Duration    = "00:00:00";
-	this.IsCompleted = false;
-	this.Activities  = [];
+	this.ID             = 0;
+	this.Project        = "life";
+	this.Title          = null;
+	this.Description    = "";
+	this.Complexity     = COMPLEXITIES[0];
+	this.Deadline       = null;
+	this.Estimation     = "01:00:00";
+	this.Repeat         = null;
+	this.RepeatWeekdays = [];
+	this.Duration       = "00:00:00";
+	this.IsCompleted    = false;
+	this.Activities     = [];
 
 };
 
@@ -167,12 +187,12 @@ Task.from = function(value) {
 			task.Estimation = value["estimation"];
 		}
 
-		if (IsBoolean(value["eternal"])) {
-			task.Eternal = value["eternal"];
-		}
-
 		if (isRepeat(value["repeat"])) {
 			task.Repeat = value["repeat"];
+		}
+
+		if (isRepeatWeekdays(value["repeat_weekdays"])) {
+			task.RepeatWeekdays = value["repeat_weekdays"];
 		}
 
 		if (isTime(value["duration"])) {
@@ -241,8 +261,8 @@ Task.prototype = {
 			&& isComplexity(this.Complexity)
 			&& (isDatetime(this.Deadline) || this.Deadline === null)
 			&& isTime(this.Estimation)
-			&& IsBoolean(this.Eternal)
-			&& isRepeat(this.Repeat)
+			&& (isRepeat(this.Repeat) || this.Repeat === null)
+			&& isRepeatWeekdays(this.RepeatWeekdays)
 			&& isTime(this.Duration)
 			&& IsBoolean(this.IsCompleted)
 			&& IsArray(this.Activities)
@@ -261,18 +281,18 @@ Task.prototype = {
 	toJSON: function() {
 
 		return {
-			"id":           this.ID,
-			"project":      this.Project,
-			"title":        this.Title,
-			"description":  this.Description,
-			"complexity":   this.Complexity,
-			"deadline":     this.Deadline,
-			"estimation":   this.Estimation,
-			"eternal":      this.Eternal,
-			"repeat":       this.Repeat,
-			"duration":     this.Duration,
-			"is_completed": this.IsCompleted,
-			"activities":   this.Activities
+			"id":              this.ID,
+			"project":         this.Project,
+			"title":           this.Title,
+			"description":     this.Description,
+			"complexity":      this.Complexity,
+			"deadline":        this.Deadline,
+			"estimation":      this.Estimation,
+			"repeat":          this.Repeat,
+			"repeat_weekdays": this.RepeatWeekdays,
+			"duration":        this.Duration,
+			"is_completed":    this.IsCompleted,
+			"activities":      this.Activities
 		};
 
 	},

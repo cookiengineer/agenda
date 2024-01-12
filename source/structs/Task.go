@@ -7,7 +7,7 @@ import "slices"
 import "strings"
 import "time"
 
-var COMPLEXITIES []int = []int{
+var TASK_COMPLEXITIES []int = []int{
 	1,
 	2,
 	3,
@@ -17,7 +17,14 @@ var COMPLEXITIES []int = []int{
 	21,
 }
 
-var DAYS []string = []string{
+var TASK_REPEAT []string = []string{
+	"weekly",
+	"bi-weekly",
+	"monthly",
+	"yearly",
+}
+
+var TASK_WEEKDAYS []string = []string{
 	"Monday",
 	"Tuesday",
 	"Wednesday",
@@ -28,18 +35,18 @@ var DAYS []string = []string{
 }
 
 type Task struct {
-	ID          int      `json:"id"`
-	Project     string   `json:"project"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Complexity  int      `json:"complexity"`
-	Deadline    *string  `json:"deadline"`
-	Estimation  string   `json:"estimation"`
-	Eternal     bool     `json:"eternal"`
-	Repeat      []string `json:"repeat"`
-	Duration    string   `json:"duration"`
-	IsCompleted bool     `json:"is_completed"`
-	Activities  []string `json:"activities"`
+	ID             int      `json:"id"`
+	Project        string   `json:"project"`
+	Title          string   `json:"title"`
+	Description    string   `json:"description"`
+	Complexity     int      `json:"complexity"`
+	Deadline       *string  `json:"deadline"`
+	Estimation     string   `json:"estimation"`
+	Repeat         *string  `json:"repeat"`
+	RepeatWeekdays []string `json:"repeat_weekdays"`
+	Duration       string   `json:"duration"`
+	IsCompleted    bool     `json:"is_completed"`
+	Activities     []string `json:"activities"`
 }
 
 func TaskFrom(requestbody io.ReadCloser) (Task, error) {
@@ -72,7 +79,7 @@ func (task *Task) IsValid() bool {
 	var valid_duration bool = false
 	var valid_activities bool = false
 
-	// Don't validate ID, Eternal, IsCompleted
+	// Don't validate ID, IsCompleted
 
 	if task.Project != "" && utils.ToProject(task.Project) == task.Project {
 		valid_project = true
@@ -86,7 +93,7 @@ func (task *Task) IsValid() bool {
 		valid_description = true
 	}
 
-	if task.Complexity != 0 && slices.Contains(COMPLEXITIES, task.Complexity) {
+	if task.Complexity != 0 && slices.Contains(TASK_COMPLEXITIES, task.Complexity) {
 		valid_complexity = true
 	}
 
@@ -112,21 +119,47 @@ func (task *Task) IsValid() bool {
 
 	}
 
-	if len(task.Repeat) > 0 {
+	if task.Repeat != nil {
 
-		valid_repeat = true
+		if len(task.RepeatWeekdays) > 0 {
 
-		for r := 0; r < len(task.Repeat); r++ {
+			valid_repeat = true
 
-			if slices.Contains(DAYS, task.Repeat[r]) == false {
+			for r := 0; r < len(task.RepeatWeekdays); r++ {
+
+				if slices.Contains(TASK_WEEKDAYS, task.RepeatWeekdays[r]) == false {
+					valid_repeat = false
+					break
+				}
+
+			}
+
+			if valid_repeat == true {
+
+				if slices.Contains(TASK_REPEAT, *task.Repeat) {
+					valid_repeat = true
+				} else {
+					valid_repeat = false
+				}
+
+			} else {
 				valid_repeat = false
-				break
+			}
+
+		} else {
+
+			if slices.Contains(TASK_REPEAT, *task.Repeat) {
+				valid_repeat = true
 			}
 
 		}
 
 	} else {
-		valid_repeat = true
+
+		if len(task.RepeatWeekdays) == 0 {
+			valid_repeat = true
+		}
+
 	}
 
 	if task.Duration != "" {

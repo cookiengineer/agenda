@@ -86,7 +86,7 @@ Activity.prototype = {
 					if (yesterday.Year === start.Year && yesterday.Month === start.Month && yesterday.Day === start.Day && start.Hour > 12 && now.Hour < 12) {
 
 						this.Datetime = start;
-						this.Index    = this.Task.Activities.length;
+						this.Index    = this.Task.Activities.length - 1;
 
 					} else {
 
@@ -99,7 +99,7 @@ Activity.prototype = {
 				} else {
 
 					this.Datetime = start;
-					this.Index    = this.Task.Activities.length;
+					this.Index    = this.Task.Activities.length - 1;
 
 				}
 
