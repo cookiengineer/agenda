@@ -13,19 +13,27 @@ func FormatInt(number int, length int) string {
 		chunk = chunk[1:]
 	}
 
-	if len(chunk) < length {
+	if length == 0 {
 
-		var prefix strings.Builder
-
-		for p := 0; p < length-len(chunk); p++ {
-			prefix.WriteString("0")
-		}
-
-		result = prefix.String() + chunk
+		result = chunk
 
 	} else {
 
-		result = chunk
+		if len(chunk) < length {
+
+			var prefix strings.Builder
+
+			for p := 0; p < length-len(chunk); p++ {
+				prefix.WriteString("0")
+			}
+
+			result = prefix.String() + chunk
+
+		} else {
+
+			result = chunk
+
+		}
 
 	}
 

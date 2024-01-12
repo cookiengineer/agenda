@@ -321,7 +321,11 @@ func (time *Time) String() string {
 
 	var buffer bytes.Buffer
 
-	buffer.WriteString(utils.FormatUint(time.Hour, 2))
+	if time.Hour > 99 {
+		buffer.WriteString(utils.FormatUint(time.Hour, 0))
+	} else {
+		buffer.WriteString(utils.FormatUint(time.Hour, 2))
+	}
 	buffer.WriteString(":")
 	buffer.WriteString(utils.FormatUint(time.Minute, 2))
 	buffer.WriteString(":")

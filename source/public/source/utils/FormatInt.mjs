@@ -8,19 +8,27 @@ export const FormatInt = function(value, length) {
 		chunk = chunk.substr(1);
 	}
 
-	if (chunk.length < length) {
+	if (length === 0) {
 
-		let prefix = "";
-
-		for (let p = 0; p < length - chunk.length; p++) {
-			prefix += "0";
-		}
-
-		result = prefix + chunk;
+		result = chunk;
 
 	} else {
 
-		result = chunk;
+		if (chunk.length < length) {
+
+			let prefix = "";
+
+			for (let p = 0; p < length - chunk.length; p++) {
+				prefix += "0";
+			}
+
+			result = prefix + chunk;
+
+		} else {
+
+			result = chunk;
+
+		}
 
 	}
 

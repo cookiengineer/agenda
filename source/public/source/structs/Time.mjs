@@ -1,29 +1,5 @@
 
-const formatUint = (value, length) => {
-
-	let result = "";
-
-	let chunk = (value).toString();
-
-	if (chunk.length < length) {
-
-		let prefix = "";
-
-		for (let p = 0; p < length - chunk.length; p++) {
-			prefix += "0";
-		}
-
-		result = prefix + chunk;
-
-	} else {
-
-		result = chunk;
-
-	}
-
-	return result;
-
-};
+import { FormatInt } from "/source/utils/FormatInt.mjs";
 
 export const Time = function() {
 
@@ -393,11 +369,15 @@ Time.prototype = {
 
 		let buffer = "";
 
-		buffer += this.Hour > 99 ? "99" : formatUint(this.Hour, 2);
+		if (this.Hour > 99) {
+			buffer += FormatInt(this.Hour, 0);
+		} else {
+			buffer += FormatInt(this.Hour, 2);
+		}
 		buffer += ":";
-		buffer += formatUint(this.Minute, 2);
+		buffer += FormatInt(this.Minute, 2);
 		buffer += ":";
-		buffer += formatUint(this.Second, 2);
+		buffer += FormatInt(this.Second, 2);
 
 		return buffer;
 

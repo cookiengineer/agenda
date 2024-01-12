@@ -1,5 +1,6 @@
 
-import { Time } from "/source/structs/Time.mjs";
+import { Time      } from "/source/structs/Time.mjs";
+import { FormatInt } from "/source/utils/FormatInt.mjs";
 
 const WEEKDAYS  = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" ];
 const MONTHS    = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
@@ -53,32 +54,6 @@ const TIMEZONES = [
 
 export const IsDatetime = (obj) => {
 	return Object.prototype.toString.call(obj) === "[object Datetime]";
-};
-
-const formatUint = (value, length) => {
-
-	let result = "";
-
-	let chunk = (value).toString();
-
-	if (chunk.length < length) {
-
-		let prefix = "";
-
-		for (let p = 0; p < length - chunk.length; p++) {
-			prefix += "0";
-		}
-
-		result = prefix + chunk;
-
-	} else {
-
-		result = chunk;
-
-	}
-
-	return result;
-
 };
 
 const isDay = (value) => {
@@ -1033,17 +1008,17 @@ Datetime.prototype = {
 
 		let buffer = "";
 
-		buffer += formatUint(this.Year, 4);
+		buffer += FormatInt(this.Year, 4);
 		buffer += "-";
-		buffer += formatUint(this.Month, 2);
+		buffer += FormatInt(this.Month, 2);
 		buffer += "-";
-		buffer += formatUint(this.Day, 2);
+		buffer += FormatInt(this.Day, 2);
 		buffer += " ";
-		buffer += formatUint(this.Hour, 2);
+		buffer += FormatInt(this.Hour, 2);
 		buffer += ":";
-		buffer += formatUint(this.Minute, 2);
+		buffer += FormatInt(this.Minute, 2);
 		buffer += ":";
-		buffer += formatUint(this.Second, 2);
+		buffer += FormatInt(this.Second, 2);
 
 		return buffer;
 
