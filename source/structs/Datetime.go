@@ -1009,6 +1009,7 @@ func (datetime *Datetime) ToDatetimeDifference(other Datetime) Datetime {
 					days = other.Day - tmp.Day
 				} else {
 					months -= 1
+					tmp.Month -= 1;
 					days = (tmp.ToDays() - tmp.Day) + other.Day
 				}
 

@@ -1,10 +1,12 @@
 
 import { IsArray, IsBoolean, IsNumber, IsString } from "/stdlib.mjs";
-import { Datetime                               } from "./Datetime.mjs";
+import { Datetime                               } from "/source/structs/Datetime.mjs";
+import { ToTitle                                } from "/source/utils/ToTitle.mjs";
+import { ToProject                              } from "/source/utils/ToProject.mjs";
 
 export const IsTask = (obj) => Object.prototype.toString.call(obj) === "[object Task]";
 
-const COMPLEXITIES = [
+const TASK_COMPLEXITIES = [
 	1,
 	2,
 	3,
@@ -14,14 +16,14 @@ const COMPLEXITIES = [
 	21
 ];
 
-const REPEAT = [
+const TASK_REPEAT = [
 	"weekly",
 	"bi-weekly",
 	"monthly",
 	"yearly"
 ];
 
-const WEEKDAYS = [
+const TASK_WEEKDAYS = [
 	"Monday",
 	"Tuesday",
 	"Wednesday",
@@ -35,7 +37,7 @@ const isComplexity = function(complexity) {
 
 	if (
 		IsNumber(complexity)
-		&& COMPLEXITIES.includes(complexity)
+		&& TASK_COMPLEXITIES.includes(complexity)
 	) {
 		return true;
 	}
@@ -88,7 +90,7 @@ const isRepeat = function(repeat) {
 
 	if (
 		IsString(repeat)
-		&& REPEAT.includes(repeat)
+		&& TASK_REPEAT.includes(repeat)
 	) {
 		return true;
 	}
@@ -106,7 +108,7 @@ const isRepeatWeekdays = function(weekdays) {
 
 		days.forEach((day) => {
 
-			if (WEEKDAYS.includes(day)) {
+			if (TASK_WEEKDAYS.includes(day)) {
 				valid = false;
 			}
 
@@ -138,7 +140,7 @@ export const Task = function() {
 	this.Project        = "life";
 	this.Title          = null;
 	this.Description    = "";
-	this.Complexity     = COMPLEXITIES[0];
+	this.Complexity     = TASK_COMPLEXITIES[0];
 	this.Deadline       = null;
 	this.Estimation     = "01:00:00";
 	this.Repeat         = null;
@@ -253,19 +255,156 @@ Task.prototype = {
 
 	IsValid: function() {
 
+		let valid_id = false;
+		let valid_project = false;
+		let valid_title = false;
+		let valid_description = false;
+		let valid_complexity = false;
+		let valid_deadline = false;
+		let valid_estimation = false;
+		let valid_repeat = false;
+		let valid_duration = false;
+		let valid_activities = false;
+
+		// Don't validate IsCompleted
+
+		if (IsNumber(this.ID)) {
+			// Don't validate ID
+			valid_id = true;
+		}
+
+		if (IsString(this.Project) && this.Project !== "" && ToProject(this.Project) === this.Project) {
+			valid_project = true;
+		}
+
+		if (IsString(this.Title) && this.Title !== "" && ToTitle(this.Title) === this.Title) {
+			valid_title = true;
+		}
+
+		if (IsString(this.Description) && this.Description !== "") {
+			valid_description = true;
+		}
+
+		if (isComplexity(this.Complexity)) {
+			valid_complexity = true;
+		}
+
+		if (this.Deadline !== null) {
+
+			if (isDatetime(this.Deadline)) {
+				valid_deadline = true;
+			}
+
+		} else {
+			valid_deadline = true;
+		}
+
+		if (isTime(this.Estimation)) {
+			valid_estimation = true;
+		}
+
+		if (this.Repeat !== null) {
+
+			if (this.RepeatWeekdays.length > 0) {
+
+				valid_repeat = true;
+
+				for (let r = 0; r < this.RepeatWeekdays.length; r++) {
+
+					let weekday = this.RepeatWeekdays[r];
+
+					if (TASK_WEEKDAYS.includes(weekday) === false) {
+						valid_repeat = false;
+						break;
+					}
+
+				}
+
+				if (valid_repeat === true) {
+
+					if (TASK_REPEAT.includes(this.Repeat)) {
+						valid_repeat = true;
+					} else {
+						valid_repeat = false;
+					}
+
+				}
+
+			} else {
+
+				if (TASK_REPEAT.includes(this.Repeat)) {
+					valid_repeat = true;
+				}
+
+			}
+
+		} else {
+
+			if (this.RepeatWeekdays.length === 0) {
+				valid_repeat = true;
+			}
+
+		}
+
+		if (isTime(this.Duration)) {
+			valid_duration = true;
+		}
+
+		if (this.Activities.length > 0) {
+
+			valid_activities = true;
+
+			for (let a = 0; a < this.Activities.length; a++) {
+
+				let activity = this.Activities[a].split(" - ");
+
+				if (activity.length === 2) {
+
+					if (activity[1] === "" && a === this.Activities.length - 1) {
+
+						let before = Datetime.from(activity[0]);
+						let now = Datetime.from(new Date());
+
+						if (before.IsBefore(now)) {
+							// Do Nothing
+						} else {
+							valid_activities = false;
+							break;
+						}
+
+					} else {
+
+						let before = Datetime.from(activity[0]);
+						let after = Datetime.from(activity[1]);
+
+						if (before.IsBefore(after)) {
+							// Do Nothing
+						} else {
+							valid_activities = false;
+							break;
+						}
+
+					}
+
+				}
+
+			}
+
+		} else {
+			valid_activities = true;
+		}
+
 		if (
-			IsNumber(this.ID)
-			&& IsString(this.Project)
-			&& IsString(this.Title)
-			&& IsString(this.Description)
-			&& isComplexity(this.Complexity)
-			&& (isDatetime(this.Deadline) || this.Deadline === null)
-			&& isTime(this.Estimation)
-			&& (isRepeat(this.Repeat) || this.Repeat === null)
-			&& isRepeatWeekdays(this.RepeatWeekdays)
-			&& isTime(this.Duration)
-			&& IsBoolean(this.IsCompleted)
-			&& IsArray(this.Activities)
+			valid_id
+			&& valid_project
+			&& valid_title
+			&& valid_description
+			&& valid_complexity
+			&& valid_deadline
+			&& valid_estimation
+			&& valid_repeat
+			&& valid_duration
+			&& valid_activities
 		) {
 			return true;
 		}

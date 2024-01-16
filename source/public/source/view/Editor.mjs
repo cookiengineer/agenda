@@ -121,6 +121,14 @@ const render = function(task) {
 
 		if (IsString(task.Repeat) && IsArray(task.RepeatWeekdays)) {
 
+			if (task.Repeat === "weekly") {
+				this.elements["deadline"]["date"].removeAttribute("required");
+				this.elements["deadline"]["time"].removeAttribute("required");
+			} else {
+				this.elements["deadline"]["date"].setAttribute("required", true);
+				this.elements["deadline"]["time"].setAttribute("required", true);
+			}
+
 			this.actions["toggle-repeat"].checked = true;
 			this.elements["repeat"].removeAttribute("disabled");
 			this.elements["repeat"].value = task.Repeat;
@@ -137,7 +145,11 @@ const render = function(task) {
 
 		} else {
 
+			this.elements["deadline"]["date"].removeAttribute("required");
+			this.elements["deadline"]["time"].removeAttribute("required");
+
 			this.actions["toggle-repeat"].checked = false;
+
 			this.elements["repeat"].setAttribute("disabled", true);
 			this.elements["repeat"].value = "weekly";
 			this.elements["repeat-weekdays"].forEach((element) => {
@@ -191,6 +203,9 @@ const render = function(task) {
 		this.elements["estimation"].value       = "";
 		this.elements["duration"].value         = "00:00:00";
 		this.elements["is-completed"].value     = false;
+
+		this.elements["deadline"]["date"].removeAttribute("required");
+		this.elements["deadline"]["time"].removeAttribute("required");
 
 		this.actions["toggle-repeat"].checked = false;
 		this.elements["repeat"].setAttribute("disabled", true);
@@ -254,6 +269,9 @@ const reset = function() {
 	this.elements["deadline"]["time"].value = "";
 	this.elements["duration"].value         = "00:00:00";
 	this.elements["is-completed"].value     = false;
+
+	this.elements["deadline"]["date"].removeAttribute("required");
+	this.elements["deadline"]["time"].removeAttribute("required");
 
 	this.elements["repeat"].value = "weekly";
 	this.elements["repeat-weekdays"].forEach((element) => {
@@ -431,6 +449,15 @@ Editor.prototype = {
 			let checked = this.actions["toggle-repeat"].checked;
 			if (checked === true) {
 
+				let repeat = SelectToString(this.elements["repeat"]);
+				if (repeat === "weekly") {
+					this.elements["deadline"]["date"].removeAttribute("required");
+					this.elements["deadline"]["time"].removeAttribute("required");
+				} else {
+					this.elements["deadline"]["date"].setAttribute("required", true);
+					this.elements["deadline"]["time"].setAttribute("required", true);
+				}
+
 				this.elements["repeat"].removeAttribute("disabled");
 				this.elements["repeat-weekdays"].forEach((element) => {
 					element.removeAttribute("disabled");
@@ -438,6 +465,8 @@ Editor.prototype = {
 
 			} else {
 
+				this.elements["deadline"]["date"].removeAttribute("required");
+				this.elements["deadline"]["time"].removeAttribute("required");
 				this.elements["repeat"].setAttribute("disabled", true);
 				this.elements["repeat"].value = "weekly";
 				this.elements["repeat-weekdays"].forEach((element) => {
@@ -478,6 +507,20 @@ Editor.prototype = {
 			}
 
 		});
+
+		this.elements["repeat"].addEventListener("change", () => {
+
+			let repeat = SelectToString(this.elements["repeat"]);
+			if (repeat === "weekly") {
+				this.elements["deadline"]["date"].removeAttribute("required");
+				this.elements["deadline"]["time"].removeAttribute("required");
+			} else {
+				this.elements["deadline"]["date"].setAttribute("required", true);
+				this.elements["deadline"]["time"].setAttribute("required", true);
+			}
+
+		});
+
 
 	},
 

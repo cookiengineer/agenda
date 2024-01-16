@@ -1041,115 +1041,227 @@ Datetime.prototype = {
 
 	},
 
+	ToDatetimeDifference: function(other) {
+
+		let result = new Datetime();
+
+		if (this.IsBefore(other) === true) {
+
+			let years   = 0;
+			let months  = 0;
+			let days    = 0;
+			let hours   = (24 - this.Hour)   + other.Hour;
+			let minutes = (60 - this.Minute) + other.Minute;
+			let seconds = (60 - this.Second) + other.Second;
+
+			let tmp = Datetime.from(this.toString());
+
+			if (tmp.Year <= other.Year) {
+
+				if (tmp.Month <= other.Month) {
+
+					while (tmp.Year < other.Year) {
+						years += 1;
+						tmp.Year += 1;
+					}
+
+					while (tmp.Month < other.Month) {
+						months += 1;
+						tmp.Month += 1;
+					}
+
+					if (tmp.Day <= other.Day) {
+						days = other.Day - tmp.Day;
+					} else {
+						months -= 1;
+						tmp.Month -= 1;
+						days = (tmp.ToDays() - tmp.Day) + other.Day;
+					}
+
+				} else {
+
+					if (tmp.Day <= other.Day) {
+						months = (12 - tmp.Month) + other.Month;
+						days = other.Day - tmp.Day;
+					} else {
+						months = (12 - tmp.Month) + other.Month - 1;
+						days = (tmp.ToDays() - tmp.Day) + other.Day;
+					}
+
+				}
+
+			}
+
+			if (hours > 0 || minutes > 0 || seconds > 0) {
+				days -= 1;
+			}
+
+			if (minutes > 0 || seconds > 0) {
+
+				hours -= 1;
+
+				if (seconds > 60) {
+					seconds -= 60;
+					minutes += 1;
+				}
+
+				if (seconds > 60) {
+					seconds -= 60;
+					minutes += 1;
+				}
+
+				if (minutes > 60) {
+					minutes -= 60;
+					hours += 1;
+				}
+
+				if (minutes > 60) {
+					minutes -= 60;
+					hours += 1;
+				}
+
+				if (hours == 23 && minutes == 60 && seconds == 60) {
+					days += 1;
+					hours = 0;
+					minutes = 0;
+					seconds = 0;
+				} else if (minutes == 60 && seconds == 60) {
+					seconds = 0;
+					minutes = 0;
+					hours += 1;
+				} else if (minutes == 60) {
+					minutes = 0;
+					hours += 1;
+				}
+
+			}
+
+			result.Year   = years;
+			result.Month  = months;
+			result.Day    = days;
+			result.Hour   = hours;
+			result.Minute = minutes;
+			result.Second = seconds;
+
+		}
+
+		return result;
+
+	},
+
 	ToTimeDifference: function(other) {
 
 		let time = new Time();
 
-		let days    = 0;
-		let hours   = (24 - this.Hour)   + other.Hour;
-		let minutes = (60 - this.Minute) + other.Minute;
-		let seconds = (60 - this.Second) + other.Second;
+		if (this.IsBefore(other) === true) {
 
-		let tmp = Datetime.from(this.toString());
+			let days    = 0;
+			let hours   = (24 - this.Hour)   + other.Hour;
+			let minutes = (60 - this.Minute) + other.Minute;
+			let seconds = (60 - this.Second) + other.Second;
 
-		if (tmp.Year !== other.Year) {
+			let tmp = Datetime.from(this.toString());
 
-			while (tmp.Year < other.Year - 1) {
+			if (tmp.Year !== other.Year) {
 
-				if (isLeapYear(tmp.Year)) {
-					days += 366;
-				} else {
-					days += 365;
+				while (tmp.Year < other.Year - 1) {
+
+					if (isLeapYear(tmp.Year)) {
+						days += 366;
+					} else {
+						days += 365;
+					}
+
+					tmp.Year += 1;
+
 				}
-
-				tmp.Year += 1;
-
-			}
-
-			days += (tmp.ToDays() - tmp.Day);
-			tmp.Day = tmp.ToDays();
-			tmp.Month += 1;
-
-			while (tmp.Month <= 12) {
-				days += tmp.ToDays();
-				tmp.Month += 1;
-			}
-
-			days += 1;
-			tmp.Year += 1;
-			tmp.Month = 1;
-			tmp.Day = 1;
-
-		}
-
-		if (tmp.Year === other.Year) {
-
-			if (tmp.Month === other.Month) {
-
-				if (tmp.Day !== other.Day) {
-					days += (other.Day - tmp.Day);
-				}
-
-			} else {
 
 				days += (tmp.ToDays() - tmp.Day);
+				tmp.Day = tmp.ToDays();
 				tmp.Month += 1;
 
-				while (tmp.Month !== other.Month) {
+				while (tmp.Month <= 12) {
 					days += tmp.ToDays();
 					tmp.Month += 1;
 				}
 
-				days += other.Day;
+				days += 1;
+				tmp.Year += 1;
+				tmp.Month = 1;
+				tmp.Day = 1;
 
 			}
+
+			if (tmp.Year === other.Year) {
+
+				if (tmp.Month === other.Month) {
+
+					if (tmp.Day !== other.Day) {
+						days += (other.Day - tmp.Day);
+					}
+
+				} else {
+
+					days += (tmp.ToDays() - tmp.Day);
+					tmp.Month += 1;
+
+					while (tmp.Month !== other.Month) {
+						days += tmp.ToDays();
+						tmp.Month += 1;
+					}
+
+					days += other.Day;
+
+				}
+
+			}
+
+			if (days > 0) {
+				hours += (days - 1) * 24;
+			} else {
+				hours -= 24;
+			}
+
+			if (minutes > 0 || seconds > 0) {
+
+				hours -= 1;
+
+				if (seconds > 60) {
+					seconds -= 60;
+					minutes += 1;
+				}
+
+				if (seconds > 60) {
+					seconds -= 60;
+					minutes += 1;
+				}
+
+				if (minutes > 60) {
+					minutes -= 60;
+					hours   += 1;
+				}
+
+				if (minutes > 60) {
+					minutes -= 60;
+					hours   += 1;
+				}
+
+				if (minutes === 60 && seconds === 60) {
+					seconds = 0;
+					minutes = 0;
+					hours += 1;
+				} else if (minutes === 60) {
+					minutes = 0;
+					hours += 1;
+				}
+
+			}
+
+			time.Hour   = hours;
+			time.Minute = minutes;
+			time.Second = seconds;
 
 		}
-
-		if (days > 0) {
-			hours += (days - 1) * 24;
-		} else {
-			hours -= 24;
-		}
-
-		if (minutes > 0 || seconds > 0) {
-
-			hours -= 1;
-
-			if (seconds > 60) {
-				seconds -= 60;
-				minutes += 1;
-			}
-
-			if (seconds > 60) {
-				seconds -= 60;
-				minutes += 1;
-			}
-
-			if (minutes > 60) {
-				minutes -= 60;
-				hours   += 1;
-			}
-
-			if (minutes > 60) {
-				minutes -= 60;
-				hours   += 1;
-			}
-
-			if (minutes === 60 && seconds === 60) {
-				seconds = 0;
-				minutes = 0;
-				hours += 1;
-			} else if (minutes === 60) {
-				minutes = 0;
-				hours += 1;
-			}
-
-		}
-
-		time.Hour   = hours;
-		time.Minute = minutes;
-		time.Second = seconds;
 
 		return time;
 

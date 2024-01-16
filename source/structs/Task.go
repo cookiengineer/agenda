@@ -6,7 +6,6 @@ import "io"
 import "slices"
 import "strings"
 import "time"
-import "fmt"
 
 var TASK_COMPLEXITIES []int = []int{
 	1,
@@ -34,6 +33,7 @@ var TASK_WEEKDAYS []string = []string{
 	"Saturday",
 	"Sunday",
 }
+
 
 type Task struct {
 	ID             int      `json:"id"`
@@ -143,8 +143,6 @@ func (task *Task) IsValid() bool {
 					valid_repeat = false
 				}
 
-			} else {
-				valid_repeat = false
 			}
 
 		} else {
@@ -274,7 +272,6 @@ func (task *Task) ToDatetimes (start Datetime, end Datetime) []Datetime {
 						weekday := tmp.ToWeekday()
 
 						if slices.Contains(task.RepeatWeekdays, weekday) {
-							fmt.Println(tmp.Year, tmp.Month, tmp.Day, weekday)
 							result = append(result, DatetimeFrom(tmp.String()))
 						}
 
@@ -296,6 +293,16 @@ func (task *Task) ToDatetimes (start Datetime, end Datetime) []Datetime {
 
 		} else if repeat == "monthly" {
 
+			weekdays_to_remaining := map[string]uint{
+				"Monday":    6,
+				"Tuesday":   5,
+				"Wednesday": 4,
+				"Thursday":  3,
+				"Friday":    2,
+				"Saturday":  1,
+				"Sunday":    0,
+			}
+
 			for tmp.Year <= end.Year {
 
 				var end_month uint = 12
@@ -307,11 +314,39 @@ func (task *Task) ToDatetimes (start Datetime, end Datetime) []Datetime {
 				for tmp.Month <= end_month {
 
 					tmp.Day = deadline.Day
-					weekday := tmp.ToWeekday()
+					end_of_week := tmp.Day + weekdays_to_remaining[tmp.ToWeekday()]
 
-					// TODO: Find out the nth week of the next month based
-					// based on the tmp.ToWeekday() and tmp.Day
-					// e.g. second week, thursday
+					if end_of_week > tmp.ToDays() {
+						end_of_week = tmp.ToDays()
+					}
+
+					if end_of_week <= 7 {
+
+						for d := uint(1); d <= end_of_week; d++ {
+
+							tmp.Day = d
+							weekday := tmp.ToWeekday()
+
+							if slices.Contains(task.RepeatWeekdays, weekday) {
+								result = append(result, DatetimeFrom(tmp.String()))
+							}
+
+						}
+
+					} else {
+
+						for d := end_of_week - 7; d <= end_of_week; d++ {
+
+							tmp.Day = d
+							weekday := tmp.ToWeekday()
+
+							if slices.Contains(task.RepeatWeekdays, weekday) {
+								result = append(result, DatetimeFrom(tmp.String()))
+							}
+
+						}
+
+					}
 
 					tmp.Day = 1
 					tmp.Month += 1
@@ -323,16 +358,103 @@ func (task *Task) ToDatetimes (start Datetime, end Datetime) []Datetime {
 
 			}
 
-
-
 		} else if repeat == "yearly" {
-		}
 
-		fmt.Println("Repeat from start until deadline or end, whichever comes first")
+			is_29th_february := false
+
+			if deadline.Month == 2 && deadline.Day == 29 {
+				is_29th_february = true
+			}
+
+			for tmp.Year <= end.Year {
+
+				if is_29th_february == true {
+
+					tmp.Month = deadline.Month
+					tmp.Day = deadline.Day
+
+					if tmp.ToDays() == 29 {
+						tmp.Day = 29
+					} else {
+						tmp.Day = 28
+					}
+
+					result = append(result, DatetimeFrom(tmp.String()))
+
+				} else {
+
+					tmp.Month = deadline.Month
+					tmp.Day = deadline.Day
+
+					result = append(result, DatetimeFrom(tmp.String()))
+
+				}
+
+				tmp.Year += 1
+
+			}
+
+		}
 
 	} else if task.Repeat != nil && task.Deadline == nil {
 
-		fmt.Println("Repeat from start until end")
+		tmp := DatetimeFrom(start.String())
+
+		var repeat = *task.Repeat
+
+		if repeat == "weekly" {
+
+			for tmp.Year <= end.Year {
+
+				var end_month uint = 12
+
+				if tmp.Year == end.Year {
+					end_month = end.Month
+				}
+
+				for tmp.Month <= end_month {
+
+					end_days := tmp.ToDays()
+
+					if tmp.Year == end.Year && tmp.Month == end.Month {
+						end_days = end.Day
+					}
+
+					// first iteration uses start.Day
+					for d := tmp.Day; d <= end_days; d++ {
+
+						tmp.Day = d
+						weekday := tmp.ToWeekday()
+
+						if slices.Contains(task.RepeatWeekdays, weekday) {
+							result = append(result, DatetimeFrom(tmp.String()))
+						}
+
+					}
+
+					tmp.Day = 1
+					tmp.Month += 1
+
+				}
+
+				tmp.Month = 1
+				tmp.Year += 1
+
+			}
+
+		} else if repeat == "bi-weekly" {
+
+			// Do Nothing
+
+		} else if repeat == "monthly" {
+
+			// Do Nothing
+
+		} else if repeat == "yearly" {
+
+			// Do Nothing
+
+		}
 
 	} else if task.Repeat == nil && task.Deadline != nil {
 
