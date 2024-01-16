@@ -9,16 +9,19 @@ am attempting to design/create differently here.
 
 ## Opinions
 
-**Eternal tasks are never done**
+**Repeating tasks are never done**
 
-Eternal tasks reflect reoccuring tasks which consume time, but can
-never be done and usually are repetitive in nature. For example: household,
-groceries, sports and hobbies, cleaning etc.
+Repeating tasks reflect reoccuring tasks which consume time, but can
+never be done and usually are repetitive in nature.
+
+For example: household, groceries, sports and hobbies, meetings, cleaning etc.
 
 **Repeating tasks are per-weekday**
 
 Repeating tasks reflect reoccuring tasks, and they are repeating on
 a specified-weekday basis, and not each specified-date-of-the-month.
+
+For example: Every 3rd Saturday of the month at 20:00:00 or Every Monday and Wednesday.
 
 **Color palette reflects the assigned project**
 
@@ -26,9 +29,10 @@ The color palette is used to reflect the assigned project of each task.
 The header bar allows to refresh the current view and all of its displayed
 tasks by enabling/disabling the selected project's button.
 
-**Tasks with dependencies always have a specified deadline**
+**Tasks with (external) dependencies always have a specified deadline**
 
-Tasks that rely on other people always have a specified deadline.
+Tasks that rely on other people always have a specified deadline. A deadline
+is used to reflect when exactly this Task must be finished or prepared for.
 This includes scheduled meeting appointments with others.
 
 **Tasks have a complexity**
@@ -37,7 +41,7 @@ Tasks have an assumed logical complexity, and there is always a backlog
 of tasks which have an assumed complexity in the planning phase. This
 assumed complexity reflects the Story Points in Scrum.
 
-**Tasks have an assumed time estimation and measured time duration**
+**Tasks have an assumed time estimation and a measured time duration**
 
 Tasks have an assumed time estimation, which is also measured in the
 form of the time duration. If the time duration is shorter/longer than
@@ -49,10 +53,12 @@ can be suggested over time.
 
 While a user works on any given task, there's no need for the user to
 keep track of other tasks and deadlines. The only thing that the user
-needs to keep track of is when they started/stopped working on the task.
+needs to keep track of is when they started/stopped/resumed working on
+the active task.
 
-Everything else should be in the Task Planner App, especially the tasks
-of lower immediate priority that are hard to remember over time.
+Everything else should be the job of the Task Planner App, especially
+keeping track of the tasks of lower immediate priority that are hard
+to remember over time.
 
 
 ## Multiple Views

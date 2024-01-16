@@ -654,19 +654,19 @@ func (datetime *Datetime) IsBefore(other Datetime) bool {
 
 }
 
-func (datetime *Datetime) IsPast() bool {
-
-	now := DatetimeFrom(time.Now().Format(time.RFC3339))
-
-	return datetime.IsBefore(now)
-
-}
-
 func (datetime *Datetime) IsFuture() bool {
 
 	now := DatetimeFrom(time.Now().Format(time.RFC3339))
 
 	return datetime.IsAfter(now)
+
+}
+
+func (datetime *Datetime) IsPast() bool {
+
+	now := DatetimeFrom(time.Now().Format(time.RFC3339))
+
+	return datetime.IsBefore(now)
 
 }
 
@@ -721,8 +721,8 @@ func (datetime *Datetime) Offset(offset string) {
 			var year = datetime.Year
 			var month = datetime.Month
 			var day = datetime.Day
-			var hour = datetime.Hour - uint(offset_hours)
-			var minute = datetime.Minute - uint(offset_minutes)
+			var hour = int(datetime.Hour - uint(offset_hours))
+			var minute = int(datetime.Minute - uint(offset_minutes))
 
 			if minute < 0 {
 				hour -= 1
@@ -734,28 +734,34 @@ func (datetime *Datetime) Offset(offset string) {
 				hour += 24
 			}
 
-			if day < 0 {
 
-				month -= 1
+			if day <= 0 {
 
-				if isLeapYear(year) && month == 2 {
-					day += uint(MONTHDAYS[month-1]) + 1
+				if month > 1 {
+
+					month -= 1
+
+					if isLeapYear(year) && month == 2 {
+						day += uint(MONTHDAYS[month-1]) + 1
+					} else {
+						day += uint(MONTHDAYS[month-1])
+					}
+
 				} else {
-					day += uint(MONTHDAYS[month-1])
+
+					year -= 1
+					month = 12
+					day = 31
+
 				}
 
-			}
-
-			if month < 0 {
-				year -= 1
-				month += 12
 			}
 
 			datetime.Year = year
 			datetime.Month = month
 			datetime.Day = day
-			datetime.Hour = hour
-			datetime.Minute = minute
+			datetime.Hour = uint(hour)
+			datetime.Minute = uint(minute)
 
 		} else if operator == "-" {
 
@@ -970,117 +976,228 @@ func (datetime *Datetime) ToDays() uint {
 
 }
 
-func (datetime *Datetime) ToTimeDifference(other Datetime) Time {
+func (datetime *Datetime) ToDatetimeDifference(other Datetime) Datetime {
 
-	var time Time
+	var result Datetime
 
-	var days    uint = 0
-	var hours   uint = (24 - datetime.Hour)   + other.Hour
-	var minutes uint = (60 - datetime.Minute) + other.Minute
-	var seconds uint = (60 - datetime.Second) + other.Second
+	if datetime.IsBefore(other) {
 
-	tmp := DatetimeFrom(datetime.String())
+		var years   uint = 0
+		var months  uint = 0
+		var days    uint = 0
+		var hours   uint = (24 - datetime.Hour)   + other.Hour
+		var minutes uint = (60 - datetime.Minute) + other.Minute
+		var seconds uint = (60 - datetime.Second) + other.Second
 
-	if tmp.Year != other.Year {
+		tmp := DatetimeFrom(datetime.String())
 
-		for tmp.Year < other.Year - 1 {
+		if tmp.Year <= other.Year {
 
-			if isLeapYear(tmp.Year) {
-				days += 366
+			if tmp.Month <= other.Month {
+
+				for tmp.Year < other.Year {
+					years += 1
+					tmp.Year += 1
+				}
+
+				for tmp.Month < other.Month {
+					months += 1
+					tmp.Month += 1
+				}
+
+				if tmp.Day <= other.Day {
+					days = other.Day - tmp.Day
+				} else {
+					months -= 1
+					days = (tmp.ToDays() - tmp.Day) + other.Day
+				}
+
 			} else {
-				days += 365
+
+				if tmp.Day <= other.Day {
+					months = (12 - tmp.Month) + other.Month
+					days = other.Day - tmp.Day
+				} else {
+					months = (12 - tmp.Month) + other.Month - 1
+					days = (tmp.ToDays() - tmp.Day) + other.Day
+				}
+
 			}
 
-			tmp.Year += 1
+		}
+
+		if hours > 0 || minutes > 0 || seconds > 0 {
+			days -= 1
+		}
+
+		if minutes > 0 || seconds > 0 {
+
+			hours -= 1
+
+			if seconds > 60 {
+				seconds -= 60
+				minutes += 1
+			}
+
+			if seconds > 60 {
+				seconds -= 60
+				minutes += 1
+			}
+
+			if minutes > 60 {
+				minutes -= 60
+				hours += 1
+			}
+
+			if minutes > 60 {
+				minutes -= 60
+				hours += 1
+			}
+
+			if hours == 23 && minutes == 60 && seconds == 60 {
+				days += 1
+				hours = 0
+				minutes = 0
+				seconds = 0
+			} else if minutes == 60 && seconds == 60 {
+				seconds = 0
+				minutes = 0
+				hours += 1
+			} else if minutes == 60 {
+				minutes = 0
+				hours += 1
+			}
 
 		}
 
-		days += (tmp.ToDays() - tmp.Day)
-		tmp.Day = tmp.ToDays()
-		tmp.Month += 1
-
-		for tmp.Month <= 12 {
-			days += tmp.ToDays()
-			tmp.Month += 1
-		}
-
-		days += 1
-		tmp.Year += 1
-		tmp.Month = 1
-		tmp.Day = 1
+		result.Year   = years
+		result.Month  = months
+		result.Day    = days
+		result.Hour   = hours
+		result.Minute = minutes
+		result.Second = seconds
 
 	}
 
-	if tmp.Year == other.Year {
+	return result
 
-		if tmp.Month == other.Month {
+}
 
-			if tmp.Day != other.Day {
-				days += other.Day - tmp.Day
+func (datetime *Datetime) ToTimeDifference(other Datetime) Time {
+
+	var result Time
+
+	if datetime.IsBefore(other) {
+
+		var days    uint = 0
+		var hours   uint = (24 - datetime.Hour)   + other.Hour
+		var minutes uint = (60 - datetime.Minute) + other.Minute
+		var seconds uint = (60 - datetime.Second) + other.Second
+
+		tmp := DatetimeFrom(datetime.String())
+
+		if tmp.Year != other.Year {
+
+			for tmp.Year < other.Year - 1 {
+
+				if isLeapYear(tmp.Year) {
+					days += 366
+				} else {
+					days += 365
+				}
+
+				tmp.Year += 1
+
 			}
 
-		} else {
-
 			days += (tmp.ToDays() - tmp.Day)
+			tmp.Day = tmp.ToDays()
 			tmp.Month += 1
 
-			for tmp.Month != other.Month {
+			for tmp.Month <= 12 {
 				days += tmp.ToDays()
 				tmp.Month += 1
 			}
 
-			days += other.Day
+			days += 1
+			tmp.Year += 1
+			tmp.Month = 1
+			tmp.Day = 1
 
 		}
+
+		if tmp.Year == other.Year {
+
+			if tmp.Month == other.Month {
+
+				if tmp.Day != other.Day {
+					days += other.Day - tmp.Day
+				}
+
+			} else {
+
+				days += (tmp.ToDays() - tmp.Day)
+				tmp.Month += 1
+
+				for tmp.Month != other.Month {
+					days += tmp.ToDays()
+					tmp.Month += 1
+				}
+
+				days += other.Day
+
+			}
+
+		}
+
+		if days > 0 {
+			hours += (days - 1) * 24
+		} else {
+			hours -= 24
+		}
+
+		if minutes > 0 || seconds > 0 {
+
+			hours -= 1
+
+			if seconds > 60 {
+				seconds -= 60
+				minutes += 1
+			}
+
+			if seconds > 60 {
+				seconds -= 60
+				minutes += 1
+			}
+
+			if minutes > 60 {
+				minutes -= 60
+				hours += 1
+			}
+
+			if minutes > 60 {
+				minutes -= 60
+				hours += 1
+			}
+
+			if minutes == 60 && seconds == 60 {
+				seconds = 0
+				minutes = 0
+				hours += 1
+			} else if minutes == 60 {
+				minutes = 0
+				hours += 1
+			}
+
+		}
+
+		result.Hour   = hours
+		result.Minute = minutes
+		result.Second = seconds
 
 	}
 
-	if days > 0 {
-		hours += (days - 1) * 24
-	} else {
-		hours -= 24
-	}
-
-	if minutes > 0 || seconds > 0 {
-
-		hours -= 1
-
-		if seconds > 60 {
-			seconds -= 60
-			minutes += 1
-		}
-
-		if seconds > 60 {
-			seconds -= 60
-			minutes += 1
-		}
-
-		if minutes > 60 {
-			minutes -= 60
-			hours += 1
-		}
-
-		if minutes > 60 {
-			minutes -= 60
-			hours += 1
-		}
-
-		if minutes == 60 && seconds == 60 {
-			seconds = 0
-			minutes = 0
-			hours += 1
-		} else if minutes == 60 {
-			minutes = 0
-			hours += 1
-		}
-
-	}
-
-	time.Hour   = hours
-	time.Minute = minutes
-	time.Second = seconds
-
-	return time
+	return result
 
 }
 
@@ -1101,7 +1218,7 @@ func (datetime *Datetime) ToWeekday() string {
 	}
 
 	var index uint = (year + year/4 - year/100 + year/400 + offsets[month-1] + day) % 7
-	var weekdays []string = []string{"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"}
+	var weekdays []string = []string{"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}
 
 	return weekdays[index]
 

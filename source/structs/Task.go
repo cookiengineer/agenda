@@ -6,6 +6,7 @@ import "io"
 import "slices"
 import "strings"
 import "time"
+import "fmt"
 
 var TASK_COMPLEXITIES []int = []int{
 	1,
@@ -229,5 +230,120 @@ func (task *Task) IsValid() bool {
 	}
 
 	return false
+
+}
+
+func (task *Task) ToDatetimes (start Datetime, end Datetime) []Datetime {
+
+	var result []Datetime
+
+	if task.Repeat != nil && task.Deadline != nil {
+
+		deadline := DatetimeFrom(*task.Deadline)
+
+		if deadline.IsBefore(end) {
+			end = deadline
+		}
+
+		tmp := DatetimeFrom(start.String())
+
+		var repeat = *task.Repeat
+
+		if repeat == "weekly" {
+
+			for tmp.Year <= end.Year {
+
+				var end_month uint = 12
+
+				if tmp.Year == end.Year {
+					end_month = end.Month
+				}
+
+				for tmp.Month <= end_month {
+
+					end_days := tmp.ToDays()
+
+					if tmp.Year == end.Year && tmp.Month == end.Month {
+						end_days = end.Day
+					}
+
+					// first iteration uses start.Day
+					for d := tmp.Day; d <= end_days; d++ {
+
+						tmp.Day = d
+						weekday := tmp.ToWeekday()
+
+						if slices.Contains(task.RepeatWeekdays, weekday) {
+							fmt.Println(tmp.Year, tmp.Month, tmp.Day, weekday)
+							result = append(result, DatetimeFrom(tmp.String()))
+						}
+
+					}
+
+					tmp.Day = 1
+					tmp.Month += 1
+
+				}
+
+				tmp.Month = 1
+				tmp.Year += 1
+
+			}
+
+		} else if repeat == "bi-weekly" {
+
+			// TODO: No idea how to calculate 5-week months
+
+		} else if repeat == "monthly" {
+
+			for tmp.Year <= end.Year {
+
+				var end_month uint = 12
+
+				if tmp.Year == end.Year {
+					end_month = end.Month
+				}
+
+				for tmp.Month <= end_month {
+
+					tmp.Day = deadline.Day
+					weekday := tmp.ToWeekday()
+
+					// TODO: Find out the nth week of the next month based
+					// based on the tmp.ToWeekday() and tmp.Day
+					// e.g. second week, thursday
+
+					tmp.Day = 1
+					tmp.Month += 1
+
+				}
+
+				tmp.Month = 1
+				tmp.Year += 1
+
+			}
+
+
+
+		} else if repeat == "yearly" {
+		}
+
+		fmt.Println("Repeat from start until deadline or end, whichever comes first")
+
+	} else if task.Repeat != nil && task.Deadline == nil {
+
+		fmt.Println("Repeat from start until end")
+
+	} else if task.Repeat == nil && task.Deadline != nil {
+
+		tmp := DatetimeFrom(*task.Deadline)
+
+		if tmp.IsValid() && tmp.IsAfter(start) && tmp.IsBefore(end) {
+			result = append(result, tmp)
+		}
+
+	}
+
+	return result
 
 }

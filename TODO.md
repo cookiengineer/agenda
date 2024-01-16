@@ -3,10 +3,13 @@
 
 # Backend / Structs
 
-- [ ] Eternal Tasks need a `ToDatetimes(before, after)` method that returns an Array of Datetime instances for the given time range.
+- [ ] Eternal `Task` needs a `ToDatetimes(before, after)` method that returns an Array of Datetime instances for the given time range.
       Limit the latest datetime to the earliest of `after` and `task.Deadline` so that no entries beyond the deadline are generated.
 
 # Agenda View
+
+- [ ] Agenda view should display the amount of days and hours in between deadlines, according to the sorted order. Accumulate Task Estimations and give it
+      some start/end time to finish (e.g. 15min before and after).
 
 - [ ] Implement a toggle button that switches `Show Suggested` and `Show All`.
 - [ ] `Show Suggested` shows the upcoming tasks until the end of the week.

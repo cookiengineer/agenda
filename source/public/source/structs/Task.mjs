@@ -301,6 +301,16 @@ Task.prototype = {
 
 		return JSON.stringify(this.toJSON(), "", "\t");
 
+	},
+
+	ToDatetimes: function(datetime1, datetime2) {
+
+		let result = [];
+
+		// TODO
+
+		return result;
+
 	}
 
 };

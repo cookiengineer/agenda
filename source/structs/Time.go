@@ -7,9 +7,9 @@ import "strings"
 import gotime "time"
 
 type Time struct {
-	Hour   uint // `json:"hour"`
-	Minute uint // `json:"minute"`
-	Second uint // `json:"second"`
+	Hour   uint `json:"hour"`
+	Minute uint `json:"minute"`
+	Second uint `json:"second"`
 	valid  bool
 }
 
@@ -94,23 +94,27 @@ func (time *Time) AddSecond() {
 
 func (time *Time) AddTime(other Time) {
 
-	var hour   uint = time.Hour   + other.Hour
-	var minute uint = time.Minute + other.Minute
-	var second uint = time.Second + other.Second
+	if time.IsBefore(other) {
 
-	if second > 60 {
-		minute += 1
-		second -= 60
+		var hour   uint = time.Hour   + other.Hour
+		var minute uint = time.Minute + other.Minute
+		var second uint = time.Second + other.Second
+
+		if second > 60 {
+			minute += 1
+			second -= 60
+		}
+
+		if minute > 60 {
+			hour   += 1
+			minute -= 60
+		}
+
+		time.Hour   = hour
+		time.Minute = minute
+		time.Second = second
+
 	}
-
-	if minute > 60 {
-		hour   += 1
-		minute -= 60
-	}
-
-	time.Hour   = hour
-	time.Minute = minute
-	time.Second = second
 
 }
 
