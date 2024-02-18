@@ -20,9 +20,9 @@ build() {
 	cd "${ROOT}/source";
 
 	if [[ "$ext" != "" ]]; then
-		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}.${ext}" "${ROOT}/source/cmds/agenda/main.go";
+		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}.${ext}" "${ROOT}/source/main.go";
 	else
-		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}" "${ROOT}/source/cmds/agenda/main.go";
+		env GOOS="${os}" GOARCH="${arch}" ${GO} build -o "${folder}/${os}-${arch}" "${ROOT}/source/main.go";
 	fi;
 
 	if [[ "$?" == "0" ]]; then
